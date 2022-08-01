@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"colafox.top","root":"/","images":"/images","scheme":"Mist","darkmode":true,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="程序本来开源，还发了视频在b站，不过现在视频已经删除，也已经闭源，主要是因为两个原因1.开源后容易被杀软针对，当然绕一绕改一改特征码还是能过杀软2.总有某些自以为是的人来嘲讽如果你想获取一份源码，请向我发送邮件">
+<meta property="og:type" content="article">
+<meta property="og:title" content="我用C#写的远控，使用教程">
+<meta property="og:url" content="https://colafox.top/2022/07/20/csharpspy/index.html">
+<meta property="og:site_name" content="colafox&#39;s blogs">
+<meta property="og:description" content="程序本来开源，还发了视频在b站，不过现在视频已经删除，也已经闭源，主要是因为两个原因1.开源后容易被杀软针对，当然绕一绕改一改特征码还是能过杀软2.总有某些自以为是的人来嘲讽如果你想获取一份源码，请向我发送邮件">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://s1.328888.xyz/2022/07/19/l6z6C.png">
+<meta property="og:image" content="https://img1.imgtp.com/2022/07/19/YDVe7co8.png">
+<meta property="og:image" content="https://img1.imgtp.com/2022/07/19/bOJ0TMy8.png">
+<meta property="article:published_time" content="2022-07-19T19:36:33.000Z">
+<meta property="article:modified_time" content="2022-08-01T21:35:43.667Z">
+<meta property="article:author" content="colafox">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://s1.328888.xyz/2022/07/19/l6z6C.png">
+
+
+<link rel="canonical" href="https://colafox.top/2022/07/20/csharpspy/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://colafox.top/2022/07/20/csharpspy/","path":"2022/07/20/csharpspy/","title":"我用C#写的远控，使用教程"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>我用C#写的远控，使用教程 | colafox's blogs</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">colafox's blogs</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">童年的雨天全是泥泞，却是我记忆里最干净的曾经</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-留言板"><a href="/2019/12/26/ss/" rel="section"><i class="user fa-fw"></i>留言板</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#csharpspy"><span class="nav-number">1.</span> <span class="nav-text">csharpspy</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%89%8D%E6%B3%A8%E6%84%8F"><span class="nav-number">1.0.1.</span> <span class="nav-text">运行前注意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%94%9F%E6%88%90%E4%B8%80%E4%B8%AA%E8%A2%AB%E6%8E%A7%E7%AB%AF"><span class="nav-number">1.1.</span> <span class="nav-text">生成一个被控端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8csc-exe%E7%94%9F%E6%88%90"><span class="nav-number">1.1.1.</span> <span class="nav-text">使用csc.exe生成</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8msbuild-exe%E7%94%9F%E6%88%90"><span class="nav-number">1.1.2.</span> <span class="nav-text">使用msbuild.exe生成</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%88%91%E6%8E%A8%E8%8D%90%E7%9A%84%E6%96%B9%E5%BC%8F"><span class="nav-number">1.2.</span> <span class="nav-text">我推荐的方式</span></a></li></ol></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="colafox"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">colafox</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fsquirt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fsquirt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fsquirt@qq.com" title="E-Mail → mailto:fsquirt@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/349511867" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;349511867" rel="noopener" target="_blank"><i class="fab fa-youtube fa-fw"></i>Bilibili</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://colafox.top/2022/07/20/csharpspy/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="colafox">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="colafox's blogs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="我用C#写的远控，使用教程 | colafox's blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          我用C#写的远控，使用教程
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-07-20 03:36:33" itemprop="dateCreated datePublished" datetime="2022-07-20T03:36:33+08:00">2022-07-20</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-08-02 05:35:43" itemprop="dateModified" datetime="2022-08-02T05:35:43+08:00">2022-08-02</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>程序<strong>本来开源</strong>，还发了视频在b站，不过现在视频已经删除，也已经闭源，主要是因为两个原因<br>1.开源后容易被杀软针对，当然绕一绕改一改特征码还是能过杀软<br>2.总有某些自以为是的人来嘲讽<br>如果你想获取一份源码，请向我发送邮件</p>
+<span id="more"></span>
+
+<h1 id="csharpspy"><a href="#csharpspy" class="headerlink" title="csharpspy"></a>csharpspy</h1><p>一个用C#写的功能简单的Windows远控程序<br>下载源码使用Visual Studio生成即可,默认使用的是.NET4.0框架,自行更改<br>注意:部分功能会从 colafox.top 下载组件,第一次使用相关功能时需要保持能连接到 <a href="https://colafox.top/">https://colafox.top/</a></p>
+<h3 id="运行前注意"><a href="#运行前注意" class="headerlink" title="运行前注意"></a>运行前注意</h3><p>为了避免奇形怪状的bug,程序运行前会删除目录下的所有文件.会有提示询问一次<br><img src="https://s1.328888.xyz/2022/07/19/l6z6C.png" alt="l6z6C.png"></p>
+<h2 id="生成一个被控端"><a href="#生成一个被控端" class="headerlink" title="生成一个被控端"></a>生成一个被控端</h2><p>程序提供了两种生成方式 使用csc.exe生成 或使用 msbuild.exe 生成<br><img src="https://img1.imgtp.com/2022/07/19/YDVe7co8.png" alt="image.png"></p>
+<p><strong>小白如何操作:</strong> 将仓库中 <code>client</code> 文件夹中的 <code>Program.cs</code> 拖入文本框, 或者点击下载源码，输入你的IP地址和端口号, 点击设置即可替换源代码中的地址. 选择勾选隐藏黑框选项 , 点击开始编译即可生成被控端</p>
+<h3 id="使用csc-exe生成"><a href="#使用csc-exe生成" class="headerlink" title="使用csc.exe生成"></a>使用csc.exe生成</h3><p>默认填写了.NET2.0 的路径,但是注意 .NET2.0 在Windows 10系统中是不会自带的,需要自行切换csc.exe的地址<br>举几个例子:<br>.NET 2.0 <code>C:\Windows\Microsoft.NET\Framework\v2.0.50727\csc.exe</code><br>.NET 3.5 <code>C:\Windows\Microsoft.NET\Framework\v3.5\csc.exe</code><br>.NET 4.0 <code>C:\Windows\Microsoft.NET\Framework\v4.0.30319\csc.exe</code><br>使用csc.exe可以直接将被控端源代码生成出exe程序,简单且快捷<br>但是我不推荐，这样生成出来的程序容易被杀软查杀，不隐藏黑框还不会被杀</p>
+<h3 id="使用msbuild-exe生成"><a href="#使用msbuild-exe生成" class="headerlink" title="使用msbuild.exe生成"></a>使用msbuild.exe生成</h3><p>这就和直接用Visual Studio没啥区别了</p>
+<h2 id="我推荐的方式"><a href="#我推荐的方式" class="headerlink" title="我推荐的方式"></a>我推荐的方式</h2><p>创建一个 <code>Windows窗体应用</code>, 将<code>Program.cs</code>中的相关代码放进去<br>在窗口加载事件的函数里加载<code>Program.cs</code>的main函数，再加一句 <code>this.Visible = false</code> 来隐藏窗口<br>这样同样能隐藏窗口 还能免杀<br><img src="https://img1.imgtp.com/2022/07/19/bOJ0TMy8.png" alt="QQ截图20220719004849.png"><br>举一反三，也可以找到开源的C#项目，重复以上操作</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/03/13/kaliwin7/" rel="prev" title="kali通过永恒之蓝漏洞入侵win7">
+                  <i class="fa fa-chevron-left"></i> kali通过永恒之蓝漏洞入侵win7
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2022/08/01/ddoscc/" rel="next" title="CC？ 本地发包？ 放马过来">
+                  CC？ 本地发包？ 放马过来 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">colafox</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.3/mermaid.min.js","integrity":"sha256-TIYL00Rhw/8WaoUhYTLX9SKIEFdXxg+yMWSLVUbhiLg="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"user-name/repo-name","issue_term":"pathname","theme":"github-dark"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"./live2d_models/haruna/33/model.2018.spring.json"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":true},"react":{"opacity":0.8},"log":false});</script></body>
+</html>

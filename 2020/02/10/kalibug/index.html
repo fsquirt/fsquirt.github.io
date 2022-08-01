@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#222" media="(prefers-color-scheme: dark)"><meta name="generator" content="Hexo 6.2.0">
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png">
+  <link rel="mask-icon" href="/images/logo.svg" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"colafox.top","root":"/","images":"/images","scheme":"Mist","darkmode":true,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+
+    <meta name="description" content="本人是个linux刚入门的新手，文章可能有误或存在争议，反馈邮箱&amp;#x66;&amp;#115;&amp;#x71;&amp;#117;&amp;#x69;&amp;#x72;&amp;#116;&amp;#x40;&amp;#113;&amp;#113;&amp;#46;&amp;#x63;&amp;#111;&amp;#109;，非常感谢支持！ 一些没用的P话没错没错，又是一篇讲kali linux的文章今天一个朋友来问我kali的安装步骤，我就远程帮他安装kali linux但是，新版kali">
+<meta property="og:type" content="article">
+<meta property="og:title" content="新版kali安装GNOME桌面环境">
+<meta property="og:url" content="https://colafox.top/2020/02/10/kalibug/index.html">
+<meta property="og:site_name" content="colafox&#39;s blogs">
+<meta property="og:description" content="本人是个linux刚入门的新手，文章可能有误或存在争议，反馈邮箱&amp;#x66;&amp;#115;&amp;#x71;&amp;#117;&amp;#x69;&amp;#x72;&amp;#116;&amp;#x40;&amp;#113;&amp;#113;&amp;#46;&amp;#x63;&amp;#111;&amp;#109;，非常感谢支持！ 一些没用的P话没错没错，又是一篇讲kali linux的文章今天一个朋友来问我kali的安装步骤，我就远程帮他安装kali linux但是，新版kali">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/DJpouZmSjTgEFXw.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/1N87yoDrTBzsmgJ.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/DeShxIvRsOcp7di.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/teDCZ2zEKcmFsLH.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/OJfaxDskn5NprHA.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/S7YsHWf9K5DQa1l.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/nU48RJoFI9dvT2K.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/iavtEMpL1PTCKmW.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/QX2pOAMDKHoFWZv.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/cLjC2bifVxN9gIo.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/bqS1KYHugs3FvJl.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/mKnkIYEryawibtx.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/CpZimxb76FyuR2j.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/zClbR2F8HJMXOuB.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/MKGugC2LqtPcIUS.png">
+<meta property="og:image" content="https://i.loli.net/2020/03/13/yPIrx9bJXd73mGL.png">
+<meta property="article:published_time" content="2020-02-09T17:02:47.000Z">
+<meta property="article:modified_time" content="2020-03-12T16:36:17.494Z">
+<meta property="article:author" content="colafox">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://i.loli.net/2020/03/13/DJpouZmSjTgEFXw.png">
+
+
+<link rel="canonical" href="https://colafox.top/2020/02/10/kalibug/">
+
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://colafox.top/2020/02/10/kalibug/","path":"2020/02/10/kalibug/","title":"新版kali安装GNOME桌面环境"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>新版kali安装GNOME桌面环境 | colafox's blogs</title>
+  
+
+
+
+
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+  <div class="headband"></div>
+
+  <main class="main">
+    <header class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">colafox's blogs</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">童年的雨天全是泥泞，却是我记忆里最干净的曾经</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="home fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="archive fa-fw"></i>归档</a></li><li class="menu-item menu-item-留言板"><a href="/2019/12/26/ss/" rel="section"><i class="user fa-fw"></i>留言板</a></li>
+  </ul>
+</nav>
+
+
+
+
+</div>
+        
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E4%BA%9B%E6%B2%A1%E7%94%A8%E7%9A%84P%E8%AF%9D"><span class="nav-number">1.</span> <span class="nav-text">一些没用的P话</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%80%E5%A7%8B%EF%BC%81"><span class="nav-number">2.</span> <span class="nav-text">开始！</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A7%89%E5%BE%97GNOME%E5%A4%AA%E5%8D%A1%EF%BC%9F%E9%82%A3%E5%B0%B1%E6%8D%A2%E5%9B%9EXfce%E5%90%A7%EF%BC%81%EF%BC%88%E6%8E%A8%E8%8D%90%E5%86%85%E5%AD%98%E5%B0%8F%E7%9A%84%E4%BD%BF%E7%94%A8%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">觉得GNOME太卡？那就换回Xfce吧！（推荐内存小的使用）</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8F%91%E4%B8%80%E4%B8%8B%E7%89%A2%E9%AA%9A"><span class="nav-number">4.</span> <span class="nav-text">发一下牢骚</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author site-overview-item animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="colafox"
+      src="/images/avatar.gif">
+  <p class="site-author-name" itemprop="name">colafox</p>
+  <div class="site-description" itemprop="description"></div>
+</div>
+<div class="site-state-wrap site-overview-item animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author site-overview-item animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/fsquirt" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;fsquirt" rel="noopener" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:fsquirt@qq.com" title="E-Mail → mailto:fsquirt@qq.com" rel="noopener" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="https://space.bilibili.com/349511867" title="Bilibili → https:&#x2F;&#x2F;space.bilibili.com&#x2F;349511867" rel="noopener" target="_blank"><i class="fab fa-youtube fa-fw"></i>Bilibili</a>
+      </span>
+  </div>
+
+
+
+        </div>
+      </div>
+    </div>
+  </aside>
+  <div class="sidebar-dimmer"></div>
+
+
+    </header>
+
+    
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://colafox.top/2020/02/10/kalibug/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="colafox">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="colafox's blogs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="新版kali安装GNOME桌面环境 | colafox's blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          新版kali安装GNOME桌面环境
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2020-02-10 01:02:47" itemprop="dateCreated datePublished" datetime="2020-02-10T01:02:47+08:00">2020-02-10</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2020-03-13 00:36:17" itemprop="dateModified" datetime="2020-03-13T00:36:17+08:00">2020-03-13</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+        <p>本人是个linux刚入门的新手，文章可能有误或存在争议，反馈邮箱<a href="mailto:&#x66;&#115;&#x71;&#117;&#x69;&#x72;&#116;&#x40;&#113;&#113;&#46;&#x63;&#111;&#109;">&#x66;&#115;&#x71;&#117;&#x69;&#x72;&#116;&#x40;&#113;&#113;&#46;&#x63;&#111;&#109;</a>，非常感谢支持！</p>
+<h2 id="一些没用的P话"><a href="#一些没用的P话" class="headerlink" title="一些没用的P话"></a>一些没用的P话</h2><p>没错没错，又是一篇讲kali linux的文章<br>今天一个朋友来问我kali的安装步骤，我就远程帮他安装kali linux<br>但是，新版kali在安装盘中省略掉了很多东西，这就需要用户在安装的时候联网从kali官方下载别的组件<br>但下载速度实在是太慢了，一个多小时还没好，我直接断网重新安装kali linux，一路下一步下一步。结果，没有桌面环境。</p>
+<span id="more"></span>
+
+<p>淦！在选择安装软件时，我明明勾选了<strong>default desktop environment</strong>(默认桌面环境)。<br>而且新版kali也自带了Xfce4,但它不启动。我重度依赖图形化界面，毕竟我是新手。去网上查办法，百度的话都是怎么安装远程桌面的桌面环境。<br>我试了试使用<strong>update-alternatives –config x-session-manager</strong>来切换桌面，从回显可以看到有三个Xfce4桌面的选项，可我试了都没用！<br>那就自己来装个漂亮的GNOME吧！</p>
+<h2 id="开始！"><a href="#开始！" class="headerlink" title="开始！"></a>开始！</h2><p>这里说下，因为安装时选的是中文，而没有桌面环境话中文都是菱形。所以，注意了，别把指令敲错了。</p>
+<p><strong>Step1.设置root的密码</strong><br>首先登录，输入设好的用户名，回车，再输入设好的密码，回车，登录成功然后<strong>sudo passwd root</strong>设置root的密码<br>注意：输入指令后，你需要先输一次你在安装过程中设置的账户（也就是你现在登的账户）的密码，回车，然后再输入你设置的root的密码，回车，再重复一遍<br>执行<strong>su</strong>，再输入你置的root的密码<br><img src="https://i.loli.net/2020/03/13/DJpouZmSjTgEFXw.png" alt="1.png"></p>
+<p>Step2.加源<br>使用<strong>vim &#x2F;etc&#x2F;apt&#x2F;sources.list</strong>打开源的配置文件</p>
+<p><img src="https://i.loli.net/2020/03/13/1N87yoDrTBzsmgJ.png" alt="2.png"></p>
+<p>然后需要进入编辑模式，按i、I、a、A、o、O、r和R中某个键即可。</p>
+<p><img src="https://i.loli.net/2020/03/13/DeShxIvRsOcp7di.png" alt="3.png"></p>
+<p>用上下左右方向键移动编辑的位置，在文末加上:<br><strong>#aliyun</strong><br><strong>deb <a target="_blank" rel="noopener" href="http://mirrors.aliyun.com/kali">http://mirrors.aliyun.com/kali</a> kali-rolling main non-free contrib</strong><br><strong>deb-src <a target="_blank" rel="noopener" href="http://mirrors.aliyun.com/kali">http://mirrors.aliyun.com/kali</a> kali-rolling main non-free contrib</strong><br>然后按Esc键，再按冒号键（L键右边的那个）+shift，输入wq，回车。</p>
+<p><img src="https://i.loli.net/2020/03/13/teDCZ2zEKcmFsLH.png" alt="4.png"></p>
+<p><strong>Step3.开始安装GNOME</strong><br>敲下面的指令：<br><strong>apt update</strong></p>
+<p><img src="https://i.loli.net/2020/03/13/OJfaxDskn5NprHA.png" alt="5.png"></p>
+<p><strong>apt-get install gnome-core kali-defaults kali-root-login desktop-base</strong><br>刚敲指令后，会问你要不要安装，按Y，回车。</p>
+<p><img src="https://i.loli.net/2020/03/13/S7YsHWf9K5DQa1l.png" alt="6.png"></p>
+<p><img src="https://i.loli.net/2020/03/13/nU48RJoFI9dvT2K.png" alt="7.png"></p>
+<p>然后kali就开始安装GNOME了，记得联网，<strong>中途会弹出配置界面，按上下键选择gdm3</strong>,回车。<br>当最后一行出现root@kali: ,也就是让你敲指令的时候，GNOME已经安装好了</p>
+<p>如果没有让你选择gdm3就直接结束了，最后一行直接是root@kali:了，那就</p>
+<p><strong>apt-get update –fix-missing</strong><br><strong>apt-get install gnome-core kali-defaults kali-root-login desktop-base</strong></p>
+<p><img src="https://i.loli.net/2020/03/13/iavtEMpL1PTCKmW.png" alt="8.png"><br><img src="https://i.loli.net/2020/03/13/QX2pOAMDKHoFWZv.png" alt="9.png"><br><img src="https://i.loli.net/2020/03/13/cLjC2bifVxN9gIo.png" alt="10.png"></p>
+<p>来再把GNOME装一次</p>
+<p><strong>Step4.能干嘛？重启呀</strong></p>
+<p><img src="https://i.loli.net/2020/03/13/bqS1KYHugs3FvJl.png" alt="11.png"></p>
+<p>重启指令：<br><strong>reboot</strong><br>然后，桌面环境就出来了。</p>
+<p><img src="https://i.loli.net/2020/03/13/mKnkIYEryawibtx.png" alt="12.png"></p>
+<h2 id="觉得GNOME太卡？那就换回Xfce吧！（推荐内存小的使用）"><a href="#觉得GNOME太卡？那就换回Xfce吧！（推荐内存小的使用）" class="headerlink" title="觉得GNOME太卡？那就换回Xfce吧！（推荐内存小的使用）"></a>觉得GNOME太卡？那就换回Xfce吧！（推荐内存小的使用）</h2><p>还记得之前说kali自带了Xfce4桌面环境吗？我不知道为什么，在我卸载掉GNOME后，Xfce桌面环境就正常工作了！<br>手动滑稽，新版kali有点意思。。P话不多说，开始<br>1.在登录界面按下Ctrl+Alt+F3，进入无图形化界面，以root的身份登录<br>2.<strong>sudo apt-get remove gnome-shell</strong> 卸载GNOME，在输完这个指令后一会会黑屏，按Ctrl+Alt+Delete重启。此时你就会发现Xfce启动了！我也不知道为什么！但清理工作还没有结束，继续以root身份登录</p>
+<p><img src="https://i.loli.net/2020/03/13/CpZimxb76FyuR2j.png" alt="13.png"><br><img src="https://i.loli.net/2020/03/13/zClbR2F8HJMXOuB.png" alt="14.png"></p>
+<p>3.<strong>apt-get autoremove</strong> 来卸载不必要的依赖关系<br><img src="https://i.loli.net/2020/03/13/MKGugC2LqtPcIUS.png" alt="15.png"><br>4.<strong>apt-get remove gnome</strong>* 来卸载GNOME的一切<br><img src="https://i.loli.net/2020/03/13/yPIrx9bJXd73mGL.png" alt="16.png"><br>5.<strong>apt-get autoclean</strong> 和 <strong>apt-get clean</strong>再清理下<br>至此，你已经成功换回Xfce4了，它的内存占用更低，对性能的要求也更低。有可能会中文乱码，我的网站里也有解决办法</p>
+<h2 id="发一下牢骚"><a href="#发一下牢骚" class="headerlink" title="发一下牢骚"></a>发一下牢骚</h2><p>啊啊啊我大概花了差不多一天来搞这事啊。。<br>不知道为什么，我使用VM12虚拟机装kali时，硬盘占用一点都不高。搞得我慢慢的等。硬盘绝对没问题</p>
+<p>上次更新时间2020-02-11 21点41分 文章改动次数：6次</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2020/02/05/kalitxt/" rel="prev" title="解决新版kali中文乱码和不能使用dpkg装软件">
+                  <i class="fa fa-chevron-left"></i> 解决新版kali中文乱码和不能使用dpkg装软件
+                </a>
+            </div>
+            <div class="post-nav-item">
+                <a href="/2020/03/13/kaliwin7/" rel="next" title="kali通过永恒之蓝漏洞入侵win7">
+                  kali通过永恒之蓝漏洞入侵win7 <i class="fa fa-chevron-right"></i>
+                </a>
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments utterances-container"></div>
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+
+<div class="copyright">
+  &copy; 
+  <span itemprop="copyrightYear">2022</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">colafox</span>
+</div>
+  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/mist/" rel="noopener" target="_blank">NexT.Mist</a> 强力驱动
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous"></script>
+<script src="/js/comments.js"></script><script src="/js/utils.js"></script><script src="/js/motion.js"></script><script src="/js/schemes/muse.js"></script><script src="/js/next-boot.js"></script>
+
+  
+
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"default","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/9.1.3/mermaid.min.js","integrity":"sha256-TIYL00Rhw/8WaoUhYTLX9SKIEFdXxg+yMWSLVUbhiLg="}}</script>
+  <script src="/js/third-party/tags/mermaid.js"></script>
+
+
+
+  
+
+
+
+
+<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"user-name/repo-name","issue_term":"pathname","theme":"github-dark"}</script>
+<script src="/js/third-party/comments/utterances.js"></script>
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"./live2d_models/haruna/33/model.2018.spring.json"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":true},"react":{"opacity":0.8},"log":false});</script></body>
+</html>
