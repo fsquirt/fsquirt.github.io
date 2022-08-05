@@ -127,7 +127,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">8</span>
+          <span class="site-state-item-count">9</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -177,7 +177,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
-    <link itemprop="mainEntityOfPage" href="https://colafox.top/2022/08/05/fuckupxbyhand/">
+    <link itemprop="mainEntityOfPage" href="https://colafox.top/2022/08/05/handaspark/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -195,7 +195,7 @@
     </span>
       <header class="post-header">
         <h2 class="post-title" itemprop="name headline">
-          <a href="/2022/08/05/fuckupxbyhand/" class="post-title-link" itemprop="url">手脱UPX壳的一些方法</a>
+          <a href="/2022/08/05/handaspark/" class="post-title-link" itemprop="url">另外两种全自动手脱Aspark壳的方法</a>
         </h2>
 
         <div class="post-meta-container">
@@ -205,9 +205,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2022-08-05 01:42:05 / 修改时间：02:46:56" itemprop="dateCreated datePublished" datetime="2022-08-05T01:42:05+08:00">2022-08-05</time>
+      <time title="创建时间：2022-08-05 11:45:05" itemprop="dateCreated datePublished" datetime="2022-08-05T11:45:05+08:00">2022-08-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-08-06 00:47:14" itemprop="dateModified" datetime="2022-08-06T00:47:14+08:00">2022-08-06</time>
     </span>
 
   
@@ -221,10 +227,90 @@
     
     <div class="post-body" itemprop="articleBody">
           <h1 id="查壳"><a href="#查壳" class="headerlink" title="查壳"></a>查壳</h1><p>用PEID查壳</p>
-<h1 id="寻找OEP"><a href="#寻找OEP" class="headerlink" title="寻找OEP"></a>寻找OEP</h1><h2 id="单步跟踪"><a href="#单步跟踪" class="headerlink" title="单步跟踪"></a>单步跟踪</h2><p>一步一步手动跟踪，向上的跳转不能让它实现，向下反之<br>Ollydbg 下一步快捷键 F8</p>
+<h1 id="寻找OEP"><a href="#寻找OEP" class="headerlink" title="寻找OEP"></a>寻找OEP</h1><p>让ollydbg自动帮你找OEP吧！</p>
+<h2 id="模拟跟踪"><a href="#模拟跟踪" class="headerlink" title="模拟跟踪"></a>模拟跟踪</h2><p>打开内存窗口 找到包含列中含有 “SFX IMPORTS 输入表” 字样的<strong>内存地址</strong><br>命令行输入 <strong>tc eip&lt;内存地址</strong> , 回车<br>左上角显示 跟踪 两字，等待就能跳到OEP ， 没跳过去也能单步跟踪<br>不过很慢</p>
+<h2 id="SFX"><a href="#SFX" class="headerlink" title="SFX"></a>SFX</h2><p>选项 -&gt; 调试选项 -&gt; SFX选项卡<br>勾选“块方式跟踪真正入口处（不一定准确）” 或者 “字节方式跟踪真正入口处（速度非常慢）” 确定<br>点击重载 就能跳到OEP</p>
+
+      
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+        <div class="post-eof"></div>
+      
+    </footer>
+  </article>
+</div>
+
+
+
+
+    
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="">
+    <link itemprop="mainEntityOfPage" href="https://colafox.top/2022/08/05/upxbyhand/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.gif">
+      <meta itemprop="name" content="colafox">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="colafox's blogs">
+      <meta itemprop="description" content="">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="undefined | colafox's blogs">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h2 class="post-title" itemprop="name headline">
+          <a href="/2022/08/05/upxbyhand/" class="post-title-link" itemprop="url">手脱UPX壳的一些方法</a>
+        </h2>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+
+      <time title="创建时间：2022-08-05 01:42:05" itemprop="dateCreated datePublished" datetime="2022-08-05T01:42:05+08:00">2022-08-05</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2022-08-06 00:36:44" itemprop="dateModified" datetime="2022-08-06T00:36:44+08:00">2022-08-06</time>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+          <h1 id="查壳"><a href="#查壳" class="headerlink" title="查壳"></a>查壳</h1><p>用PEID查壳</p>
+<h1 id="寻找OEP"><a href="#寻找OEP" class="headerlink" title="寻找OEP"></a>寻找OEP</h1><p>寻找关键语句 popad</p>
+<h2 id="单步跟踪"><a href="#单步跟踪" class="headerlink" title="单步跟踪"></a>单步跟踪</h2><p>一步一步手动跟踪，向上的跳转不能让它实现，向下反之<br>Ollydbg 下一步快捷键 F8</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2022/08/05/fuckupxbyhand/#more" rel="contents">
+              <a class="btn" href="/2022/08/05/upxbyhand/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
