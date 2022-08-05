@@ -29,7 +29,7 @@
 <meta property="og:description" content="查壳用PEID查壳 寻找OEP寻找关键语句 popad 单步跟踪一步一步手动跟踪，向上的跳转不能让它实现，向下反之Ollydbg 下一步快捷键 F8">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2022-08-04T17:42:05.000Z">
-<meta property="article:modified_time" content="2022-08-05T16:36:44.730Z">
+<meta property="article:modified_time" content="2022-08-05T16:57:48.388Z">
 <meta property="article:author" content="colafox">
 <meta name="twitter:card" content="summary">
 
@@ -219,7 +219,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-08-06 00:36:44" itemprop="dateModified" datetime="2022-08-06T00:36:44+08:00">2022-08-06</time>
+      <time title="修改时间：2022-08-06 00:57:48" itemprop="dateModified" datetime="2022-08-06T00:57:48+08:00">2022-08-06</time>
     </span>
 
   
@@ -238,7 +238,7 @@
 <span id="more"></span>
 <p>遇到向上的跳转方法：<br>1.在下一行右键 -&gt; 断点 -&gt; 运行到所选位置(F4)<br>2.右键 -&gt; 断点 -&gt; 切换(F2) 先下一个断点，然后运行，同样的方法取消断点<br>如果下一行是call 那就再下一行 popad出栈<br>popad下很大的跳转jmp ， 会跳到 OEP(真正的程序入口点)</p>
 <h2 id="ESP定律法"><a href="#ESP定律法" class="headerlink" title="ESP定律法"></a>ESP定律法</h2><p>先执行单步，查看窗口右侧ESP的值，在右下角命令输入<br><strong>dd ESP的值</strong> 或者 <strong>hr ESP的值</strong> 回车<br>或者 右键ESP后的数据 -&gt; 在数据窗口跟随<br>数值右键 -&gt; 断点 -&gt; 设置硬件访问断点 -&gt; Dword 或 Word -&gt; 运行<br>调试 -&gt; 硬件断点(H) -&gt; 删除硬件断点<br>再次单步 到达OEP</p>
-<h2 id="2次内存镜像法"><a href="#2次内存镜像法" class="headerlink" title="2次内存镜像法"></a>2次内存镜像法</h2><p>打开内存窗口(Alt + M) 或者点击M按钮<br>找到程序段第一个 <strong>.rsrc</strong> 下断点<br>右键 -&gt; 设置访问中断 -&gt; 运行(shift + F9)<br>再次打开内存窗口，在<strong>OO4O1OO</strong> 下断点，再运行<br>之后执行单步，就能看见popad下很大的跳转，跳转过去OEP</p>
+<h2 id="2次内存镜像法"><a href="#2次内存镜像法" class="headerlink" title="2次内存镜像法"></a>2次内存镜像法</h2><p>打开内存窗口(Alt + M) 或者点击M按钮<br>找到程序段第一个 <strong>.rsrc</strong> 下断点，如果没有 就跳过<br>右键 -&gt; 设置访问中断 -&gt; 运行(shift + F9)<br>再次打开内存窗口，在<strong>OO4O1OO</strong> 下断点，再运行<br>之后执行单步，就能看见popad下很大的跳转，跳转过去OEP</p>
 <h2 id="一步简便法-UPX-ASPARK"><a href="#一步简便法-UPX-ASPARK" class="headerlink" title="一步简便法(UPX ASPARK)"></a>一步简便法(UPX ASPARK)</h2><p>直接找出栈命令 popad<br>入口右键 -&gt; 查找(S) -&gt; 命令(C)<br>不用勾选整个断块<br>继续执行单步，直到到达OEP</p>
 <h1 id="开始脱壳"><a href="#开始脱壳" class="headerlink" title="开始脱壳"></a>开始脱壳</h1><h2 id="OD插件脱壳"><a href="#OD插件脱壳" class="headerlink" title="OD插件脱壳"></a>OD插件脱壳</h2><p>找到真正程序入口点后 右键那一行 -&gt; 用OllyDump脱壳调试进程<br>方式1 ： 在内存镜像中搜索JMP[API] | CALL[API]<br>方式2 ： 在脱壳文件中搜索DLL &amp; API名称</p>
 <p>复制第二行修正后的入口点地址</p>
