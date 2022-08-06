@@ -19,13 +19,13 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css" integrity="sha256-DfWjNxDkM94fVBWx1H5BMMp0Zq7luBlV8QRcSES7s+0=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"colafox.top","root":"/","images":"/images","scheme":"Mist","darkmode":true,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"colafox.top","root":"/","images":"/images","scheme":"Mist","darkmode":true,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
     <meta name="description" content="程序本来开源，还发了视频在b站，不过现在视频已经删除，也已经闭源，主要是因为两个原因1.开源后容易被杀软针对，当然绕一绕改一改特征码还是能过杀软2.总有某些自以为是的人来嘲讽如果你想获取一份源码，请向我发送邮件">
 <meta property="og:type" content="article">
 <meta property="og:title" content="我用C#写的远控，使用教程">
 <meta property="og:url" content="https://colafox.top/2022/07/20/csharpspy/index.html">
-<meta property="og:site_name" content="colafox&#39;s blogs">
+<meta property="og:site_name" content="colafox&#39;s blog">
 <meta property="og:description" content="程序本来开源，还发了视频在b站，不过现在视频已经删除，也已经闭源，主要是因为两个原因1.开源后容易被杀软针对，当然绕一绕改一改特征码还是能过杀软2.总有某些自以为是的人来嘲讽如果你想获取一份源码，请向我发送邮件">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://s1.328888.xyz/2022/07/19/l6z6C.png">
@@ -45,7 +45,7 @@
 <script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://colafox.top/2022/07/20/csharpspy/","path":"2022/07/20/csharpspy/","title":"我用C#写的远控，使用教程"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>我用C#写的远控，使用教程 | colafox's blogs</title>
+<title>我用C#写的远控，使用教程 | colafox's blog</title>
   
 
 
@@ -75,7 +75,7 @@
 
     <a href="/" class="brand" rel="start">
       <i class="logo-line"></i>
-      <p class="site-title">colafox's blogs</p>
+      <p class="site-title">colafox's blog</p>
       <i class="logo-line"></i>
     </a>
       <p class="site-subtitle" itemprop="description">童年的雨天全是泥泞，却是我记忆里最干净的曾经</p>
@@ -195,12 +195,12 @@
     </span>
 
     <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="colafox's blogs">
+      <meta itemprop="name" content="colafox's blog">
       <meta itemprop="description" content="">
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="我用C#写的远控，使用教程 | colafox's blogs">
+      <meta itemprop="name" content="我用C#写的远控，使用教程 | colafox's blog">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
@@ -278,7 +278,7 @@
 
 
 
-    <div class="comments utterances-container"></div>
+    <div class="comments gitalk-container"></div>
 </div>
   </main>
 
@@ -317,8 +317,10 @@
 
 
 
-<script class="next-config" data-name="utterances" type="application/json">{"enable":true,"repo":"user-name/repo-name","issue_term":"pathname","theme":"github-dark"}</script>
-<script src="/js/third-party/comments/utterances.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
+
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"fsquirt","repo":"fsquirt.github.io","client_id":"dcd4dcd83d9bc86ace7e","client_secret":"de37f3e1ef196cd611a14c3db70ad199b3958d20","admin_user":"fsquirt","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"2a6ab12f9c59888fe8e727a544cab87d"}</script>
+<script src="/js/third-party/comments/gitalk.js"></script>
 
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"./live2d_models/haruna/33/model.2018.spring.json"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":true},"react":{"opacity":0.8},"log":false});</script></body>
 </html>
