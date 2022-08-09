@@ -21,28 +21,28 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"colafox.top","root":"/","images":"/images","scheme":"Mist","darkmode":true,"version":"8.12.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12},"copycode":{"enable":false,"style":null},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":"gitalk","storage":true,"lazyload":false,"nav":null,"activeClass":"gitalk"},"stickytabs":false,"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"prism":false,"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js"></script>
 
-    <meta name="description" content="查壳用PEID查壳 寻找OEP让ollydbg自动帮你找OEP吧！ 模拟跟踪打开内存窗口 找到包含列中含有 “SFX IMPORTS 输入表” 字样的内存地址命令行输入 tc eip&lt;内存地址 , 回车左上角显示 跟踪 两字，等待就能跳到OEP ， 没跳过去也能单步跟踪不过很慢 SFX选项 -&gt; 调试选项 -&gt; SFX选项卡勾选“块方式跟踪真正入口处（不一定准确）” 或者 “字节">
+    <meta name="description" content="北斗壳版本小于3.0下断点，命令行输入at GetVersion在下面的retn下断点，运行，取消断点，单步OEP在上方 北斗壳版本大于3.0peid查壳的时候可能会显示查不到壳，但是EP区段会写:nsp0 或者 nsp1运行时会上来就是一个jmp，单步就行ESP定律法等等都可用">
 <meta property="og:type" content="article">
-<meta property="og:title" content="另外两种全自动手脱Aspark壳的方法">
-<meta property="og:url" content="https://colafox.top/2022/08/05/handaspark/index.html">
+<meta property="og:title" content="手托北斗壳的别的方法">
+<meta property="og:url" content="https://colafox.top/2022/08/08/handbeidou/index.html">
 <meta property="og:site_name" content="colafox的会员制餐厅">
-<meta property="og:description" content="查壳用PEID查壳 寻找OEP让ollydbg自动帮你找OEP吧！ 模拟跟踪打开内存窗口 找到包含列中含有 “SFX IMPORTS 输入表” 字样的内存地址命令行输入 tc eip&lt;内存地址 , 回车左上角显示 跟踪 两字，等待就能跳到OEP ， 没跳过去也能单步跟踪不过很慢 SFX选项 -&gt; 调试选项 -&gt; SFX选项卡勾选“块方式跟踪真正入口处（不一定准确）” 或者 “字节">
+<meta property="og:description" content="北斗壳版本小于3.0下断点，命令行输入at GetVersion在下面的retn下断点，运行，取消断点，单步OEP在上方 北斗壳版本大于3.0peid查壳的时候可能会显示查不到壳，但是EP区段会写:nsp0 或者 nsp1运行时会上来就是一个jmp，单步就行ESP定律法等等都可用">
 <meta property="og:locale" content="zh_CN">
-<meta property="article:published_time" content="2022-08-05T03:45:05.000Z">
-<meta property="article:modified_time" content="2022-08-05T16:47:14.507Z">
+<meta property="article:published_time" content="2022-08-07T18:27:17.000Z">
+<meta property="article:modified_time" content="2022-08-07T18:33:22.053Z">
 <meta property="article:author" content="colafox">
 <meta property="article:tag" content="kali,黑客,小白,linux,windows,逆向,脱壳,OD">
 <meta name="twitter:card" content="summary">
 
 
-<link rel="canonical" href="https://colafox.top/2022/08/05/handaspark/">
+<link rel="canonical" href="https://colafox.top/2022/08/08/handbeidou/">
 
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://colafox.top/2022/08/05/handaspark/","path":"2022/08/05/handaspark/","title":"另外两种全自动手脱Aspark壳的方法"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://colafox.top/2022/08/08/handbeidou/","path":"2022/08/08/handbeidou/","title":"手托北斗壳的别的方法"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>另外两种全自动手脱Aspark壳的方法 | colafox的会员制餐厅</title>
+<title>手托北斗壳的别的方法 | colafox的会员制餐厅</title>
   
 
 
@@ -118,7 +118,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%9F%A5%E5%A3%B3"><span class="nav-number">1.</span> <span class="nav-text">查壳</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AF%BB%E6%89%BEOEP"><span class="nav-number">2.</span> <span class="nav-text">寻找OEP</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A8%A1%E6%8B%9F%E8%B7%9F%E8%B8%AA"><span class="nav-number">2.1.</span> <span class="nav-text">模拟跟踪</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#SFX"><span class="nav-number">2.2.</span> <span class="nav-text">SFX</span></a></li></ol></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%97%E6%96%97%E5%A3%B3%E7%89%88%E6%9C%AC%E5%B0%8F%E4%BA%8E3-0"><span class="nav-number">1.</span> <span class="nav-text">北斗壳版本小于3.0</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%8C%97%E6%96%97%E5%A3%B3%E7%89%88%E6%9C%AC%E5%A4%A7%E4%BA%8E3-0"><span class="nav-number">2.</span> <span class="nav-text">北斗壳版本大于3.0</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -184,7 +184,7 @@
   
 
   <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="https://colafox.top/2022/08/05/handaspark/">
+    <link itemprop="mainEntityOfPage" href="https://colafox.top/2022/08/08/handbeidou/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.gif">
@@ -197,12 +197,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="另外两种全自动手脱Aspark壳的方法 | colafox的会员制餐厅">
+      <meta itemprop="name" content="手托北斗壳的别的方法 | colafox的会员制餐厅">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          另外两种全自动手脱Aspark壳的方法
+          手托北斗壳的别的方法
         </h1>
 
         <div class="post-meta-container">
@@ -212,15 +212,9 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
+      
 
-      <time title="创建时间：2022-08-05 11:45:05" itemprop="dateCreated datePublished" datetime="2022-08-05T11:45:05+08:00">2022-08-05</time>
-    </span>
-    <span class="post-meta-item">
-      <span class="post-meta-item-icon">
-        <i class="far fa-calendar-check"></i>
-      </span>
-      <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2022-08-06 00:47:14" itemprop="dateModified" datetime="2022-08-06T00:47:14+08:00">2022-08-06</time>
+      <time title="创建时间：2022-08-08 02:27:17 / 修改时间：02:33:22" itemprop="dateCreated datePublished" datetime="2022-08-08T02:27:17+08:00">2022-08-08</time>
     </span>
 
   
@@ -233,10 +227,8 @@
     
     
     <div class="post-body" itemprop="articleBody">
-        <h1 id="查壳"><a href="#查壳" class="headerlink" title="查壳"></a>查壳</h1><p>用PEID查壳</p>
-<h1 id="寻找OEP"><a href="#寻找OEP" class="headerlink" title="寻找OEP"></a>寻找OEP</h1><p>让ollydbg自动帮你找OEP吧！</p>
-<h2 id="模拟跟踪"><a href="#模拟跟踪" class="headerlink" title="模拟跟踪"></a>模拟跟踪</h2><p>打开内存窗口 找到包含列中含有 “SFX IMPORTS 输入表” 字样的<strong>内存地址</strong><br>命令行输入 <strong>tc eip&lt;内存地址</strong> , 回车<br>左上角显示 跟踪 两字，等待就能跳到OEP ， 没跳过去也能单步跟踪<br>不过很慢</p>
-<h2 id="SFX"><a href="#SFX" class="headerlink" title="SFX"></a>SFX</h2><p>选项 -&gt; 调试选项 -&gt; SFX选项卡<br>勾选“块方式跟踪真正入口处（不一定准确）” 或者 “字节方式跟踪真正入口处（速度非常慢）” 确定<br>点击重载 就能跳到OEP</p>
+        <h1 id="北斗壳版本小于3-0"><a href="#北斗壳版本小于3-0" class="headerlink" title="北斗壳版本小于3.0"></a>北斗壳版本小于3.0</h1><p>下断点，命令行输入<strong>at GetVersion</strong><br>在下面的retn下断点，运行，取消断点，单步<br>OEP在上方</p>
+<h1 id="北斗壳版本大于3-0"><a href="#北斗壳版本大于3-0" class="headerlink" title="北斗壳版本大于3.0"></a>北斗壳版本大于3.0</h1><p>peid查壳的时候可能会显示查不到壳，但是EP区段会写:nsp0 或者 nsp1<br>运行时会上来就是一个jmp，单步就行<br>ESP定律法等等都可用</p>
 
     </div>
 
@@ -250,14 +242,11 @@
 
           <div class="post-nav">
             <div class="post-nav-item">
-                <a href="/2022/08/05/upxbyhand/" rel="prev" title="手脱UPX壳的一些方法">
-                  <i class="fa fa-chevron-left"></i> 手脱UPX壳的一些方法
+                <a href="/2022/08/05/handaspark/" rel="prev" title="另外两种全自动手脱Aspark壳的方法">
+                  <i class="fa fa-chevron-left"></i> 另外两种全自动手脱Aspark壳的方法
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2022/08/08/handbeidou/" rel="next" title="手托北斗壳的别的方法">
-                  手托北斗壳的别的方法 <i class="fa fa-chevron-right"></i>
-                </a>
             </div>
           </div>
     </footer>
@@ -310,7 +299,7 @@
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.css" integrity="sha256-AJnUHL7dBv6PGaeyPQJcgQPDjt/Hn/PvYZde1iqfp8U=" crossorigin="anonymous">
 
-<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"fsquirt","repo":"fsquirt.github.io","client_id":"dcd4dcd83d9bc86ace7e","client_secret":"de37f3e1ef196cd611a14c3db70ad199b3958d20","admin_user":"fsquirt","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"e86b844d2d0d90a91c1ca23fd4ea62c6"}</script>
+<script class="next-config" data-name="gitalk" type="application/json">{"enable":true,"github_id":"fsquirt","repo":"fsquirt.github.io","client_id":"dcd4dcd83d9bc86ace7e","client_secret":"de37f3e1ef196cd611a14c3db70ad199b3958d20","admin_user":"fsquirt","distraction_free_mode":true,"proxy":"https://cors-anywhere.azm.workers.dev/https://github.com/login/oauth/access_token","language":"zh-CN","js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/gitalk/1.7.2/gitalk.min.js","integrity":"sha256-Pmj85ojLaPOWwRtlMJwmezB/Qg8BzvJp5eTzvXaYAfA="},"path_md5":"ff0beffae8da158f0f0ba93ec8e1de09"}</script>
 <script src="/js/third-party/comments/gitalk.js"></script>
 
 <script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"./live2d_models/haruna/33/model.2017.summer.normal.1.json"},"display":{"position":"right","width":300,"height":600},"mobile":{"show":true},"react":{"opacity":0.8},"log":false});</script></body>

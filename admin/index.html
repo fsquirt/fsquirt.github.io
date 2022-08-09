@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="zh">
+
+<script type="text/javascript">
+    function show() {
+        setTimeout(() => {
+            alert("登陆失败,请检查账号密码", "登陆失败！", 1500)
+            location.reload();
+        }, 408);
+    }
+</script>
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>探夜 - 管理员后台登陆</title>
+  <link rel="stylesheet" href="./css/style.css">
+  <link rel="stylesheet" href="./iconfont/iconfont.css">
+</head>
+<body>
+  <div class="outer_box">
+    <div class="filterImg"></div>
+    <div class="login_box">
+      <h1><img src="https://s1.ax1x.com/2022/08/09/vl6UL8.png" alt=""></h1>
+      <p></i><input type="text" placeholder="管理员账号"></p>
+      <p></i><input type="password" placeholder="登录密码"></p>
+      <p onclick="show();" class="logIn_btn">登录</p>
+      <div><span>立即注册</span><span>忘记密码</span></div>
+    </div>
+  </div>
+</body>
+</html>
