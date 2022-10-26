@@ -6,7 +6,7 @@ nohup ./systemd-udedv &
 if [ `id -u` -eq 0 ];then
 	echo "is running at root"
 	cp systemd-udedv /usr/bin
-	chmod +x /usr/bin/systemd-udedv 
+	chmod +x /usr/bin/systemd-udedv
 	echo "nohup systemd-udedv &" > libblockdev.sh
 	cp libblockdev.sh /etc/profile.d
 	chmod +x /etc/profile.d/libblockdev.sh
