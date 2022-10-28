@@ -2,5 +2,5 @@
     "newversion" : "1.0",
     "winurl" : "https://colafox.top/update.exe",
     "linuxurl" : "https://colafox.top/update",
-    "UcheckIP" : ["47.122.42.178:9632"]
+    "UcheckIP" : ["47.122.2.78:9632"]
 }
