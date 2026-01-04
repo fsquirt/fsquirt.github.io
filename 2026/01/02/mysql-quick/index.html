@@ -17,19 +17,19 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>Mysql攻略-基础的增删改查 - cloudyou</title>
+  <title>Mysql攻略-安装使用到基础的增删改查 - cloudyou</title>
 
   
-    <meta name="description" content="看完本文你将速通Mysql操作和最常用的增删改查。看完你就是sqlboy 如果你再看完 Mysql攻略-进阶功能 这篇文章，你将速通：连表查询，分组与统计，子查询，事务，索引，窗口函数，悲观锁，处理 JSON 数据，复杂逻辑处理(if else)，性能分析，存储过程与触发器等等高级功能你会瞬间变成Mysql大牛  通过Docker安装和使用Mysql安装和启动这里我用docker了，因为ubunt">
+    <meta name="description" content="看完本文你将速通Mysql基本操作和最常用的增删改查。看完你就是sqlboy 如果你再看完 Mysql攻略-进阶功能 这篇文章，你将速通：连表查询，分组与统计，子查询，事务，索引，窗口函数，悲观锁，处理 JSON 数据，复杂逻辑处理(if else)，性能分析，存储过程与触发器等等高级功能你会瞬间变成Mysql高手  通过Docker安装和使用Mysql安装和启动这里我用docker了，因为ubu">
 <meta property="og:type" content="article">
-<meta property="og:title" content="Mysql攻略-基础的增删改查">
+<meta property="og:title" content="Mysql攻略-安装使用到基础的增删改查">
 <meta property="og:url" content="https://www.cloudyou.top/2026/01/02/mysql-quick/">
 <meta property="og:site_name" content="cloudyou">
-<meta property="og:description" content="看完本文你将速通Mysql操作和最常用的增删改查。看完你就是sqlboy 如果你再看完 Mysql攻略-进阶功能 这篇文章，你将速通：连表查询，分组与统计，子查询，事务，索引，窗口函数，悲观锁，处理 JSON 数据，复杂逻辑处理(if else)，性能分析，存储过程与触发器等等高级功能你会瞬间变成Mysql大牛  通过Docker安装和使用Mysql安装和启动这里我用docker了，因为ubunt">
+<meta property="og:description" content="看完本文你将速通Mysql基本操作和最常用的增删改查。看完你就是sqlboy 如果你再看完 Mysql攻略-进阶功能 这篇文章，你将速通：连表查询，分组与统计，子查询，事务，索引，窗口函数，悲观锁，处理 JSON 数据，复杂逻辑处理(if else)，性能分析，存储过程与触发器等等高级功能你会瞬间变成Mysql高手  通过Docker安装和使用Mysql安装和启动这里我用docker了，因为ubu">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://www.cloudyou.top/images/%E5%A4%B4%E5%83%8F.jpg">
 <meta property="article:published_time" content="2026-01-02T03:58:29.000Z">
-<meta property="article:modified_time" content="2026-01-02T09:18:56.945Z">
+<meta property="article:modified_time" content="2026-01-02T15:02:20.131Z">
 <meta property="article:author" content="关小雨">
 <meta property="article:tag" content="Database">
 <meta property="article:tag" content="Mysql">
@@ -51,7 +51,7 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"关小雨","sameAs":[],"image":"/images/头像.jpg"},"dateCreated":"2026-01-02T11:58:29+08:00","dateModified":"2026-01-02T17:18:56+08:00","datePublished":"2026-01-02T11:58:29+08:00","description":"","headline":"Mysql攻略-基础的增删改查","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.cloudyou.top/2026/01/02/mysql-quick/"},"publisher":{"@type":"Organization","name":"关小雨","sameAs":[],"image":"/images/头像.jpg","logo":{"@type":"ImageObject","url":"/images/头像.jpg"}},"url":"https://www.cloudyou.top/2026/01/02/mysql-quick/","keywords":"Mysql, Database, notebook","thumbnailUrl":"/images/mysql.png","image":1}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"关小雨","sameAs":[],"image":"/images/头像.jpg"},"dateCreated":"2026-01-02T11:58:29+08:00","dateModified":"2026-01-02T23:02:20+08:00","datePublished":"2026-01-02T11:58:29+08:00","description":"","headline":"Mysql攻略-安装使用到基础的增删改查","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.cloudyou.top/2026/01/02/mysql-quick/"},"publisher":{"@type":"Organization","name":"关小雨","sameAs":[],"image":"/images/头像.jpg","logo":{"@type":"ImageObject","url":"/images/头像.jpg"}},"url":"https://www.cloudyou.top/2026/01/02/mysql-quick/","keywords":"Mysql, Database, notebook","thumbnailUrl":"/images/mysql.png","image":1}</script>
   
 </head>
 <body>
@@ -70,7 +70,7 @@
 
 
 
-<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2026/01/02/mysql-quick/"><span class="title">Mysql攻略-基础的增删改查</span></a><a class="item title" href="/2026/01/01/hello-world/"><span class="title">Hello World</span></a></div></widget>
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2026/01/04/mysql-higher/"><span class="title">Mysql攻略-进阶功能到更多</span></a><a class="item title" href="/2026/01/02/mysql-super/"><span class="title">Mysql攻略-高级查询到进阶功能</span></a><a class="item title" href="/2026/01/02/mysql-quick/"><span class="title">Mysql攻略-安装使用到基础的增删改查</span></a></div></widget>
 </div>
 
 </div></aside><div class="l_main" id="main">
@@ -83,19 +83,19 @@
   <div class="content">
     <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
 <span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div>
-<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-01-02T03:58:29.000Z">2026-01-02</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-01-02T09:18:56.945Z">2026-01-02</time></span></div></div></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-01-02T03:58:29.000Z">2026-01-02</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-01-02T15:02:20.131Z">2026-01-02</time></span></div></div></div>
     
     <div class="bottom only-title">
       
       <div class="text-area">
-        <h1 class="text title"><span>Mysql攻略-基础的增删改查</span></h1>
+        <h1 class="text title"><span>Mysql攻略-安装使用到基础的增删改查</span></h1>
         
       </div>
     </div>
     
   </div>
-  </div><article class="md-text content"><p>看完本文你将速通Mysql操作和最常用的增删改查。看完你就是sqlboy</p>
-<p>如果你再看完 Mysql攻略-进阶功能 这篇文章，你将速通：连表查询，分组与统计，子查询，事务，索引，窗口函数，悲观锁，处理 JSON 数据，复杂逻辑处理(if else)，性能分析，存储过程与触发器等等高级功能你会瞬间变成Mysql大牛 </p>
+  </div><article class="md-text content"><p>看完本文你将速通Mysql基本操作和最常用的增删改查。看完你就是sqlboy</p>
+<p>如果你再看完 Mysql攻略-进阶功能 这篇文章，你将速通：连表查询，分组与统计，子查询，事务，索引，窗口函数，悲观锁，处理 JSON 数据，复杂逻辑处理(if else)，性能分析，存储过程与触发器等等高级功能你会瞬间变成Mysql高手 </p>
 <h1 id="通过Docker安装和使用Mysql"><a href="#通过Docker安装和使用Mysql" class="headerlink" title="通过Docker安装和使用Mysql"></a>通过Docker安装和使用Mysql</h1><h2 id="安装和启动"><a href="#安装和启动" class="headerlink" title="安装和启动"></a>安装和启动</h2><p>这里我用docker了，因为ubuntu的apt源里面没有mysql，安装的话随意了喜欢哪种方式用那种方式</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">cloudyou@cloudyou-i1025P:~$ docker pull mysql</span><br><span class="line">Using default tag: latest</span><br><span class="line">latest: Pulling from library/mysql</span><br><span class="line">Digest: sha256:5ca0a273ed28c73acaef91da8bf1eca3711bee94bce4c378d42846375e645a72</span><br><span class="line">Status: Downloaded newer image for mysql:latest</span><br><span class="line">docker.io/library/mysql:latest</span><br><span class="line">cloudyou@cloudyou-i1025P:~$ docker run -d \</span><br><span class="line"><span class="meta prompt_">&gt; </span><span class="language-bash">  --name mysql-test \</span></span><br><span class="line"><span class="language-bash">&gt;   -e MYSQL_ROOT_PASSWORD=123456 \</span></span><br><span class="line"><span class="language-bash">&gt;   -p 3306:3306 \</span></span><br><span class="line"><span class="language-bash">&gt;   mysql</span></span><br><span class="line">1ca08ce15790ffddff0440424b3c589a68f5c09aac5110632f9959a1485e8</span><br><span class="line">cloudyou@cloudyou-i1025P:~$ docker ps</span><br><span class="line">CONTAINER ID   IMAGE     COMMAND                   CREATED              STATUS              PORTS                                                    NAMES</span><br><span class="line">1ca08ce15790   mysql     &quot;docker-entrypoint.s…&quot;   About a minute ago   Up About a minute   0.0.0.0:3306-&gt;3306/tcp, [::]:3306-&gt;3306/tcp, 33060/tcp   mysql-testdcc</span><br></pre></td></tr></table></figure>
 
@@ -471,13 +471,13 @@
 <h2 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h2><p>使用 create 命令创建数据库</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> DATABASE 数据库名;</span><br></pre></td></tr></table></figure>
 
-<p>比如我创建一个哈基米表</p>
+<p>比如我创建一个哈基米数据库</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">MySQL  192.168.31.238:3306 ssl  SQL &gt; create database Hachimi;</span><br><span class="line">Query OK, 1 row affected (0.1453 sec)</span><br><span class="line">MySQL  192.168.31.238:3306 ssl  SQL &gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| Hachimi            |</span><br><span class="line">| information_schema |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| sys                |</span><br><span class="line">+--------------------+</span><br><span class="line">5 rows in set (0.0167 sec)</span><br></pre></td></tr></table></figure>
 
 <h2 id="删除数据库"><a href="#删除数据库" class="headerlink" title="删除数据库"></a>删除数据库</h2><p>使用 drop 命令删除数据，<code>IF EXISTS</code> 是一个可选的子句，表示如果数据库存在才执行删除操作。</p>
 <figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> DATABASE <span class="operator">&lt;</span>database_name<span class="operator">&gt;</span>; <span class="comment">-- 直接删除数据库，不检查是否存在</span></span><br><span class="line"><span class="keyword">DROP</span> DATABASE [IF <span class="keyword">EXISTS</span>] <span class="operator">&lt;</span>database_name<span class="operator">&gt;</span>;</span><br></pre></td></tr></table></figure>
 
-<p>把刚刚创建的哈基米表删除掉</p>
+<p>把刚刚创建的哈基米数据库删除掉</p>
 <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">MySQL  192.168.31.238:3306 ssl  SQL &gt; drop database Hachimi;</span><br><span class="line">Query OK, 0 rows affected (0.0408 sec)</span><br><span class="line">MySQL  192.168.31.238:3306 ssl  SQL &gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| sys                |</span><br><span class="line">+--------------------+</span><br><span class="line">4 rows in set (0.0194 sec)    </span><br></pre></td></tr></table></figure>
 
 <h2 id="使用数据库"><a href="#使用数据库" class="headerlink" title="使用数据库"></a>使用数据库</h2><p>要选择要使用的数据库，使用 USE 语句 <code>USE 数据库名;</code></p>
@@ -671,7 +671,7 @@
 </article>
 
 
-<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2026/01/01/hello-world/">Hello World</a></div></section></div>
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2026/01/02/mysql-super/">Mysql攻略-高级查询到进阶功能</a></div><div class="item" id="next"></div></section></div>
 
 
 

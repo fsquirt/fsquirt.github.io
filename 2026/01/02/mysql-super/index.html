@@ -1,0 +1,1459 @@
+
+<!DOCTYPE html><html lang="zh-CN">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
+  
+  
+  <meta name="generator" content="Hexo 8.1.1">
+  <meta http-equiv='x-dns-prefetch-control' content='on' />
+  
+  <meta name="renderer" content="webkit">
+  <meta name="force-rendering" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge,chrome=1">
+  <meta name="HandheldFriendly" content="True" >
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
+  <meta name="theme-color" content="#f9fafb">
+  <title>Mysql攻略-高级查询到进阶功能 - cloudyou</title>
+
+  
+    <meta name="description" content="你点开本文我就当你已经知道Mysql基础了，看完本文你将速通：函数，分组与统计，多表查询，子查询，索引，事务，间隙锁。 由于篇幅问题，窗口函数，悲观&#x2F;乐观锁，处理 JSON 数据，复杂逻辑处理(if else)，性能分析，存储过程与触发器等等高级功能会放到下一篇文章。全部看完你就瞬间变成Mysql高手 先用下面的py模拟一堆数据进去 123456789101112131415161718">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Mysql攻略-高级查询到进阶功能">
+<meta property="og:url" content="https://www.cloudyou.top/2026/01/02/mysql-super/">
+<meta property="og:site_name" content="cloudyou">
+<meta property="og:description" content="你点开本文我就当你已经知道Mysql基础了，看完本文你将速通：函数，分组与统计，多表查询，子查询，索引，事务，间隙锁。 由于篇幅问题，窗口函数，悲观&#x2F;乐观锁，处理 JSON 数据，复杂逻辑处理(if else)，性能分析，存储过程与触发器等等高级功能会放到下一篇文章。全部看完你就瞬间变成Mysql高手 先用下面的py模拟一堆数据进去 123456789101112131415161718">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://www.cloudyou.top/images/%E5%A4%B4%E5%83%8F.jpg">
+<meta property="article:published_time" content="2026-01-02T14:53:43.000Z">
+<meta property="article:modified_time" content="2026-01-04T11:09:52.442Z">
+<meta property="article:author" content="关小雨">
+<meta property="article:tag" content="Database">
+<meta property="article:tag" content="Mysql">
+<meta property="article:tag" content="notebook">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://www.cloudyou.top/images/%E5%A4%B4%E5%83%8F.jpg">
+  
+  
+  
+  <meta name="keywords" content="Mysql,Database,notebook">
+
+  <!-- feed -->
+  
+
+  <link rel="stylesheet" href="/css/main.css?v=1.33.1">
+
+
+  
+
+  
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"关小雨","sameAs":[],"image":"/images/头像.jpg"},"dateCreated":"2026-01-02T22:53:43+08:00","dateModified":"2026-01-04T19:09:52+08:00","datePublished":"2026-01-02T22:53:43+08:00","description":"","headline":"Mysql攻略-高级查询到进阶功能","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.cloudyou.top/2026/01/02/mysql-super/"},"publisher":{"@type":"Organization","name":"关小雨","sameAs":[],"image":"/images/头像.jpg","logo":{"@type":"ImageObject","url":"/images/头像.jpg"}},"url":"https://www.cloudyou.top/2026/01/02/mysql-super/","keywords":"Mysql, Database, notebook","thumbnailUrl":"/images/mysql2.png","image":1}</script>
+  
+</head>
+<body>
+
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+
+
+<header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/头像.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">cloudyou</div><div class="sub normal cap">rm -rf /past && touch future</div><div class="sub hover cap" style="opacity:0"> 在比特的洪流中盘桓此刻</div></a></div></header>
+
+<div class="nav-area">
+
+<nav class="menu dis-select"></nav>
+</div>
+<div class="widgets">
+<div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
+
+
+
+<widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2026/01/04/mysql-higher/"><span class="title">Mysql攻略-进阶功能到更多</span></a><a class="item title" href="/2026/01/02/mysql-super/"><span class="title">Mysql攻略-高级查询到进阶功能</span></a><a class="item title" href="/2026/01/02/mysql-quick/"><span class="title">Mysql攻略-安装使用到基础的增删改查</span></a></div></widget>
+</div>
+
+</div></aside><div class="l_main" id="main">
+
+
+
+
+
+<div class="article banner top"><img class="lazy bg" data-src="/images/mysql2.png">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-01-02T14:53:43.000Z">2026-01-02</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-01-04T11:09:52.442Z">2026-01-04</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>Mysql攻略-高级查询到进阶功能</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p>你点开本文我就当你已经知道Mysql基础了，看完本文你将速通：函数，分组与统计，多表查询，子查询，索引，事务，间隙锁。</p>
+<p>由于篇幅问题，窗口函数，悲观&#x2F;乐观锁，处理 JSON 数据，复杂逻辑处理(if else)，性能分析，存储过程与触发器等等高级功能会放到下一篇文章。全部看完你就瞬间变成Mysql高手</p>
+<p>先用下面的py模拟一堆数据进去</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br><span class="line">167</span><br><span class="line">168</span><br><span class="line">169</span><br><span class="line">170</span><br><span class="line">171</span><br><span class="line">172</span><br><span class="line">173</span><br><span class="line">174</span><br><span class="line">175</span><br><span class="line">176</span><br><span class="line">177</span><br><span class="line">178</span><br><span class="line">179</span><br><span class="line">180</span><br><span class="line">181</span><br><span class="line">182</span><br><span class="line">183</span><br><span class="line">184</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> pymysql</span><br><span class="line"><span class="keyword">from</span> faker <span class="keyword">import</span> Faker</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"><span class="keyword">from</span> datetime <span class="keyword">import</span> datetime</span><br><span class="line"></span><br><span class="line"><span class="comment"># ================= 配置区域 =================</span></span><br><span class="line">DB_CONFIG = &#123;</span><br><span class="line">    <span class="string">&quot;host&quot;</span>: <span class="string">&quot;localhost&quot;</span>,</span><br><span class="line">    <span class="string">&quot;user&quot;</span>: <span class="string">&quot;root&quot;</span>,        </span><br><span class="line">    <span class="string">&quot;password&quot;</span>: <span class="string">&quot;123456&quot;</span>, <span class="comment"># ⚠️ 记得改你的密码</span></span><br><span class="line">    <span class="string">&quot;port&quot;</span>: <span class="number">3306</span>,</span><br><span class="line">    <span class="string">&quot;charset&quot;</span>: <span class="string">&quot;utf8mb4&quot;</span></span><br><span class="line">&#125;</span><br><span class="line">DB_NAME = <span class="string">&quot;mall_db_simple&quot;</span> <span class="comment"># 依然使用纯净库</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 数据量设置</span></span><br><span class="line">NUM_USERS = <span class="number">200</span>     <span class="comment"># 200个用户</span></span><br><span class="line">NUM_PRODUCTS = <span class="number">50</span>   <span class="comment"># 50种商品</span></span><br><span class="line">NUM_ORDERS = <span class="number">100</span>   <span class="comment"># 100个订单 (生成的 order_items 会有 2000~4000 条)</span></span><br><span class="line"><span class="comment"># ===========================================</span></span><br><span class="line"></span><br><span class="line">fake = Faker(<span class="string">&quot;zh_CN&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">get_connection</span>(<span class="params">use_db=<span class="literal">True</span></span>):</span><br><span class="line">    conf = DB_CONFIG.copy()</span><br><span class="line">    <span class="keyword">if</span> use_db:</span><br><span class="line">        conf[<span class="string">&quot;db&quot;</span>] = DB_NAME</span><br><span class="line">    <span class="keyword">return</span> pymysql.connect(**conf)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">init_db</span>():</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;🔄 初始化纯净版数据库: <span class="subst">&#123;DB_NAME&#125;</span>...&quot;</span>)</span><br><span class="line">    conn = get_connection(use_db=<span class="literal">False</span>)</span><br><span class="line">    cursor = conn.cursor()</span><br><span class="line"></span><br><span class="line">    cursor.execute(<span class="string">f&quot;CREATE DATABASE IF NOT EXISTS <span class="subst">&#123;DB_NAME&#125;</span> DEFAULT CHARSET utf8mb4;&quot;</span>)</span><br><span class="line">    cursor.execute(<span class="string">f&quot;USE <span class="subst">&#123;DB_NAME&#125;</span>;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 清理旧表</span></span><br><span class="line">    cursor.execute(<span class="string">&quot;DROP TABLE IF EXISTS order_items;&quot;</span>)</span><br><span class="line">    cursor.execute(<span class="string">&quot;DROP TABLE IF EXISTS orders;&quot;</span>)</span><br><span class="line">    cursor.execute(<span class="string">&quot;DROP TABLE IF EXISTS products;&quot;</span>)</span><br><span class="line">    cursor.execute(<span class="string">&quot;DROP TABLE IF EXISTS users;&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># === 表结构保持“素颜”（只有主键） ===</span></span><br><span class="line"></span><br><span class="line">    sql_users = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    CREATE TABLE users (</span></span><br><span class="line"><span class="string">        id INT AUTO_INCREMENT PRIMARY KEY,</span></span><br><span class="line"><span class="string">        username VARCHAR(50),</span></span><br><span class="line"><span class="string">        email VARCHAR(100),</span></span><br><span class="line"><span class="string">        phone VARCHAR(20),</span></span><br><span class="line"><span class="string">        city VARCHAR(50),</span></span><br><span class="line"><span class="string">        created_at DATETIME</span></span><br><span class="line"><span class="string">    );</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    sql_products = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    CREATE TABLE products (</span></span><br><span class="line"><span class="string">        id INT AUTO_INCREMENT PRIMARY KEY,</span></span><br><span class="line"><span class="string">        name VARCHAR(100),</span></span><br><span class="line"><span class="string">        category VARCHAR(50),</span></span><br><span class="line"><span class="string">        price DECIMAL(10, 2),</span></span><br><span class="line"><span class="string">        stock INT,</span></span><br><span class="line"><span class="string">        status TINYINT</span></span><br><span class="line"><span class="string">    );</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    sql_orders = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    CREATE TABLE orders (</span></span><br><span class="line"><span class="string">        id INT AUTO_INCREMENT PRIMARY KEY,</span></span><br><span class="line"><span class="string">        user_id INT NOT NULL,</span></span><br><span class="line"><span class="string">        order_no VARCHAR(50),</span></span><br><span class="line"><span class="string">        total_amount DECIMAL(12, 2), -- 这个金额是经过计算算出来的</span></span><br><span class="line"><span class="string">        status TINYINT,</span></span><br><span class="line"><span class="string">        created_at DATETIME</span></span><br><span class="line"><span class="string">    );</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    sql_order_items = <span class="string">&quot;&quot;&quot;</span></span><br><span class="line"><span class="string">    CREATE TABLE order_items (</span></span><br><span class="line"><span class="string">        id INT AUTO_INCREMENT PRIMARY KEY,</span></span><br><span class="line"><span class="string">        order_id INT NOT NULL,</span></span><br><span class="line"><span class="string">        product_id INT NOT NULL,</span></span><br><span class="line"><span class="string">        quantity INT,</span></span><br><span class="line"><span class="string">        price DECIMAL(10, 2)</span></span><br><span class="line"><span class="string">    );</span></span><br><span class="line"><span class="string">    &quot;&quot;&quot;</span></span><br><span class="line"></span><br><span class="line">    cursor.execute(sql_users)</span><br><span class="line">    cursor.execute(sql_products)</span><br><span class="line">    cursor.execute(sql_orders)</span><br><span class="line">    cursor.execute(sql_order_items)</span><br><span class="line">    conn.commit()</span><br><span class="line">    conn.close()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;✅ 表结构重置完成！&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">def</span> <span class="title function_">generate_data</span>():</span><br><span class="line">    conn = get_connection()</span><br><span class="line">    cursor = conn.cursor()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- 1. 生成用户 ---</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;👤 正在生成用户...&quot;</span>)</span><br><span class="line">    users_data = []</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(NUM_USERS):</span><br><span class="line">        users_data.append((fake.name(), fake.email(), fake.phone_number(), fake.city(), fake.date_time()))</span><br><span class="line">    cursor.executemany(<span class="string">&quot;INSERT INTO users (username, email, phone, city, created_at) VALUES (%s, %s, %s, %s, %s)&quot;</span>, users_data)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- 2. 生成商品 ---</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;📦 正在生成商品...&quot;</span>)</span><br><span class="line">    products_data = []</span><br><span class="line">    <span class="comment"># 搞点真实的分类</span></span><br><span class="line">    categories = [<span class="string">&#x27;数码&#x27;</span>, <span class="string">&#x27;零食&#x27;</span>, <span class="string">&#x27;书籍&#x27;</span>, <span class="string">&#x27;服装&#x27;</span>, <span class="string">&#x27;家居&#x27;</span>]</span><br><span class="line">    <span class="keyword">for</span> _ <span class="keyword">in</span> <span class="built_in">range</span>(NUM_PRODUCTS):</span><br><span class="line">        cat = random.choice(categories)</span><br><span class="line">        price = random.randint(<span class="number">10</span>, <span class="number">2000</span>) <span class="comment"># 价格在10块到2000块之间</span></span><br><span class="line">        products_data.append((<span class="string">f&quot;<span class="subst">&#123;cat&#125;</span>-<span class="subst">&#123;fake.word()&#125;</span>&quot;</span>, cat, price, <span class="number">999</span>, <span class="number">1</span>))</span><br><span class="line">    cursor.executemany(<span class="string">&quot;INSERT INTO products (name, category, price, stock, status) VALUES (%s, %s, %s, %s, %s)&quot;</span>, products_data)</span><br><span class="line">    conn.commit()</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 准备缓存数据，方便下面生成订单用</span></span><br><span class="line">    cursor.execute(<span class="string">&quot;SELECT id FROM users&quot;</span>)</span><br><span class="line">    user_ids = [r[<span class="number">0</span>] <span class="keyword">for</span> r <span class="keyword">in</span> cursor.fetchall()]</span><br><span class="line"></span><br><span class="line">    cursor.execute(<span class="string">&quot;SELECT id, price FROM products&quot;</span>)</span><br><span class="line">    <span class="comment"># 变成字典 &#123;id: price&#125;，方便查价格</span></span><br><span class="line">    products_map = &#123;r[<span class="number">0</span>]: <span class="built_in">float</span>(r[<span class="number">1</span>]) <span class="keyword">for</span> r <span class="keyword">in</span> cursor.fetchall()&#125; </span><br><span class="line">    product_ids_list = <span class="built_in">list</span>(products_map.keys())</span><br><span class="line"></span><br><span class="line">    <span class="comment"># --- 3. 生成复杂的订单 ---</span></span><br><span class="line">    <span class="built_in">print</span>(<span class="string">&quot;📝 正在生成复杂订单 (多商品/多数量)...&quot;</span>)</span><br><span class="line">    batch_orders = []</span><br><span class="line">    batch_items = []</span><br><span class="line"></span><br><span class="line">    <span class="keyword">for</span> i <span class="keyword">in</span> <span class="built_in">range</span>(<span class="number">1</span>, NUM_ORDERS + <span class="number">1</span>):</span><br><span class="line">        <span class="comment"># 3.1 随机选人、时间、状态</span></span><br><span class="line">        u_id = random.choice(user_ids)</span><br><span class="line">        created_at = fake.date_time_between(start_date=<span class="string">&quot;-1y&quot;</span>, end_date=<span class="string">&quot;now&quot;</span>)</span><br><span class="line">        order_no = <span class="string">f&quot;ORD<span class="subst">&#123;created_at.strftime(<span class="string">&#x27;%Y%m%d&#x27;</span>)&#125;</span><span class="subst">&#123;i:05d&#125;</span>&quot;</span></span><br><span class="line">        status = random.choice([<span class="number">0</span>, <span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>])</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 3.2 决定这个订单买几种商品 (1 到 5 种)</span></span><br><span class="line">        items_count = random.randint(<span class="number">1</span>, <span class="number">5</span>)</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 从商品库里随机抽 items_count 个商品ID (不重复)</span></span><br><span class="line">        selected_pids = random.sample(product_ids_list, items_count)</span><br><span class="line"></span><br><span class="line">        current_order_total = <span class="number">0.0</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 3.3 遍历生成的商品，算钱，生成明细</span></span><br><span class="line">        <span class="keyword">for</span> pid <span class="keyword">in</span> selected_pids:</span><br><span class="line">            <span class="comment"># 决定买几个 (1 到 3 个)</span></span><br><span class="line">            qty = random.randint(<span class="number">1</span>, <span class="number">3</span>)</span><br><span class="line">            price = products_map[pid]</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 累加总金额</span></span><br><span class="line">            current_order_total += price * qty</span><br><span class="line"></span><br><span class="line">            <span class="comment"># 添加到 items 列表 (注意这里用了 i 作为 order_id)</span></span><br><span class="line">            batch_items.append((i, pid, qty, price))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 3.4 添加到 orders 列表</span></span><br><span class="line">        batch_orders.append((u_id, order_no, current_order_total, status, created_at))</span><br><span class="line"></span><br><span class="line">        <span class="comment"># 每500个提交一次，防止列表太大撑爆内存</span></span><br><span class="line">        <span class="keyword">if</span> <span class="built_in">len</span>(batch_orders) &gt;= <span class="number">500</span>:</span><br><span class="line">            cursor.executemany(<span class="string">&quot;INSERT INTO orders (user_id, order_no, total_amount, status, created_at) VALUES (%s, %s, %s, %s, %s)&quot;</span>, batch_orders)</span><br><span class="line">            cursor.executemany(<span class="string">&quot;INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (%s, %s, %s, %s)&quot;</span>, batch_items)</span><br><span class="line">            conn.commit()</span><br><span class="line">            batch_orders = []</span><br><span class="line">            batch_items = []</span><br><span class="line">            <span class="built_in">print</span>(<span class="string">f&quot;   ...已处理 <span class="subst">&#123;i&#125;</span> 个订单&quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment"># 处理剩下的</span></span><br><span class="line">    <span class="keyword">if</span> batch_orders:</span><br><span class="line">        cursor.executemany(<span class="string">&quot;INSERT INTO orders (user_id, order_no, total_amount, status, created_at) VALUES (%s, %s, %s, %s, %s)&quot;</span>, batch_orders)</span><br><span class="line">        cursor.executemany(<span class="string">&quot;INSERT INTO order_items (order_id, product_id, quantity, price) VALUES (%s, %s, %s, %s)&quot;</span>, batch_items)</span><br><span class="line">        conn.commit()</span><br><span class="line"></span><br><span class="line">    conn.close()</span><br><span class="line">    <span class="built_in">print</span>(<span class="string">f&quot;\n🎉 搞定！生成了 <span class="subst">&#123;NUM_ORDERS&#125;</span> 个订单，包含多种商品组合。&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">&quot;__main__&quot;</span>:</span><br><span class="line">    init_db()</span><br><span class="line">    generate_data()</span><br></pre></td></tr></table></figure>
+
+<h1 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h1><p>Mysql提供了很多类似于编程语言的函数，进来一堆行，吐出一个值</p>
+<table>
+<thead>
+<tr>
+<th align="left">函数名</th>
+<th align="left">类型</th>
+<th align="left">作用</th>
+<th align="left">应用场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>COUNT()</strong></td>
+<td align="left">聚合</td>
+<td align="left">数数</td>
+<td align="left">统计今天有多少人注册：<code>COUNT(id)</code></td>
+</tr>
+<tr>
+<td align="left"><strong>SUM()</strong></td>
+<td align="left">聚合</td>
+<td align="left">求和</td>
+<td align="left">算出今天的总营业额：<code>SUM(total_amount)</code></td>
+</tr>
+<tr>
+<td align="left"><strong>AVG()</strong></td>
+<td align="left">聚合</td>
+<td align="left">平均值</td>
+<td align="left">算出客单价（平均每单多少钱）：<code>AVG(total_amount)</code></td>
+</tr>
+<tr>
+<td align="left"><strong>MAX()</strong></td>
+<td align="left">聚合</td>
+<td align="left">最大值</td>
+<td align="left">找出最贵的商品价格：<code>MAX(price)</code></td>
+</tr>
+<tr>
+<td align="left"><strong>MIN()</strong></td>
+<td align="left">聚合</td>
+<td align="left">最小值</td>
+<td align="left">找出库存最少的商品：<code>MIN(stock)</code></td>
+</tr>
+<tr>
+<td align="left"><strong>GROUP_CONCAT()</strong></td>
+<td align="left">聚合</td>
+<td align="left">拼接结果</td>
+<td align="left">把一个订单买的所有商品名拼成一行显示：<code>&quot;薯片,可乐,辣条&quot;</code></td>
+</tr>
+<tr>
+<td align="left"><strong>NOW()</strong></td>
+<td align="left">时间</td>
+<td align="left">当前时间</td>
+<td align="left">插入订单时，<code>created_at</code> 字段用的就是它</td>
+</tr>
+<tr>
+<td align="left"><strong>DATE_FORMAT()</strong></td>
+<td align="left">时间</td>
+<td align="left">格式化</td>
+<td align="left">前端要显示 “2026年01月04日”，而不是数据库那串原本的英文格式</td>
+</tr>
+<tr>
+<td align="left"><strong>DATEDIFF()</strong></td>
+<td align="left">时间</td>
+<td align="left">算天数</td>
+<td align="left">统计用户 “注册了多少天”：<code>DATEDIFF(NOW(), created_at)</code></td>
+</tr>
+<tr>
+<td align="left"><strong>CONCAT()</strong></td>
+<td align="left">字符串</td>
+<td align="left">拼字符串</td>
+<td align="left">模糊搜索时拼 <code>like</code> 条件，或者把 姓+名 拼在一起</td>
+</tr>
+<tr>
+<td align="left"><strong>SUBSTR()</strong></td>
+<td align="left">字符串</td>
+<td align="left">截取</td>
+<td align="left">手机号脱敏，只显示后四位</td>
+</tr>
+<tr>
+<td align="left"><strong>LENGTH()</strong></td>
+<td align="left">字符串</td>
+<td align="left">算长度</td>
+<td align="left">检查用户简介是不是太长了</td>
+</tr>
+<tr>
+<td align="left"><strong>IFNULL()</strong></td>
+<td align="left">逻辑</td>
+<td align="left">是不是NULL?</td>
+<td align="left">如果头像 URL 是 <code>NULL</code>，给个默认图：<code>IFNULL(avatar, &#39;default.png&#39;)</code></td>
+</tr>
+<tr>
+<td align="left"><strong>CASE WHEN</strong></td>
+<td align="left">逻辑</td>
+<td align="left">SQL里的if-else</td>
+<td align="left">把状态 <code>0/1</code> 转换成中文 “未支付”&#x2F;“已支付”</td>
+</tr>
+</tbody></table>
+<p>下面的内容会使用到这些常用的函数，如果有用到的函数没有在这张表上显示的话，可以前往<a target="_blank" rel="noopener" href="https://www.runoob.com/mysql/mysql-functions.html">MySQL 函数 | 菜鸟教程</a> 查看函数功能 </p>
+<h1 id="分组和统计"><a href="#分组和统计" class="headerlink" title="分组和统计"></a>分组和统计</h1><p>GROUP BY 语句根据一个或多个列对结果集进行分组。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    分组字段, </span><br><span class="line">    聚合函数(统计字段)</span><br><span class="line"><span class="keyword">FROM</span> 表名</span><br><span class="line"><span class="keyword">WHERE</span> 过滤条件              <span class="comment">-- (可选) 在分组前过滤原始行</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> 分组字段           <span class="comment">-- 核心：按什么来分组</span></span><br><span class="line"><span class="keyword">HAVING</span> 聚合后的过滤条件      <span class="comment">-- (可选) 在分组后过滤统计结果</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> 排序字段;          <span class="comment">-- (可选) 排序</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="使用GROUP-BY分组"><a href="#使用GROUP-BY分组" class="headerlink" title="使用GROUP BY分组"></a>使用GROUP BY分组</h2><p>举个简单的例子，比如我想查看mall_db_simple数据库里，products表里有多少种商品类型</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> category <span class="keyword">from</span> products <span class="keyword">group</span> <span class="keyword">by</span> category;</span><br></pre></td></tr></table></figure>
+
+<p>这样就会输出</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----------+</span><br><span class="line">| category |</span><br><span class="line">+----------+</span><br><span class="line">| 书籍     |</span><br><span class="line">| 家居     |</span><br><span class="line">| 数码     |</span><br><span class="line">| 服装     |</span><br><span class="line">| 零食     |</span><br><span class="line">+----------+</span><br><span class="line">5 rows in set (0.0005 sec)</span><br></pre></td></tr></table></figure>
+
+<h2 id="配合函数使用"><a href="#配合函数使用" class="headerlink" title="配合函数使用"></a>配合函数使用</h2><p>如果我还想看每个分类有多少个，使用上面提到的<code>COUNT()</code>函数来获取个数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> category,<span class="built_in">count</span>(category) <span class="keyword">from</span> products <span class="keyword">group</span> <span class="keyword">by</span> category;</span><br></pre></td></tr></table></figure>
+
+<p>这样就会输出</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----------+-----------------+</span><br><span class="line">| category | count(category) |</span><br><span class="line">+----------+-----------------+</span><br><span class="line">| 书籍     |               4 |</span><br><span class="line">| 家居     |              14 |</span><br><span class="line">| 数码     |               8 |</span><br><span class="line">| 服装     |              15 |</span><br><span class="line">| 零食     |               9 |</span><br><span class="line">+----------+-----------------+</span><br><span class="line">5 rows in set (0.0009 sec)</span><br></pre></td></tr></table></figure>
+
+<p>返回的的表个数列会使用sql语句里写的内容，可以使用 <code>AS</code> 关键字来给这个列取个名字</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> category,<span class="built_in">count</span>(category) <span class="keyword">as</span> category_count <span class="keyword">from</span> products <span class="keyword">group</span> <span class="keyword">by</span> category;</span><br></pre></td></tr></table></figure>
+
+<p>这样列 <code>count(category)</code> 就会被重命名为 <code>category_count</code></p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----------+----------------+</span><br><span class="line">| category | category_count |</span><br><span class="line">+----------+----------------+</span><br><span class="line">| 书籍     |              4 |</span><br><span class="line">| 家居     |             14 |</span><br><span class="line">| 数码     |              8 |</span><br><span class="line">| 服装     |             15 |</span><br><span class="line">| 零食     |              9 |</span><br><span class="line">+----------+----------------+</span><br><span class="line">5 rows in set (0.0003 sec)</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用HAVING对分组之后的结果再过滤"><a href="#使用HAVING对分组之后的结果再过滤" class="headerlink" title="使用HAVING对分组之后的结果再过滤"></a>使用HAVING对分组之后的结果再过滤</h2><p>比如我要列出个数小于10的商品，看看我商城网站上还有哪些商品比较缺</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> category,<span class="built_in">count</span>(category) <span class="keyword">as</span> category_count <span class="keyword">from</span> products <span class="keyword">group</span> <span class="keyword">by</span> category <span class="keyword">having</span> category_count <span class="operator">&lt;</span> <span class="number">10</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这样就只会输出商品类别小于10的商品种类</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+----------+----------------+</span><br><span class="line">| category | category_count |</span><br><span class="line">+----------+----------------+</span><br><span class="line">| 书籍     |              4 |</span><br><span class="line">| 数码     |              8 |</span><br><span class="line">| 零食     |              9 |</span><br><span class="line">+----------+----------------+</span><br><span class="line">3 rows in set (0.0042 sec)</span><br></pre></td></tr></table></figure>
+
+<h3 id="HAVING和WHERE的区别？"><a href="#HAVING和WHERE的区别？" class="headerlink" title="HAVING和WHERE的区别？"></a>HAVING和WHERE的区别？</h3><p><strong><code>WHERE</code></strong>：在分组<strong>之前</strong>过滤。比如：我只统计“已支付”订单的金额。</p>
+<p><strong><code>HAVING</code></strong>：在分组<strong>之后</strong>过滤统计结果。比如：我只看“消费总额超过1000元”的大客户。</p>
+<p>上面那个指令，如果把having移动到where作为条件就会</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> category,<span class="built_in">count</span>(category) <span class="keyword">as</span> category_count <span class="keyword">from</span> products <span class="keyword">where</span> category_count <span class="operator">&lt;</span> <span class="number">10</span> <span class="keyword">group</span> <span class="keyword">by</span> category ;</span><br></pre></td></tr></table></figure>
+
+<p>报错</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: 1054 (42S22): Unknown column &#x27;category_count&#x27; in &#x27;where clause&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>WHERE会找不到分组后的这一个列</p>
+<h1 id="多表查询"><a href="#多表查询" class="headerlink" title="多表查询"></a>多表查询</h1><p>在那个py生成的数据库里，为了不让数据冗余，我把数据拆分到了不同的表里（用户一张表、订单一张表）。多表查询就是通过一个  <strong>“关联字段”</strong>，把这些表像拼图一样临时拼起来。就是多表查询</p>
+<h2 id="使用JOIN进行多表查询"><a href="#使用JOIN进行多表查询" class="headerlink" title="使用JOIN进行多表查询"></a>使用JOIN进行多表查询</h2><p>在 MySQL 中，最常用的多表查询方式是 <strong><code>JOIN</code></strong>。</p>
+<table>
+<thead>
+<tr>
+<th align="left">查询类型</th>
+<th align="left">名字</th>
+<th align="left">效果</th>
+<th align="left">业务场景</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>INNER JOIN</strong></td>
+<td align="left"><strong>内连接</strong></td>
+<td align="left">只显示<strong>两边都能对上</strong>的数据</td>
+<td align="left">查出那些“确实下过单”的用户和订单</td>
+</tr>
+<tr>
+<td align="left"><strong>LEFT JOIN</strong></td>
+<td align="left"><strong>左连接</strong></td>
+<td align="left"><strong>左表全保留</strong>，右表没对上的显示 NULL</td>
+<td align="left">查出“所有用户”，包括那些还没买过东西的</td>
+</tr>
+<tr>
+<td align="left"><strong>RIGHT JOIN</strong></td>
+<td align="left"><strong>右连接</strong></td>
+<td align="left"><strong>右表全保留</strong>（很少用，通常用 LEFT JOIN 代替）</td>
+<td align="left">-</td>
+</tr>
+</tbody></table>
+<h3 id="使用内连接"><a href="#使用内连接" class="headerlink" title="使用内连接"></a>使用内连接</h3><p>比如我要找到每个订单的买家和买家的手机号</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> users.username,users.phone,orders.order_no,orders.total_amount <span class="keyword">from</span> users <span class="keyword">inner</span> <span class="keyword">join</span> orders <span class="keyword">on</span> users.id <span class="operator">=</span> orders.user_id <span class="keyword">order</span> <span class="keyword">by</span> users.username;</span><br></pre></td></tr></table></figure>
+
+<p>也可以使用<code>AS</code>来方便写sql语句，两者执行结果是一样的。我加了ORDER BY来用名字排序</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    u.username, </span><br><span class="line">    u.phone, </span><br><span class="line">    o.order_no, </span><br><span class="line">    o.total_amount</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u </span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o <span class="keyword">ON</span> u.id <span class="operator">=</span> o.user_id</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> u.username; </span><br></pre></td></tr></table></figure>
+
+<p>这样就会输出</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">+----------+-------------+------------------+--------------+</span><br><span class="line">| username | phone       | order_no         | total_amount |</span><br><span class="line">+----------+-------------+------------------+--------------+</span><br><span class="line">| 丁宁     | 13473076571 | ORD2025092300097 |     13104.00 |</span><br><span class="line">| 丁宁     | 13473076571 | ORD2025040100039 |      8057.00 |</span><br><span class="line">| 丁宁     | 13473076571 | ORD2025040800086 |       129.00 |</span><br><span class="line">| 何宁     | 14796476245 | ORD2025030500020 |     13788.00 |</span><br><span class="line"></span><br><span class="line">....省略若干</span><br></pre></td></tr></table></figure>
+
+<h3 id="使用左连接"><a href="#使用左连接" class="headerlink" title="使用左连接"></a>使用左连接</h3><p>比如我要搞一个富豪榜，按照消费额度大小搞一个<strong>不漏掉没有下过单</strong>的人的全排名。</p>
+<p>使用下面的sql语句</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    u.username, </span><br><span class="line">    <span class="built_in">SUM</span>(o.total_amount) <span class="keyword">as</span> money</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o <span class="keyword">ON</span> u.id <span class="operator">=</span> o.user_id</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> money <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这样执行就会报错</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: 1140 (42000): In aggregated query without GROUP BY, expression #1 of SELECT list contains nonaggregated column &#x27;mall_db_simple.u.username&#x27;; this is incompatible with sql_mode=only_full_group_by</span><br></pre></td></tr></table></figure>
+
+<p>报错信息里的 <code>only_full_group_by</code> 就是：“既然你用了聚合函数，那你必须告诉我，那些没被聚合的字段该按什么规则排列？”</p>
+<p><strong><code>u.username</code></strong>：这个字段，它想把表里所有的用户名都列出来（假设有 100 行）。</p>
+<p><strong><code>SUM(o.total_amount)</code></strong>：这是一个聚合函数，它的目的是把所有的钱加起来，只吐出一个值（1 行）。</p>
+<p>让数据库在第一列显示 100 个名字，但在第二列只显示 1 个总金额。</p>
+<p>那这 1 个总金额，到底是对齐第一个人？还是最后一个人？还是平均分给所有人？数据库没法对齐</p>
+<p>使用 GROUP BY 来按人分组，算出每个人的金额</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    u.username, </span><br><span class="line">    <span class="built_in">SUM</span>(o.total_amount) <span class="keyword">as</span> money</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o <span class="keyword">ON</span> u.id <span class="operator">=</span> o.user_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> u.username</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> money <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这样就能正常输出</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">+----------+----------+</span><br><span class="line">| username | money    |</span><br><span class="line">+----------+----------+</span><br><span class="line">| 胡玉     | 22626.00 |</span><br><span class="line">| 周龙     | 21825.00 |</span><br><span class="line">| 丁宁     | 21290.00 |</span><br><span class="line">...省略若干行...</span><br><span class="line">| 吉桂芝   |     NULL |</span><br><span class="line">| 艾静     |     NULL |</span><br><span class="line">| 程帅     |     NULL |</span><br><span class="line">+----------+----------+</span><br><span class="line">193 rows in set (0.0031 sec)</span><br></pre></td></tr></table></figure>
+
+<p>没下过单的money列就会是<code>NULL</code>，我想把它改成0，使用<code>IFNULL</code>函数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    u.username, </span><br><span class="line">    IFNULL(<span class="built_in">SUM</span>(o.total_amount),<span class="number">0</span>) <span class="keyword">as</span> money</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o <span class="keyword">ON</span> u.id <span class="operator">=</span> o.user_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> u.username</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> money <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这样看着就舒服多了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">+----------+----------+</span><br><span class="line">| username | money    |</span><br><span class="line">+----------+----------+</span><br><span class="line">| 胡玉     | 22626.00 |</span><br><span class="line">| 周龙     | 21825.00 |</span><br><span class="line">| 丁宁     | 21290.00 |</span><br><span class="line">...省略若干行...</span><br><span class="line">| 吉桂芝   |     0.00 |</span><br><span class="line">| 艾静     |     0.00 |</span><br><span class="line">| 程帅     |     0.00 |</span><br><span class="line">+----------+----------+</span><br><span class="line">193 rows in set (0.0023 sec)</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用子查询进行多表查询"><a href="#使用子查询进行多表查询" class="headerlink" title="使用子查询进行多表查询"></a>使用子查询进行多表查询</h2><p>先查出一个结果，再把这个结果作为条件传给下一个查询</p>
+<p>比如我想找出那个单笔订单花了最多钱的用户，就是分成两个查询</p>
+<p>1.orders表里找到单笔金额最大的userid</p>
+<p>2.根据找到的userid在users表里找到用户信息</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> id <span class="operator">=</span> (<span class="keyword">SELECT</span> user_id <span class="keyword">FROM</span> orders <span class="keyword">ORDER</span> <span class="keyword">BY</span> total_amount <span class="keyword">DESC</span> LIMIT <span class="number">1</span>);</span><br></pre></td></tr></table></figure>
+
+<p>这样就能输出</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+-----+----------+-----------------+-------------+--------+---------------------+</span><br><span class="line">| id  | username | email           | phone       | city   | created_at          |</span><br><span class="line">+-----+----------+-----------------+-------------+--------+---------------------+</span><br><span class="line">| 100 | 周龙     | vyu@example.net | 18958822331 | 阜新县 | 2001-07-10 10:29:42 |</span><br><span class="line">+-----+----------+-----------------+-------------+--------+---------------------+</span><br><span class="line">1 row in set (0.0005 sec)</span><br></pre></td></tr></table></figure>
+
+<p>如果要把上面的富豪榜改成子查询</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    u.username, </span><br><span class="line">    (<span class="keyword">SELECT</span> IFNULL(<span class="built_in">SUM</span>(orders.total_amount), <span class="number">0</span>) </span><br><span class="line">     <span class="keyword">FROM</span> orders</span><br><span class="line">     <span class="keyword">WHERE</span> orders.user_id <span class="operator">=</span> u.id) <span class="keyword">AS</span> money</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u  </span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> money <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<p>效果是一样的</p>
+<h1 id="索引"><a href="#索引" class="headerlink" title="索引"></a>索引</h1><p>如果把数据库比作一本《新华字典》，那“索引”就是字典前面的拼音检索表。</p>
+<ul>
+<li><strong>没索引（全表扫描 &#x2F; Full Table Scan）</strong>：<br>假设要查“字”这个字，但字典没有目录。你只能从第一页开始，一页一页往后翻，直到翻到为止。如果字典有 1000 页，最坏情况你要翻 1000 次。<ul>
+<li><em>效率</em>：极低 O(n)。</li>
+</ul>
+</li>
+<li><strong>有索引（Index）</strong>：<br>先看前面的拼音目录，找到 <code>zi</code> 在第 500 页。直接翻到第 500 页。<ul>
+<li><em>效率</em>：极高 O(log n)（因为 MySQL 底层用的是 <strong>B+树</strong> 结构，类似二分查找）。<br><strong>核心作用</strong>：<strong>以空间换时间</strong>。索引是一个独立的文件，占用硬盘空间，但能让查询速度提升百倍千倍。</li>
+</ul>
+</li>
+</ul>
+<p>其实那个python在创建数据表的时候，每个表创建了一个主键。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"> MySQL  localhost:<span class="number">3306</span>  mall_db_simple  <span class="keyword">SQL</span> <span class="operator">&gt;</span> <span class="keyword">show</span> index <span class="keyword">from</span> users;</span><br><span class="line"><span class="operator">+</span><span class="comment">-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span></span><br><span class="line"><span class="operator">|</span> <span class="keyword">Table</span> <span class="operator">|</span> Non_unique <span class="operator">|</span> Key_name <span class="operator">|</span> Seq_in_index <span class="operator">|</span> Column_name <span class="operator">|</span> <span class="keyword">Collation</span> <span class="operator">|</span> <span class="keyword">Cardinality</span> <span class="operator">|</span> Sub_part <span class="operator">|</span> Packed <span class="operator">|</span> <span class="keyword">Null</span> <span class="operator">|</span> Index_type <span class="operator">|</span> Comment <span class="operator">|</span> Index_comment <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span></span><br><span class="line"><span class="operator">|</span> users <span class="operator">|</span>          <span class="number">0</span> <span class="operator">|</span> <span class="keyword">PRIMARY</span>  <span class="operator">|</span>            <span class="number">1</span> <span class="operator">|</span> id          <span class="operator">|</span> A         <span class="operator">|</span>     <span class="number">2000000</span> <span class="operator">|</span>     <span class="keyword">NULL</span> <span class="operator">|</span> <span class="keyword">NULL</span>   <span class="operator">|</span>      <span class="operator">|</span> BTREE      <span class="operator">|</span>         <span class="operator">|</span>               <span class="operator">|</span></span><br><span class="line"><span class="operator">+</span><span class="comment">-------+------------+----------+--------------+-------------+-----------+-------------+----------+--------+------+------------+---------+---------------+</span></span><br><span class="line"><span class="number">1</span> <span class="type">row</span> <span class="keyword">in</span> <span class="keyword">set</span> (<span class="number">0.0011</span> sec)</span><br></pre></td></tr></table></figure>
+
+<p>而主键是被Mysql默认作为一个索引</p>
+<h2 id="主键索引有什么用？"><a href="#主键索引有什么用？" class="headerlink" title="主键索引有什么用？"></a>主键索引有什么用？</h2><h3 id="定位一行数据"><a href="#定位一行数据" class="headerlink" title="定位一行数据"></a>定位一行数据</h3><p>比如这样的一条sql</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> orders <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">10086</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这不是“查条件”，是“<strong>我知道你是谁，直接把你拎出来</strong>”。</p>
+<p>不扫表，不比对，直接在 B+Tree 上精准定位</p>
+<p>复杂度是 <code>O(log n)</code>，而不是 <code>O(n)</code>。</p>
+<h3 id="决定数据在磁盘上的物理顺序"><a href="#决定数据在磁盘上的物理顺序" class="headerlink" title="决定数据在磁盘上的物理顺序"></a>决定数据在磁盘上的物理顺序</h3><p>在 InnoDB 里，表中的每一行，是按主键顺序排在一起存的</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">id <span class="type">INT</span> AUTO_INCREMENT <span class="keyword">PRIMARY KEY</span></span><br></pre></td></tr></table></figure>
+
+<p>意味着，id 小的在前，id 大的在后，数据页顺着排</p>
+<p>如果要执行这样的查询</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> orders <span class="keyword">WHERE</span> id <span class="keyword">BETWEEN</span> <span class="number">100</span> <span class="keyword">AND</span> <span class="number">200</span>;</span><br></pre></td></tr></table></figure>
+
+<p>数据就在磁盘上连着，一页一页顺着就读下去了</p>
+<p>并且这样join的也快，只要 join 的是主键</p>
+<h3 id="普通索引的“最终落脚点”"><a href="#普通索引的“最终落脚点”" class="headerlink" title="普通索引的“最终落脚点”"></a>普通索引的“最终落脚点”</h3><p>在 InnoDB 里：普通索引 ≠ 指向行数据，而是普通索引 → 指向主键</p>
+<p>普通索引节点里存的是：索引值 + 主键值</p>
+<h2 id="回表？"><a href="#回表？" class="headerlink" title="回表？"></a>回表？</h2><h3 id="什么是回表"><a href="#什么是回表" class="headerlink" title="什么是回表"></a>什么是回表</h3><p>比如有这么一张表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">users(</span><br><span class="line">  id <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">  username <span class="type">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  email <span class="type">VARCHAR</span>(<span class="number">50</span>),</span><br><span class="line">  balance <span class="type">DECIMAL</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line">INDEX idx_email(email)</span><br></pre></td></tr></table></figure>
+
+<p>执行这样的查询</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> email <span class="operator">=</span> <span class="string">&#x27;a@b.com&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>实际在Mysql里是这样的：</p>
+<p>先在<code>idx_email</code>里，根据<code> a@b.com</code> 找到 <code>id=100</code><br>这里只有<code>email</code>和<code>id</code>，没有<code>balance</code>和<code>username</code></p>
+<p>然后再用<code>id</code>找到这一行的数据，这一步就是回表</p>
+<p>从普通索引 → 回到主键索引 → 拿整行数据</p>
+<h3 id="什么时候会发生回表"><a href="#什么时候会发生回表" class="headerlink" title="什么时候会发生回表"></a>什么时候会发生回表</h3><p>像这样</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> email <span class="operator">=</span> <span class="string">&#x27;a@b.com&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>用了普通索引，但是要列里所有数据，索引里没有这么多列就会回表</p>
+<p>但是如果是这样</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> email <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> email <span class="operator">=</span> <span class="string">&#x27;a@b.com&#x27;</span>;</span><br><span class="line">或者</span><br><span class="line"><span class="keyword">SELECT</span> email, id <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> email <span class="operator">=</span> <span class="string">&#x27;a@b.com&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这样就不会回表，因为要找的东西在索引里就有了</p>
+<h2 id="索引的使用"><a href="#索引的使用" class="headerlink" title="索引的使用"></a>索引的使用</h2><p>还是那个py，把用户改成两百万个，运行Py后执行下面的查询</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> username <span class="keyword">LIKE</span> &quot;哈基&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>运行后是找不到这个数据的，这个正常，主要看找数据花了多久？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; SELECT * FROM users WHERE username LIKE &quot;哈基&quot;;</span><br><span class="line">Empty set (0.2233 sec)</span><br></pre></td></tr></table></figure>
+
+<p>0.22秒，看起来不多，纯粹是因为我的电脑硬件（CPU、内存、SSD）太强了，把“笨重”的 SQL 硬扛下来了。如果是要面对大量并发查询，每次全表扫描就太慢了</p>
+<p><code>users</code> 表里现在只有主键索引（PRIMARY），但查询条件是 <code>WHERE username LIKE ...</code>。因为 <code>username</code> 没有索引，<strong>MySQL 其实做了一次“全表扫描”</strong>。</p>
+<p>执行下面的SQL看看是怎么查询的</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> username <span class="keyword">LIKE</span> &quot;哈基&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>运行输出:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------------+</span><br><span class="line">| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows    | filtered | Extra       |</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------------+</span><br><span class="line">|  1 | SIMPLE      | users | NULL       | ALL  | NULL          | NULL | NULL    | NULL | 2000000 |    11.11 | Using where |</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------------+</span><br><span class="line">1 row in set, 1 warning (0.0010 sec)</span><br><span class="line">Note (code 1003): /* select#1 */ select `mall_db_simple`.`users`.`id` AS `id`,`mall_db_simple`.`users`.`username` AS `username`,`mall_db_simple`.`users`.`email` AS `email`,`mall_db_simple`.`users`.`phone` AS `phone`,`mall_db_simple`.`users`.`city` AS `city`,`mall_db_simple`.`users`.`created_at` AS `created_at` from `mall_db_simple`.`users` where (`mall_db_simple`.`users`.`username` like &#x27;哈基&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p>可以看到type列是<code>ALL</code>(代表全表扫描，最烂的情况) ，rows列是<code>2000000</code>遍历了两百万行</p>
+<h3 id="创建和使用索引"><a href="#创建和使用索引" class="headerlink" title="创建和使用索引"></a>创建和使用索引</h3><p>创建索引的SQL语句是</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> INDEX 索引名 <span class="keyword">ON</span> 表名(字段名);</span><br></pre></td></tr></table></figure>
+
+<p>在这里就是</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> INDEX idx_username <span class="keyword">ON</span> users(username);</span><br></pre></td></tr></table></figure>
+
+<p>执行后再次运行上面那个查询，可以看到是瞬间给出结果了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; SELECT * FROM users WHERE username LIKE &quot;哈基&quot;;</span><br><span class="line">Empty set (0.0004 sec)</span><br></pre></td></tr></table></figure>
+
+<p>只用了0.0004秒，现在再看看Mysql是怎么查询的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; EXPLAIN SELECT * FROM users WHERE username LIKE &quot;哈基&quot;;</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+--------------+---------+------+------+----------+-----------------------+</span><br><span class="line">| id | select_type | table | partitions | type  | possible_keys | key          | key_len | ref  | rows | filtered | Extra                 |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+--------------+---------+------+------+----------+-----------------------+</span><br><span class="line">|  1 | SIMPLE      | users | NULL       | range | idx_username  | idx_username | 203     | NULL |    1 |      100 | Using index condition |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+--------------+---------+------+------+----------+-----------------------+</span><br><span class="line">1 row in set, 1 warning (0.0004 sec)</span><br><span class="line">Note (code 1003): /* select#1 */ select `mall_db_simple`.`users`.`id` AS `id`,`mall_db_simple`.`users`.`username` AS `username`,`mall_db_simple`.`users`.`email` AS `email`,`mall_db_simple`.`users`.`phone` AS `phone`,`mall_db_simple`.`users`.`city` AS `city`,`mall_db_simple`.`users`.`created_at` AS `created_at` from `mall_db_simple`.`users` where (`mall_db_simple`.`users`.`username` like &#x27;哈基&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p>看rows列变成了1，就是说明只需要扫 <strong>1 条索引记录</strong>，就能命中</p>
+<h3 id="删除索引"><a href="#删除索引" class="headerlink" title="删除索引"></a>删除索引</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">DROP</span> INDEX 索引名 <span class="keyword">ON</span> 表名;</span><br></pre></td></tr></table></figure>
+
+<p>如果索引建错了，或者没用上，要删掉（因为索引会拖慢写入速度）。就用上面的命令。我不演示了</p>
+<h2 id="索引的副作用"><a href="#索引的副作用" class="headerlink" title="索引的副作用"></a>索引的副作用</h2><p>既然这么好，为啥不给所有字段都加？给 <code>username</code>, <code>phone</code>, <code>email</code>, <code>address</code> 全加上索引，岂不是起飞？</p>
+<ol>
+<li><strong>拖慢写入（INSERT&#x2F;UPDATE&#x2F;DELETE）</strong>：<ul>
+<li>往书里<strong>写</strong>一行内容（INSERT），不仅要往正文里写，还得去<strong>改目录</strong>（维护索引树）。索引越多，改目录越慢。</li>
+<li>对于写多读少的系统（比如日志系统），索引要慎用。</li>
+</ul>
+</li>
+<li><strong>占用磁盘空间</strong>：<ul>
+<li>索引也是文件，也是要存硬盘的。数据量大时，索引可能比数据本身还大。</li>
+</ul>
+</li>
+</ol>
+<h2 id="LIKE的坑"><a href="#LIKE的坑" class="headerlink" title="LIKE的坑"></a>LIKE的坑</h2><p>在刚刚的SQL里使用了LIKE但是没有加百分号。也就是说其实还是使用的精确匹配</p>
+<ol>
+<li><p><strong>精确匹配&#x2F;前缀匹配（索引生效 ）</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> username <span class="keyword">LIKE</span> &quot;哈基%&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>结果：<code>type</code> 是 <code>range</code> 或 <code>ref</code>。索引生效了！因为目录是按拼音排的，MySQL 知道“哈”在前面的几页。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----+-------------+-------+------------+-------+---------------+--------------+---------+------+------+----------+-----------------------+</span><br><span class="line">| id | select_type | table | partitions | type  | possible_keys | key          | key_len | ref  | rows | filtered | Extra                 |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+--------------+---------+------+------+----------+-----------------------+</span><br><span class="line">|  1 | SIMPLE      | users | NULL       | range | idx_username  | idx_username | 203     | NULL |    1 |      100 | Using index condition |</span><br><span class="line">+----+-------------+-------+------------+-------+---------------+--------------+---------+------+------+----------+-----------------------+</span><br><span class="line">1 row in set, 1 warning (0.0009 sec)</span><br><span class="line">Note (code 1003): /* select#1 */ select `mall_db_simple`.`users`.`id` AS `id`,`mall_db_simple`.`users`.`username` AS `username`,`mall_db_simple`.`users`.`email` AS `email`,`mall_db_simple`.`users`.`phone` AS `phone`,`mall_db_simple`.`users`.`city` AS `city`,`mall_db_simple`.`users`.`created_at` AS `created_at` from `mall_db_simple`.`users` where (`mall_db_simple`.`users`.`username` like &#x27;哈基%&#x27;)</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>左模糊匹配（索引失效 ）</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 找名字里以“米”结尾的人（比如哈基米、小米）</span></span><br><span class="line">EXPLAIN <span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> username <span class="keyword">LIKE</span> &quot;%米&quot;;</span><br></pre></td></tr></table></figure>
+
+<p>结果：<code>type</code> 又是 <strong><code>ALL</code></strong> 了！</p>
+<p>查字典的时候，如果只知道这就字“结尾是米”，没法用拼音目录查，只能把整本字典翻一遍。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------------+</span><br><span class="line">| id | select_type | table | partitions | type | possible_keys | key  | key_len | ref  | rows    | filtered | Extra       |</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------------+</span><br><span class="line">|  1 | SIMPLE      | users | NULL       | ALL  | NULL          | NULL | NULL    | NULL | 2000000 |    11.11 | Using where |</span><br><span class="line">+----+-------------+-------+------------+------+---------------+------+---------+------+---------+----------+-------------+</span><br><span class="line">1 row in set, 1 warning (0.0003 sec)</span><br><span class="line">Note (code 1003): /* select#1 */ select `mall_db_simple`.`users`.`id` AS `id`,`mall_db_simple`.`users`.`username` AS `username`,`mall_db_simple`.`users`.`email` AS `email`,`mall_db_simple`.`users`.`phone` AS `phone`,`mall_db_simple`.`users`.`city` AS `city`,`mall_db_simple`.`users`.`created_at` AS `created_at` from `mall_db_simple`.`users` where (`mall_db_simple`.`users`.`username` like &#x27;%米&#x27;)</span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>如果我想倒着查也能瞬间给出结果？使用<strong>虚拟列</strong>功能</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 1. 给表加一个虚拟列，内容是 username 的倒序</span></span><br><span class="line"><span class="keyword">ALTER TABLE</span> users <span class="keyword">ADD</span> reverse_username <span class="type">VARCHAR</span>(<span class="number">50</span>) </span><br><span class="line">GENERATED ALWAYS <span class="keyword">AS</span> (REVERSE(username));</span><br><span class="line"></span><br><span class="line"><span class="comment">-- 2. 给这个倒序列加索引</span></span><br><span class="line"><span class="keyword">CREATE</span> INDEX idx_reverse_username <span class="keyword">ON</span> users(reverse_username);</span><br></pre></td></tr></table></figure>
+
+<p>如果使用的是Windows的phpstudy中的Mysql5.7，默认不会是InnoDB，在执行第二步就会报错</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: 1478 (HY000): Table storage engine &#x27;MyISAM&#x27; does not support the create option &#x27;Index on virtual generated column&#x27;</span><br></pre></td></tr></table></figure>
+
+<p>这时候使用ALTER命令修改存储引擎为InnoDB</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER TABLE</span> users ENGINE<span class="operator">=</span>InnoDB;</span><br></pre></td></tr></table></figure>
+
+<p>再执行第二步就正常了，现在看看左模糊匹配效果，不过得在username的倒序列里查找</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; SELECT * FROM users WHERE reverse_username LIKE &quot;米%&quot;;</span><br><span class="line">Empty set (0.0015 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; EXPLAIN SELECT * FROM users WHERE reverse_username LIKE &quot;米%&quot;;</span><br><span class="line">+----+-------------+-------+------------+-------+----------------------+----------------------+---------+------+------+----------+-------------+</span><br><span class="line">| id | select_type | table | partitions | type  | possible_keys        | key                  | key_len | ref  | rows | filtered | Extra       |</span><br><span class="line">+----+-------------+-------+------------+-------+----------------------+----------------------+---------+------+------+----------+-------------+</span><br><span class="line">|  1 | SIMPLE      | users | NULL       | range | idx_reverse_username | idx_reverse_username | 203     | NULL |    1 |      100 | Using where |</span><br><span class="line">+----+-------------+-------+------------+-------+----------------------+----------------------+---------+------+------+----------+-------------+</span><br><span class="line">1 row in set, 1 warning (0.0008 sec)</span><br><span class="line">Note (code 1003): /* select#1 */ select `mall_db_simple`.`users`.`id` AS `id`,`mall_db_simple`.`users`.`username` AS `username`,`mall_db_simple`.`users`.`email` AS `email`,`mall_db_simple`.`users`.`phone` AS `phone`,`mall_db_simple`.`users`.`city` AS `city`,`mall_db_simple`.`users`.`created_at` AS `created_at`,`mall_db_simple`.`users`.`reverse_username` AS `reverse_username` from `mall_db_simple`.`users` where (`mall_db_simple`.`users`.`reverse_username` like &#x27;米%&#x27;)</span><br></pre></td></tr></table></figure>
+
+<p>也是秒出。也只用扫描一条记录</p>
+<h1 id="事务"><a href="#事务" class="headerlink" title="事务"></a>事务</h1><p>事务是不支持MyISAM存储引擎的</p>
+<p>事务是把一组SQL语句打包成一个整体，在这组SQL语句的执行过程中，要么全部成功，要么全部失败。这组SQL语句可以是一条也可以是多条。</p>
+<h2 id="事务的八股"><a href="#事务的八股" class="headerlink" title="事务的八股:"></a>事务的八股:</h2><ul>
+<li><strong>A (Atomicity) 原子性</strong>：<ul>
+<li>事务中的所有操作就是一个不可分割的整体，像原子一样。这些操作，要么全部成功，要么全部失败。数据库会记录事务执行前的数据状态，一旦事务执行过程出现失败，就会回滚到原来的初始状态。</li>
+<li><em>原理</em>：靠 <strong>Undo Log</strong> 实现（万一失败了，根据日志把数据改回去）。</li>
+</ul>
+</li>
+<li><strong>C (Consistency) 一致性</strong>：<ul>
+<li>事务执行前后，事务的完整性不会被破坏。事务执行完成之后，保证数据正确并且符合预期。</li>
+</ul>
+</li>
+<li><strong>I (Isolation) 隔离性</strong>：<ul>
+<li>数据库允许多个并发事务同时对数据进行修改和读写，隔离性可以保证多个事务并发执行，并且不相互干扰。</li>
+<li><em>原理</em>：靠 <strong>锁 (Lock)</strong> 和 <strong>MVCC (多版本并发控制)</strong> 实现。</li>
+</ul>
+</li>
+<li><strong>D (Durability) 持久性</strong>：<ul>
+<li>只要 <code>COMMIT</code> 了，哪怕下一秒服务器爆炸，电线被挖断，数据也不能丢。</li>
+<li><em>原理</em>：靠 <strong>Redo Log</strong> 实现（先写日志再写磁盘）。</li>
+</ul>
+</li>
+</ul>
+<h2 id="事务指令"><a href="#事务指令" class="headerlink" title="事务指令"></a>事务指令</h2><table>
+<thead>
+<tr>
+<th align="left">指令</th>
+<th align="left">作用</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>START TRANSACTION</code></strong> (或 <code>BEGIN</code>)</td>
+<td align="left"><strong>开启事务</strong>。告诉 MySQL：“从这一行开始，后面的操作先别真写入硬盘，先记在小本本上。”</td>
+</tr>
+<tr>
+<td align="left"><strong><code>COMMIT</code></strong></td>
+<td align="left"><strong>提交</strong>。告诉 MySQL：“刚才的操作都确认无误，全部生效，写入硬盘！”</td>
+</tr>
+<tr>
+<td align="left"><strong><code>ROLLBACK</code></strong></td>
+<td align="left"><strong>回滚</strong>。告诉 MySQL：“出事了！刚才的操作全部作废，撤销到开启事务之前的状态！”</td>
+</tr>
+<tr>
+<td align="left"><strong><code>savepoint</code></strong></td>
+<td align="left"><strong>设置一个存档</strong>。告诉Mysql在这里保存一个状态。如果回滚的话可以选择回滚到这里</td>
+</tr>
+</tbody></table>
+<p>注意：事务是有适用范围的</p>
+<ul>
+<li><strong>能回滚的（DML - Data Manipulation Language）</strong>：<ul>
+<li><code>INSERT</code>（增）</li>
+<li><code>UPDATE</code>（改）</li>
+<li><code>DELETE</code>（删数据）</li>
+</ul>
+</li>
+<li><strong>不能回滚且会强制提交的（DDL - Data Definition Language）</strong>：<ul>
+<li><code>CREATE</code>（建表&#x2F;库）</li>
+<li><code>DROP</code>（删表&#x2F;库）</li>
+<li><code>ALTER</code>（改字段）</li>
+<li><code>TRUNCATE</code>（清空表）</li>
+</ul>
+</li>
+</ul>
+<p>比如下面这个例子:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; start transaction;</span><br><span class="line">Query OK, 0 rows affected (0.0001 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mall_db_simple     |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| sys                |</span><br><span class="line">+--------------------+</span><br><span class="line">5 rows in set (0.0008 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; drop database mall_db_simple;</span><br><span class="line">Query OK, 4 rows affected (0.0082 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; rollback;</span><br><span class="line">Query OK, 0 rows affected (0.0002 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; show databases;</span><br><span class="line">+--------------------+</span><br><span class="line">| Database           |</span><br><span class="line">+--------------------+</span><br><span class="line">| information_schema |</span><br><span class="line">| mysql              |</span><br><span class="line">| performance_schema |</span><br><span class="line">| sys                |</span><br><span class="line">+--------------------+</span><br><span class="line">4 rows in set (0.0006 sec)</span><br></pre></td></tr></table></figure>
+
+<p>Mysql在执行DDL指令前，不会管前面有没有<code>start transaction;</code>都会先执行一个<code>COMMIT</code>，然后再会执行DDL指令。执行完DDL后再会执行一个<code>COMMIT</code>。后续的<code>rollback</code>滚不回来</p>
+<h3 id="DELETE和TRUNCATE的区别"><a href="#DELETE和TRUNCATE的区别" class="headerlink" title="DELETE和TRUNCATE的区别"></a>DELETE和TRUNCATE的区别</h3><ul>
+<li><strong>想清空一张表，且希望可以回滚：</strong><ul>
+<li>用 <strong><code>DELETE FROM users;</code></strong></li>
+<li>这是 DML，速度慢（一行行删），但<strong>可以 <code>ROLLBACK</code></strong>。</li>
+</ul>
+</li>
+<li><strong>想清空一张表，不留后路：</strong><ul>
+<li>用 <strong><code>TRUNCATE TABLE users;</code></strong></li>
+<li>这是 DDL，速度快（直接把表文件扔了重新建一个），但<strong>ROLLBACK不回来</strong>。</li>
+</ul>
+</li>
+</ul>
+<h2 id="开始事务之前"><a href="#开始事务之前" class="headerlink" title="开始事务之前"></a>开始事务之前</h2><h3 id="库存是怎么被下单操作搞乱的？"><a href="#库存是怎么被下单操作搞乱的？" class="headerlink" title="库存是怎么被下单操作搞乱的？"></a>库存是怎么被下单操作搞乱的？</h3><p>先看看id为1的商品有多少个库存</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> id, stock <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>执行得到结果剩余100个</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |   100 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0003 sec)</span><br></pre></td></tr></table></figure>
+
+<p>此时一位正常用户进来买了一个id为1的商品</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> products <span class="keyword">SET</span> stock <span class="operator">=</span> stock <span class="operator">-</span> <span class="number">1</span> <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这时候库存还剩99个</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |    99 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0004 sec) sec)</span><br></pre></td></tr></table></figure>
+
+<p>然后一位测试进来买了-1个id为1的商品</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> products <span class="keyword">SET</span> stock <span class="operator">=</span> stock <span class="operator">-</span> (<span class="number">-1</span>) <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>库存增加了！</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; UPDATE products SET stock = stock - (-1) WHERE id = 1;</span><br><span class="line">Query OK, 1 row affected (0.0010 sec)</span><br><span class="line"></span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |   100 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0004 sec)</span><br></pre></td></tr></table></figure>
+
+<p>然后这位测试买了9999个商品</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> products <span class="keyword">SET</span> stock <span class="operator">=</span> stock <span class="operator">-</span> <span class="number">9999</span> <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>然后他买到了9999个商品并且把库存干成负数了，商城超卖了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; UPDATE products SET stock = stock - 9999 WHERE id = 1;</span><br><span class="line">Query OK, 1 row affected (0.0010 sec)</span><br><span class="line"></span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 | -9899 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0004 sec)</span><br></pre></td></tr></table></figure>
+
+<h3 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h3><p>利用UPDATE 语句的原子性，把“判断”逻辑直接写在 SQL 里。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> products </span><br><span class="line"><span class="keyword">SET</span> stock <span class="operator">=</span> stock <span class="operator">-</span> 购买数量</span><br><span class="line"><span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span> </span><br><span class="line"><span class="keyword">AND</span> stock <span class="operator">&gt;=</span> 购买数量;</span><br></pre></td></tr></table></figure>
+
+<p>这样的执行效果是</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; UPDATE products SET stock = stock - 9999 WHERE id = 1 AND stock &gt;= 9999;</span><br><span class="line">Query OK, 0 rows affected (0.0009 sec)</span><br><span class="line"></span><br><span class="line">Rows matched: 0  Changed: 0  Warnings: 0</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |   100 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0003 sec)</span><br></pre></td></tr></table></figure>
+
+<p><strong>效果：</strong></p>
+<ul>
+<li><strong>库存够</strong>：MySQL 找到这行数据，且条件满足，执行扣减。返回 <strong><code>Rows matched: 1, Changed: 1</code></strong>。后端看到影响行数为 1，判定购买成功。</li>
+<li><strong>库存不够</strong>（比如库存是 100）：MySQL 扫这行数据，发现 <code>stock &gt;= 9991</code> 不成立。直接放弃修改。返回 <strong><code>Rows matched: 0, Changed: 0</code></strong>。后端看到影响行数为 0，判定<strong>库存不足，下单失败</strong>。</li>
+</ul>
+<p>同样的方法解决买了-1个商品导致库存增加的问题，再添加一个AND判断逻辑</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> products </span><br><span class="line"><span class="keyword">SET</span> stock <span class="operator">=</span> stock <span class="operator">-</span> 购买数量</span><br><span class="line"><span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span> </span><br><span class="line"><span class="keyword">AND</span> stock <span class="operator">&gt;=</span> 购买数量</span><br><span class="line"><span class="keyword">AND</span> 购买数量 <span class="operator">&gt;</span> <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这样当购买数量为-1的时候</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; UPDATE products SET stock = stock - (-1) WHERE id = 1 AND stock &gt;= (-1) AND (-1) &gt; 0;</span><br><span class="line">Query OK, 0 rows affected (0.0010 sec)</span><br><span class="line"></span><br><span class="line">Rows matched: 0  Changed: 0  Warnings: 0</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |   100 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0004 sec)</span><br></pre></td></tr></table></figure>
+
+<p>同样，0行被match，0行被change</p>
+<h3 id="没用的解决方法"><a href="#没用的解决方法" class="headerlink" title="没用的解决方法"></a>没用的解决方法</h3><p>后端检测库存数量是否充足，再执行扣库存？</p>
+<p>假设库存只有 <strong>1 个</strong>。<br>User A和User B<strong>同时</strong>点击购买。<br><strong>后端代码（错误示范）：</strong></p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 1. 先查库存</span></span><br><span class="line">current_stock = db.query(<span class="string">&quot;SELECT stock FROM products WHERE id=1&quot;</span>)</span><br><span class="line"><span class="comment"># 2. 判断充足</span></span><br><span class="line"><span class="keyword">if</span> current_stock &gt; <span class="number">0</span>:</span><br><span class="line"> <span class="comment"># 3. 扣库存</span></span><br><span class="line"> db.<span class="built_in">exec</span>(<span class="string">&quot;UPDATE products SET stock = stock - 1 WHERE id=1&quot;</span>)</span><br><span class="line"> <span class="keyword">return</span> <span class="string">&quot;购买成功&quot;</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line"> <span class="keyword">return</span> <span class="string">&quot;库存不足&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p>超卖过程：</p>
+<ol>
+<li><strong>时刻 0.01s</strong>：A 查库存，是 1。</li>
+<li><strong>时刻 0.01s</strong>：B 查库存，也是 1（因为 A 还没扣呢）。</li>
+<li><strong>时刻 0.02s</strong>：A 判断 <code>1 &gt; 0</code>，通过。</li>
+<li><strong>时刻 0.02s</strong>：B 判断 <code>1 &gt; 0</code>，通过。</li>
+<li><strong>时刻 0.03s</strong>：A 扣减，库存变 0。</li>
+<li><strong>时刻 0.03s</strong>：B 扣减，库存变 -1。<br>结果：卖出了 2 个手机，实际上仓库只有 1 个。超卖了。</li>
+</ol>
+<h3 id="如果要求库存不能为负数？"><a href="#如果要求库存不能为负数？" class="headerlink" title="如果要求库存不能为负数？"></a>如果要求库存不能为负数？</h3><p>在MySQL 8.0.16+使用Check约束是可行的</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER TABLE</span> products</span><br><span class="line"><span class="keyword">ADD CONSTRAINT</span> chk_stock_non_negative</span><br><span class="line"><span class="keyword">CHECK</span> (stock <span class="operator">&gt;=</span> <span class="number">0</span>);</span><br></pre></td></tr></table></figure>
+
+<p>之后再尝试扣除超过库存的数的时候</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> products <span class="keyword">SET</span> stock <span class="operator">=</span> stock <span class="operator">-</span> <span class="number">9999</span> <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+
+<p>就会直接报错</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR 3819 (HY000): Check constraint &#x27;chk_stock_non_negative&#x27; is violated</span><br></pre></td></tr></table></figure>
+
+<p>但是要注意，CHECK 是兜底，不是主流程。因为报错成本高，不方便区分“库存不足 vs 其他错误”，而且在高并发下，异常比 affected_rows 慢</p>
+<p>如果使用UNSIGNED？表面看起来可行，但不推荐</p>
+<p>在某些版本 &#x2F; SQL_MODE 下：要么报错，要么发生隐式类型转换，行为不稳定</p>
+<p>UNSIGNED 解决的是“值域”，不是并发逻辑</p>
+<p>总之在后端逻辑和SQL语句的编写中，对于凡是能参与加减乘除的字段，都假设有人会传负数、零、极大值</p>
+<h2 id="使用事务"><a href="#使用事务" class="headerlink" title="使用事务"></a>使用事务</h2><h3 id="回滚的使用"><a href="#回滚的使用" class="headerlink" title="回滚的使用"></a>回滚的使用</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |    99 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0039 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; START TRANSACTION;</span><br><span class="line">Query OK, 0 rows affected (0.0002 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; UPDATE products SET stock = stock - 1 WHERE id = 1;</span><br><span class="line">Query OK, 1 row affected (0.0015 sec)</span><br><span class="line"></span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |    98 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0003 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; ROLLBACK;</span><br><span class="line">Query OK, 0 rows affected (0.0072 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |    99 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0003 sec)</span><br></pre></td></tr></table></figure>
+
+<p>可见，开始之前，id为1的商品库存99个。然后启动事务，将商品数量扣除1个后，再次查看商品数量已经变成98个了。然后使用回滚。商品数量没有变化</p>
+<h3 id="提交的使用"><a href="#提交的使用" class="headerlink" title="提交的使用"></a>提交的使用</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |    99 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0025 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; begin;</span><br><span class="line">Query OK, 0 rows affected (0.0002 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; UPDATE products SET stock = stock - 2 WHERE id = 1;</span><br><span class="line">Query OK, 1 row affected (0.0005 sec)</span><br><span class="line"></span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |    97 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0003 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; commit;</span><br><span class="line">Query OK, 0 rows affected (0.0045 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |    97 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0003 sec)</span><br></pre></td></tr></table></figure>
+
+<p>可见，开始之前，id为1的商品库存99个。然后启动事务，将商品数量扣除2个后，再次查看商品数量已经变成97个了。使用commit提交后，事务结束。商品库存扣除</p>
+<h3 id="保存点的使用"><a href="#保存点的使用" class="headerlink" title="保存点的使用"></a>保存点的使用</h3><p>在同一事务中，保存点名称是唯一的。如果设置相同名称的保存点名称，后设置的保存点会覆盖先设置的</p>
+<p>看下面的例子</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; begin;</span><br><span class="line">Query OK, 0 rows affected (0.0002 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |   100 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0003 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; UPDATE products SET stock = stock - 10 WHERE id = 1;</span><br><span class="line">Query OK, 1 row affected (0.0004 sec)</span><br><span class="line"></span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |    90 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0003 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; savepoint koukuncun1;</span><br><span class="line">Query OK, 0 rows affected (0.0002 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; UPDATE products SET stock = stock - 20 WHERE id = 1;</span><br><span class="line">Query OK, 1 row affected (0.0003 sec)</span><br><span class="line"></span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |    70 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0003 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; savepoint koukuncun2;</span><br><span class="line">Query OK, 0 rows affected (0.0002 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; rollback to koukuncun1;</span><br><span class="line">Query OK, 0 rows affected (0.0003 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |    90 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0002 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; rollback to koukuncun2;</span><br><span class="line">ERROR: 1305 (42000): SAVEPOINT koukuncun2 does not exist</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; release savepoint koukuncun1;</span><br><span class="line">Query OK, 0 rows affected (0.0002 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; UPDATE products SET stock = stock - 20 WHERE id = 1;</span><br><span class="line">Query OK, 1 row affected (0.0004 sec)</span><br><span class="line"></span><br><span class="line">Rows matched: 1  Changed: 1  Warnings: 0</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; SELECT id, stock FROM products WHERE id = 1;</span><br><span class="line">+----+-------+</span><br><span class="line">| id | stock |</span><br><span class="line">+----+-------+</span><br><span class="line">|  1 |    70 |</span><br><span class="line">+----+-------+</span><br><span class="line">1 row in set (0.0003 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; rollback to koukuncun1;</span><br><span class="line">ERROR: 1305 (42000): SAVEPOINT koukuncun1 does not exist</span><br></pre></td></tr></table></figure>
+
+<p>一个会话里可以设置多个保存点。并且可以通过<code>rollback to 保存点</code>回到保存点。</p>
+<p>但是，保存点不是变量。就比如上面的例子，创建了保存点<code>koukuncun1</code>后又创建了保存点<code>koukuncun2</code>。然后直接回滚到了<code>koukuncun1</code>。这时候就不能再回滚到<code>koukuncun2</code>了，因为<code>koukuncun2</code>对于<code>koukuncun1</code>来说是未来发生的。<br>也可以使用<code>release savepoint 保存点</code>指令来释放保存点。释放后的保存点同样不能再回滚。</p>
+<h2 id="自动提交？手动提交？"><a href="#自动提交？手动提交？" class="headerlink" title="自动提交？手动提交？"></a>自动提交？手动提交？</h2><ol>
+<li>什么是自动提交（默认）？<br>敲一行 SQL，回车，MySQL 立刻把它存进硬盘（Commit）。</li>
+</ol>
+<ul>
+<li><strong>状态</strong>：<code>autocommit = 1</code> (开启)</li>
+<li><strong>场景</strong>：平时在命令行里敲 <code>UPDATE ...</code>，没敲 <code>COMMIT</code> 数据也改了，就是因为这个。</li>
+</ul>
+<ol start="2">
+<li>什么是手动提交？<br>需要显式地告诉 MySQL：“我要开始记账了”和“我记完账了”。</li>
+</ol>
+<ul>
+<li><strong>状态</strong>：<code>autocommit = 0</code> (关闭)</li>
+<li><strong>场景</strong>：<ul>
+<li><strong>方法 A（推荐，临时手动）</strong>：输入 <code>START TRANSACTION</code>。此时 <code>autocommit</code> 暂时失效，直到你敲 <code>COMMIT</code> 或 <code>ROLLBACK</code>。</li>
+<li><strong>方法 B（全局手动，不推荐）</strong>：执行 <code>SET autocommit = 0;</code>。这很危险！如果忘了敲 COMMIT，做了一天的操作，关掉窗口后<strong>全都会丢</strong>。</li>
+</ul>
+</li>
+</ul>
+<p>通过下面的命令查看当前状态</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> @<span class="variable">@autocommit</span>;</span><br></pre></td></tr></table></figure>
+
+<p>一般都是默认开启了自动提交</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; SELECT @@autocommit;</span><br><span class="line">+--------------+</span><br><span class="line">| @@autocommit |</span><br><span class="line">+--------------+</span><br><span class="line">|            1 |</span><br><span class="line">+--------------+</span><br><span class="line">1 row in set (0.0001 sec)</span><br></pre></td></tr></table></figure>
+
+<h2 id="事务的隔离级别"><a href="#事务的隔离级别" class="headerlink" title="事务的隔离级别"></a>事务的隔离级别</h2><p>MySQL 提供了 4 种级别，安全性从低到高，性能从高到低：</p>
+<table>
+<thead>
+<tr>
+<th align="left">级别</th>
+<th align="left">英文名</th>
+<th align="left">绰号</th>
+<th align="left">特点</th>
+<th align="left">会发生什么？</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>1</strong></td>
+<td align="left"><strong>Read Uncommitted</strong></td>
+<td align="left"><strong>读未提交</strong></td>
+<td align="left"><strong>裸奔</strong></td>
+<td align="left">别人还没 Commit 的数据就能看见。（脏读、不可重复读、幻读）</td>
+</tr>
+<tr>
+<td align="left"><strong>2</strong></td>
+<td align="left"><strong>Read Committed</strong></td>
+<td align="left"><strong>读已提交 (RC)</strong></td>
+<td align="left"><strong>半隔离</strong></td>
+<td align="left">别人 Commit 了，才能看见。（幻读和不可重复读）</td>
+</tr>
+<tr>
+<td align="left"><strong>3</strong></td>
+<td align="left"><strong>Repeatable Read</strong></td>
+<td align="left"><strong>可重复读 (RR)</strong></td>
+<td align="left"><strong>照骗</strong></td>
+<td align="left"><strong>MySQL 默认</strong> 事务一开始，就拍个照。不管别人怎么改，看到的永远是开始时的样子。</td>
+</tr>
+<tr>
+<td align="left"><strong>4</strong></td>
+<td align="left"><strong>Serializable</strong></td>
+<td align="left"><strong>串行化</strong></td>
+<td align="left"><strong>排队</strong></td>
+<td align="left">只要我没搞完，别人连查都不准查。<strong>慢到令人发指</strong>。</td>
+</tr>
+</tbody></table>
+<h3 id="默认可重复读的场景"><a href="#默认可重复读的场景" class="headerlink" title="默认可重复读的场景"></a>默认可重复读的场景</h3><p><strong>场景</strong>：（窗口 A）在查账，（窗口 B）在改数据。</p>
+<ol>
+<li><p><strong>窗口 A</strong>：开启事务，先查一下库存。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">START</span> TRANSACTION;</span><br><span class="line"><span class="keyword">SELECT</span> stock <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>窗口 B</strong>：开启事务，卖掉 50 个</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">UPDATE</span> products <span class="keyword">SET</span> stock <span class="operator">=</span> <span class="number">50</span> <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure></li>
+<li><p><strong>窗口 A</strong>：<strong>再次查询</strong>库存。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> stock <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br></pre></td></tr></table></figure>
+<ul>
+<li><strong>结果</strong>：<strong>还是 100！</strong> (哪怕窗口 B 已经改成 50 了)</li>
+<li><strong>原因</strong>：这就是 <strong>Repeatable Read</strong>。在开启事务的那一刻，MySQL 给他生成了一个“快照”。只要不结束事务，外面的世界天崩地裂，他看到的永远是 100。</li>
+</ul>
+</li>
+<li><p><strong>窗口 A</strong>：结束查账。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">COMMIT</span>;</span><br><span class="line"><span class="keyword">SELECT</span> stock <span class="keyword">FROM</span> products <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">1</span>;</span><br><span class="line"><span class="comment">--结果：50</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<p>如果窗口A要获取实时数据，就使用</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SET</span> SESSION TRANSACTION ISOLATION LEVEL READ COMMITTED;</span><br></pre></td></tr></table></figure>
+
+<h3 id="事务并发执行可能引发的问题"><a href="#事务并发执行可能引发的问题" class="headerlink" title="事务并发执行可能引发的问题"></a>事务并发执行可能引发的问题</h3><ol>
+<li><strong>脏读 (Dirty Read)</strong>：<ul>
+<li><em>现象</em>：A 读到了 B <strong>还没提交</strong>的数据。结果 B 回滚了，A 读到的是假数据。</li>
+<li><em>谁有这毛病</em>：<strong>Read Uncommitted</strong>。</li>
+</ul>
+</li>
+<li><strong>不可重复读 (Non-repeatable Read)</strong>：<ul>
+<li><em>现象</em>：A 第一次读是 100，B 改成 50 提交了，A 第二次读变成 50。A 懵了：“怎么一会儿一个样？”</li>
+<li><em>谁有这毛病</em>：<strong>Read Committed</strong> 。</li>
+</ul>
+</li>
+<li><strong>幻读 (Phantom Read)</strong>：<ul>
+<li><em>现象</em>：A 查所有订单，发现有 5 个。B 偷偷<strong>插入</strong>了一个新订单。A 准备修改这 5 个订单，结果发现数据库里有 6 个订单受影响。A 觉得出现了幻觉。</li>
+</ul>
+</li>
+</ol>
+<p>在大部分情况下<strong>保持默认 (Repeatable Read)</strong> 就行</p>
+<p>MySQL 的默认设置已经非常优秀，能避免大多数并发坑。</p>
+<p>只有在极少数对“实时性”要求极高，且为了减少死锁的场景下（比如 12306 抢票），才会去考虑改为 RC。不过上面的那些内容也是面试狗官爱问的。</p>
+<h1 id="间隙锁"><a href="#间隙锁" class="headerlink" title="间隙锁"></a>间隙锁</h1><p><strong>间隙锁 (Gap Lock)</strong> 是 MySQL (InnoDB) 里的特性，也是<strong>只有在 RR（可重复读）隔离级别下</strong>才会生效的特殊锁机制。</p>
+<p>不需要专门写 SQL 去调用它。只要隔离级别是默认的 <strong>Repeatable Read (RR)</strong>，并且执行了<strong>范围查询的加锁操作</strong>，MySQL 就会自动触发间隙锁。</p>
+<h2 id="如果没有间隙锁"><a href="#如果没有间隙锁" class="headerlink" title="如果没有间隙锁"></a>如果没有间隙锁</h2><p><strong>场景</strong>：事务A要查 ID &gt; 10 的所有订单。目前只有 ID&#x3D;11, ID&#x3D;13 两条。</p>
+<p><strong>动作</strong>：事务A执行 <code>SELECT * FROM orders WHERE id &gt; 10 FOR UPDATE;</code>（锁住查到的数据）。</p>
+<p><strong>漏洞</strong>：如果没有间隙锁，只锁住了 11 和 13。这时候事务B偷偷<strong>插入</strong>了一条 ID&#x3D;12 的数据。</p>
+<p>结果：事务A还没提交事务，再查一次，发现突然多出来一个 12！见鬼了（幻读）。<br><strong>间隙锁的作用</strong>：<br>事务A不仅把 11 和 13 锁住，还拉起了<strong>警戒线</strong>——<strong>“把 11 和 13 中间的空位、13 后面的空位全封死！谁也不准往里插数据！”</strong></p>
+<h2 id="间隙锁的工作"><a href="#间隙锁的工作" class="headerlink" title="间隙锁的工作"></a>间隙锁的工作</h2><p>首先先创建一个很简单的表</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> gap_test (</span><br><span class="line">    id <span class="type">INT</span> <span class="keyword">PRIMARY KEY</span></span><br><span class="line">) ENGINE<span class="operator">=</span>InnoDB;</span><br><span class="line"><span class="keyword">INSERT INTO</span> gap_test <span class="keyword">VALUES</span> (<span class="number">1</span>), (<span class="number">5</span>), (<span class="number">10</span>);</span><br></pre></td></tr></table></figure>
+
+<p>在其中一个窗口启动事务查询里面的数据</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  mall_db_simple  SQL &gt; START TRANSACTION;</span><br><span class="line">Query OK, 0 rows affected (0.0002 sec)</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; SELECT * FROM gap_test WHERE id &gt; 1 AND id &lt; 10 FOR UPDATE;</span><br><span class="line">+----+</span><br><span class="line">| id |</span><br><span class="line">+----+</span><br><span class="line">|  5 |</span><br><span class="line">+----+</span><br><span class="line">1 row in set (0.0004 sec)</span><br></pre></td></tr></table></figure>
+
+<p>这时候再到另一个窗口启动事务，并尝试往这些“空位”里插数据。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306  SQL &gt; START TRANSACTION;</span><br><span class="line">Query OK, 0 rows affected (0.0002 sec)</span><br><span class="line">MySQL  localhost:3306  ★  SQL &gt; use mall_db_simple;</span><br><span class="line">Default schema set to `mall_db_simple`.</span><br><span class="line">Fetching global names, object names from `mall_db_simple` for auto-completion... Press ^C to stop.</span><br><span class="line">MySQL  localhost:3306  mall_db_simple  ★  SQL &gt; INSERT INTO gap_test VALUES (2);</span><br></pre></td></tr></table></figure>
+
+<p>卡在这里不动了，因为在第一个窗口 MySQL 会自动加上间隙锁，锁住 (1, 5) 和 (5, 10) 这两个区间</p>
+<h2 id="间隙锁导致的死锁"><a href="#间隙锁导致的死锁" class="headerlink" title="间隙锁导致的死锁"></a>间隙锁导致的死锁</h2><ol>
+<li><strong>A 用户</strong>想注册名字叫“哈基米”，由于并发逻辑，他先用 <code>SELECT * FROM users WHERE name = &#39;哈基米&#39; FOR UPDATE</code> 查一下有没有。<ul>
+<li>假设数据库里没这人。MySQL 加上了<strong>间隙锁</strong>（锁住了这一片不存在的区域）。</li>
+</ul>
+</li>
+<li><strong>B 用户</strong>同时也想注册“哈基米”，也执行了同样的 SQL。<ul>
+<li>间隙锁和间隙锁之间是<strong>不冲突</strong>的！B 用户也加上了间隙锁。</li>
+</ul>
+</li>
+<li><strong>A 用户</strong>执行 <code>INSERT ... &#39;哈基米&#39;</code>。<ul>
+<li><strong>崩了</strong>：A 被 B 的间隙锁挡住了。</li>
+</ul>
+</li>
+<li><strong>B 用户</strong>执行 <code>INSERT ... &#39;哈基米&#39;</code>。<ul>
+<li><strong>崩了</strong>：B 被 A 的间隙锁挡住了。</li>
+</ul>
+</li>
+</ol>
+<p>MySQL 报错 “Deadlock found”，其中一个用户直接报错退出。</p>
+<p>如果不需要极其严格的防幻读（大多数互联网业务都不需要），可以选择把隔离级别降级为 RC (Read Committed)。在 RC 级别下，间隙锁会自动关闭。这样能大大减少死锁，提升并发度。</p>
+</article>
+
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"><div class="note">较新文章</div><a href="/2026/01/04/mysql-higher/">Mysql攻略-进阶功能到更多</a></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2026/01/02/mysql-quick/">Mysql攻略-安装使用到基础的增删改查</a></div></section></div>
+
+
+
+
+
+
+<footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">关小雨</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br><span class="jinrishici-sentence"></span></p>
+<script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
+</div></footer>
+<div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%87%BD%E6%95%B0"><span class="toc-text">函数</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%88%86%E7%BB%84%E5%92%8C%E7%BB%9F%E8%AE%A1"><span class="toc-text">分组和统计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8GROUP-BY%E5%88%86%E7%BB%84"><span class="toc-text">使用GROUP BY分组</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%85%8D%E5%90%88%E5%87%BD%E6%95%B0%E4%BD%BF%E7%94%A8"><span class="toc-text">配合函数使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8HAVING%E5%AF%B9%E5%88%86%E7%BB%84%E4%B9%8B%E5%90%8E%E7%9A%84%E7%BB%93%E6%9E%9C%E5%86%8D%E8%BF%87%E6%BB%A4"><span class="toc-text">使用HAVING对分组之后的结果再过滤</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#HAVING%E5%92%8CWHERE%E7%9A%84%E5%8C%BA%E5%88%AB%EF%BC%9F"><span class="toc-text">HAVING和WHERE的区别？</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2"><span class="toc-text">多表查询</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8JOIN%E8%BF%9B%E8%A1%8C%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2"><span class="toc-text">使用JOIN进行多表查询</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%86%85%E8%BF%9E%E6%8E%A5"><span class="toc-text">使用内连接</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%B7%A6%E8%BF%9E%E6%8E%A5"><span class="toc-text">使用左连接</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E5%AD%90%E6%9F%A5%E8%AF%A2%E8%BF%9B%E8%A1%8C%E5%A4%9A%E8%A1%A8%E6%9F%A5%E8%AF%A2"><span class="toc-text">使用子查询进行多表查询</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95"><span class="toc-text">索引</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%BB%E9%94%AE%E7%B4%A2%E5%BC%95%E6%9C%89%E4%BB%80%E4%B9%88%E7%94%A8%EF%BC%9F"><span class="toc-text">主键索引有什么用？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AE%9A%E4%BD%8D%E4%B8%80%E8%A1%8C%E6%95%B0%E6%8D%AE"><span class="toc-text">定位一行数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%86%B3%E5%AE%9A%E6%95%B0%E6%8D%AE%E5%9C%A8%E7%A3%81%E7%9B%98%E4%B8%8A%E7%9A%84%E7%89%A9%E7%90%86%E9%A1%BA%E5%BA%8F"><span class="toc-text">决定数据在磁盘上的物理顺序</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%99%AE%E9%80%9A%E7%B4%A2%E5%BC%95%E7%9A%84%E2%80%9C%E6%9C%80%E7%BB%88%E8%90%BD%E8%84%9A%E7%82%B9%E2%80%9D"><span class="toc-text">普通索引的“最终落脚点”</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%9B%9E%E8%A1%A8%EF%BC%9F"><span class="toc-text">回表？</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%98%AF%E5%9B%9E%E8%A1%A8"><span class="toc-text">什么是回表</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E4%BC%9A%E5%8F%91%E7%94%9F%E5%9B%9E%E8%A1%A8"><span class="toc-text">什么时候会发生回表</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">索引的使用</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%9B%E5%BB%BA%E5%92%8C%E4%BD%BF%E7%94%A8%E7%B4%A2%E5%BC%95"><span class="toc-text">创建和使用索引</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%A0%E9%99%A4%E7%B4%A2%E5%BC%95"><span class="toc-text">删除索引</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%B4%A2%E5%BC%95%E7%9A%84%E5%89%AF%E4%BD%9C%E7%94%A8"><span class="toc-text">索引的副作用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#LIKE%E7%9A%84%E5%9D%91"><span class="toc-text">LIKE的坑</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1"><span class="toc-text">事务</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E5%85%AB%E8%82%A1"><span class="toc-text">事务的八股:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E6%8C%87%E4%BB%A4"><span class="toc-text">事务指令</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#DELETE%E5%92%8CTRUNCATE%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">DELETE和TRUNCATE的区别</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%BC%80%E5%A7%8B%E4%BA%8B%E5%8A%A1%E4%B9%8B%E5%89%8D"><span class="toc-text">开始事务之前</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%BA%93%E5%AD%98%E6%98%AF%E6%80%8E%E4%B9%88%E8%A2%AB%E4%B8%8B%E5%8D%95%E6%93%8D%E4%BD%9C%E6%90%9E%E4%B9%B1%E7%9A%84%EF%BC%9F"><span class="toc-text">库存是怎么被下单操作搞乱的？</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-text">解决方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%B2%A1%E7%94%A8%E7%9A%84%E8%A7%A3%E5%86%B3%E6%96%B9%E6%B3%95"><span class="toc-text">没用的解决方法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E8%A6%81%E6%B1%82%E5%BA%93%E5%AD%98%E4%B8%8D%E8%83%BD%E4%B8%BA%E8%B4%9F%E6%95%B0%EF%BC%9F"><span class="toc-text">如果要求库存不能为负数？</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8%E4%BA%8B%E5%8A%A1"><span class="toc-text">使用事务</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%9B%9E%E6%BB%9A%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">回滚的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%90%E4%BA%A4%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">提交的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%9D%E5%AD%98%E7%82%B9%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">保存点的使用</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E8%87%AA%E5%8A%A8%E6%8F%90%E4%BA%A4%EF%BC%9F%E6%89%8B%E5%8A%A8%E6%8F%90%E4%BA%A4%EF%BC%9F"><span class="toc-text">自动提交？手动提交？</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E7%9A%84%E9%9A%94%E7%A6%BB%E7%BA%A7%E5%88%AB"><span class="toc-text">事务的隔离级别</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%BB%98%E8%AE%A4%E5%8F%AF%E9%87%8D%E5%A4%8D%E8%AF%BB%E7%9A%84%E5%9C%BA%E6%99%AF"><span class="toc-text">默认可重复读的场景</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BA%8B%E5%8A%A1%E5%B9%B6%E5%8F%91%E6%89%A7%E8%A1%8C%E5%8F%AF%E8%83%BD%E5%BC%95%E5%8F%91%E7%9A%84%E9%97%AE%E9%A2%98"><span class="toc-text">事务并发执行可能引发的问题</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E9%97%B4%E9%9A%99%E9%94%81"><span class="toc-text">间隙锁</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E6%B2%A1%E6%9C%89%E9%97%B4%E9%9A%99%E9%94%81"><span class="toc-text">如果没有间隙锁</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%B4%E9%9A%99%E9%94%81%E7%9A%84%E5%B7%A5%E4%BD%9C"><span class="toc-text">间隙锁的工作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E9%97%B4%E9%9A%99%E9%94%81%E5%AF%BC%E8%87%B4%E7%9A%84%E6%AD%BB%E9%94%81"><span class="toc-text">间隙锁导致的死锁</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
+  <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
+  </button>
+  <button type='button' style='display:none' class='mobile-only leftbar-toggle mobile' onclick='sidebar.leftbar()'>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="1.5"><path d="M2 11c0-3.771 0-5.657 1.172-6.828C4.343 3 6.229 3 10 3h4c3.771 0 5.657 0 6.828 1.172C22 5.343 22 7.229 22 11v2c0 3.771 0 5.657-1.172 6.828C19.657 21 17.771 21 14 21h-4c-3.771 0-5.657 0-6.828-1.172C2 18.657 2 16.771 2 13z"/><path id="sep" stroke-linecap="round" d="M5.5 10h6m-5 4h4m4.5 7V3"/></g></svg>
+  </button>
+</div>
+</div><div class="scripts">
+
+
+<script type="text/javascript">
+  window.canonical = {"originalHost":null,"officialHosts":["localhost"],"encoded":""};
+  const ctx = {
+    date_suffix: {
+      just: `刚刚`,
+      min: `分钟前`,
+      hour: `小时前`,
+      day: `天前`,
+    },
+    root : `/`,
+    tag_plugins: {
+      chat: Object.assign({"api":"https://siteinfo.listentothewind.cn/api/v1"}),
+    }
+  };
+
+  // required plugins (only load if needs)
+  if (`local_search`) {
+    ctx.search = {};
+    ctx.search.service = `local_search`;
+    if (ctx.search.service == 'local_search') {
+      let service_obj = Object.assign({}, `{"field":"all","path":"/search.json","content":true,"skip_search":[],"codeblock":true,"sort":"-date"}`);
+      ctx.search[ctx.search.service] = service_obj;
+    }
+  }
+  const def = {
+    avatar: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/3442075.svg`,
+    cover: `https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/cover/76b86c0226ffd.svg`,
+    loading: `https://api.iconify.design/eos-icons:three-dots-loading.svg?color=%231cd0fd`,
+  };
+  const deps = {
+    jquery: `https://gcore.jsdelivr.net/npm/jquery@3.7/dist/jquery.min.js`,
+    marked: `https://gcore.jsdelivr.net/npm/marked@13.0/lib/marked.umd.min.js`,
+    lazyload: `/%5Bobject%20Object%5D`
+  }
+  
+
+</script>
+
+<script type="text/javascript">
+  
+  function RunItem() {
+    this.list = []; // 存放回调函数
+    this.start = () => {
+      for (var i = 0; i < this.list.length; i++) {
+        this.list[i].run();
+      }
+    };
+    this.push = (fn, name, setRequestAnimationFrame = true) => {
+      let myfn = fn
+      if (setRequestAnimationFrame) {
+        myfn = () => {
+          utils.requestAnimationFrame(fn)
+        }
+      }
+      var f = new Item(myfn, name);
+      this.list.push(f);
+    };
+    this.remove = (name) => {
+      for (let index = 0; index < this.list.length; index++) {
+        const e = this.list[index];
+        if (e.name == name) {
+          this.list.splice(index, 1);
+        }
+      }
+    }
+    // 构造一个可以run的对象
+    function Item(fn, name) {
+      // 函数名称
+      this.name = name || fn.name;
+      // run方法
+      this.run = () => {
+        try {
+          fn()
+        } catch (error) {
+          console.log(error);
+        }
+      };
+    }
+  }
+
+  const utils = {
+    // 懒加载 css https://github.com/filamentgroup/loadCSS
+    css: (href, before, media, attributes) => {
+      var doc = window.document;
+      var ss = doc.createElement("link");
+      var ref;
+      if (before) {
+        ref = before;
+      } else {
+        var refs = (doc.body || doc.getElementsByTagName("head")[0]).childNodes;
+        ref = refs[refs.length - 1];
+      }
+      var sheets = doc.styleSheets;
+      if (attributes) {
+        for (var attributeName in attributes) {
+          if (attributes.hasOwnProperty(attributeName)) {
+            ss.setAttribute(attributeName, attributes[attributeName]);
+          }
+        }
+      }
+      ss.rel = "stylesheet";
+      ss.href = href;
+      ss.media = "only x";
+      function ready(cb) {
+        if (doc.body) {
+          return cb();
+        }
+        setTimeout(function () {
+          ready(cb);
+        });
+      }
+      ready(function () {
+        ref.parentNode.insertBefore(ss, before ? ref : ref.nextSibling);
+      });
+      var onloadcssdefined = function (cb) {
+        var resolvedHref = ss.href;
+        var i = sheets.length;
+        while (i--) {
+          if (sheets[i].href === resolvedHref) {
+            return cb();
+          }
+        }
+        setTimeout(function () {
+          onloadcssdefined(cb);
+        });
+      };
+      function loadCB() {
+        if (ss.addEventListener) {
+          ss.removeEventListener("load", loadCB);
+        }
+        ss.media = media || "all";
+      }
+      if (ss.addEventListener) {
+        ss.addEventListener("load", loadCB);
+      }
+      ss.onloadcssdefined = onloadcssdefined;
+      onloadcssdefined(loadCB);
+      return ss;
+    },
+
+    js: (src, opt) => new Promise((resolve, reject) => {
+      var script = document.createElement('script');
+      if (src.startsWith('/')) {
+        src = ctx.root + src.substring(1);
+      }
+      script.src = src;
+      if (opt) {
+        for (let key of Object.keys(opt)) {
+          script[key] = opt[key]
+        }
+      } else {
+        // 默认异步，如果需要同步，第二个参数传入 {} 即可
+        script.async = true
+      }
+      script.onerror = reject
+      script.onload = script.onreadystatechange = function () {
+        const loadState = this.readyState
+        if (loadState && loadState !== 'loaded' && loadState !== 'complete') return
+        script.onload = script.onreadystatechange = null
+        resolve()
+      }
+      document.head.appendChild(script)
+    }),
+
+    jq: (fn) => {
+      if (typeof jQuery === 'undefined') {
+        utils.js(deps.jquery).then(fn)
+      } else {
+        fn()
+      }
+    },
+
+    onLoading: (el) => {
+      if (el) {
+        $(el).append('<div class="loading-wrap"><svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" stroke-opacity=".3" d="M12 3C16.9706 3 21 7.02944 21 12C21 16.9706 16.9706 21 12 21C7.02944 21 3 16.9706 3 12C3 7.02944 7.02944 3 12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="1.3s" values="60;0"/></path><path stroke-dasharray="15" stroke-dashoffset="15" d="M12 3C16.9706 3 21 7.02944 21 12"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.3s" values="15;0"/><animateTransform attributeName="transform" dur="1.5s" repeatCount="indefinite" type="rotate" values="0 12 12;360 12 12"/></path></g></svg></div>');
+      }
+    },
+    onLoadSuccess: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap').remove();
+      }
+    },
+    onLoadFailure: (el) => {
+      if (el) {
+        $(el).find('.loading-wrap svg').remove();
+        $(el).find('.loading-wrap').append('<svg xmlns="http://www.w3.org/2000/svg" width="2em" height="2em" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path stroke-dasharray="60" stroke-dashoffset="60" d="M12 3L21 20H3L12 3Z"><animate fill="freeze" attributeName="stroke-dashoffset" dur="0.5s" values="60;0"/></path><path stroke-dasharray="6" stroke-dashoffset="6" d="M12 10V14"><animate fill="freeze" attributeName="stroke-dashoffset" begin="0.6s" dur="0.2s" values="6;0"/></path></g><circle cx="12" cy="17" r="1" fill="currentColor" fill-opacity="0"><animate fill="freeze" attributeName="fill-opacity" begin="0.8s" dur="0.4s" values="0;1"/></circle></svg>');
+        $(el).find('.loading-wrap').addClass('error');
+      }
+    },
+    request: (el, url, callback, onFailure) => {
+      const maxRetry = 3;
+      let retryCount = 0;
+
+      return new Promise((resolve, reject) => {
+        const load = () => {
+          utils.onLoading?.(el);
+
+          let timedOut = false;
+          const timeout = setTimeout(() => {
+            timedOut = true;
+            console.warn('[request] 超时:', url);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject('请求超时');
+            } else {
+              setTimeout(load, 1000);
+            }
+          }, 5000);
+
+          fetch(url).then(resp => {
+            if (timedOut) return;
+            clearTimeout(timeout);
+
+            if (!resp.ok) throw new Error('响应失败');
+            return resp;
+          }).then(data => {
+            if (timedOut) return;
+            utils.onLoadSuccess?.(el);
+            callback(data);
+            resolve(data);
+          }).catch(err => {
+            clearTimeout(timeout);
+            console.warn('[request] 错误:', err);
+
+            if (++retryCount >= maxRetry) {
+              utils.onLoadFailure?.(el);
+              onFailure?.();
+              reject(err);
+            } else {
+              setTimeout(load, 1000);
+            }
+          });
+        };
+
+        load();
+      });
+    },
+    requestWithoutLoading: (url, options = {}, maxRetry = 2, timeout = 5000) => {
+      return new Promise((resolve, reject) => {
+        let retryCount = 0;
+
+        const tryRequest = () => {
+          let timedOut = false;
+          const timer = setTimeout(() => {
+            timedOut = true;
+            if (++retryCount > maxRetry) reject('timeout');
+            else tryRequest();
+          }, timeout);
+
+          fetch(url, options)
+            .then(resp => {
+              clearTimeout(timer);
+              if (!resp.ok) throw new Error('bad response');
+              resolve(resp);
+            })
+            .catch(err => {
+              clearTimeout(timer);
+              if (++retryCount > maxRetry) reject(err);
+              else setTimeout(tryRequest, 500);
+            });
+        };
+
+        tryRequest();
+      });
+    },
+    /********************** requestAnimationFrame ********************************/
+    // 1、requestAnimationFrame 会把每一帧中的所有 DOM 操作集中起来，在一次重绘或回流中就完成，并且重绘或回流的时间间隔紧紧跟随浏览器的刷新频率，一般来说，这个频率为每秒60帧。
+    // 2、在隐藏或不可见的元素中，requestAnimationFrame 将不会进行重绘或回流，这当然就意味着更少的的 cpu，gpu 和内存使用量。
+    requestAnimationFrame: (fn) => {
+      if (!window.requestAnimationFrame) {
+        window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame;
+      }
+      window.requestAnimationFrame(fn)
+    },
+    dark: {},
+  };
+
+  // utils.dark.mode 当前模式 dark or light
+  // utils.dark.toggle() 暗黑模式触发器
+  // utils.dark.push(callBack[,"callBackName"]) 传入触发器回调函数
+  utils.dark.method = {
+    toggle: new RunItem(),
+  };
+  utils.dark = Object.assign(utils.dark, {
+    push: utils.dark.method.toggle.push,
+  });
+</script>
+<script>
+  const sidebar = {
+    leftbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    rightbar: () => {
+      if (l_body) {
+        l_body.toggleAttribute('rightbar');
+        l_body.removeAttribute('leftbar');
+      }
+    },
+    dismiss: () => {
+      if (l_body) {
+        l_body.removeAttribute('leftbar');
+        l_body.removeAttribute('rightbar');
+      }
+    },
+    toggleTOC: () => {
+      document.querySelector('#data-toc').classList.toggle('collapse');
+    }
+  }
+</script>
+<script type="text/javascript">
+  (() => {
+    const tagSwitchers = document.querySelectorAll('.tag-subtree.parent-tag > a > .tag-switcher-wrapper')
+    for (const tagSwitcher of tagSwitchers) {
+      tagSwitcher.addEventListener('click', (e) => {
+        const parent = e.target.closest('.tag-subtree.parent-tag')
+        parent.classList.toggle('expanded')
+        e.preventDefault()
+      })
+    }
+
+    // Get active tag from query string, then activate it.
+    const urlParams = new URLSearchParams(window.location.search)
+    const activeTag = urlParams.get('tag')
+    if (activeTag) {
+      let tag = document.querySelector(`.tag-subtree[data-tag="${activeTag}"]`)
+      if (tag) {
+        tag.querySelector('a').classList.add('active')
+        
+        while (tag) {
+          tag.classList.add('expanded')
+          tag = tag.parentElement.closest('.tag-subtree.parent-tag')
+        }
+      }
+    }
+  })()
+</script>
+
+<script async src="https://gcore.jsdelivr.net/npm/vanilla-lazyload@19.1/dist/lazyload.min.js"></script>
+<script>
+  // https://www.npmjs.com/package/vanilla-lazyload
+  // Set the options globally
+  // to make LazyLoad self-initialize
+  window.lazyLoadOptions = {
+    elements_selector: ".lazy",
+    callback_loaded: (el) => {
+      el.classList.add('loaded');
+      const wrapper = el.closest('.lazy-box');
+      const icon = wrapper?.querySelector('.lazy-icon');
+      if (icon) icon.remove();
+    }
+  };
+  // Listen to the initialization event
+  // and get the instance of LazyLoad
+  window.addEventListener(
+    "LazyLoad::Initialized",
+    function (event) {
+      window.lazyLoadInstance = event.detail.instance;
+    },
+    false
+  );
+  document.addEventListener('DOMContentLoaded', function () {
+    window.lazyLoadInstance?.update();
+  });
+
+  window.wrapLazyloadImages = (container) => {
+    if (typeof container === 'string') {
+      container = document.querySelector(container);
+    }
+    if (!container) return;
+    
+    const images = container.querySelectorAll('img');
+    images.forEach((img) => {
+      if (img.classList.contains('lazy')) return;
+
+      const src = img.getAttribute('src');
+      if (!src) return;
+
+      const wrapper = document.createElement('div');
+      wrapper.className = 'lazy-box';
+
+      const newImg = img.cloneNode();
+      newImg.removeAttribute('src');
+      newImg.setAttribute('data-src', src);
+      newImg.classList.add('lazy');
+
+      const icon = document.createElement('div');
+      icon.className = 'lazy-icon';
+      if (def.loading) {
+        icon.style.backgroundImage = `url("${def.loading}")`;
+      }
+
+      wrapper.appendChild(newImg);
+      wrapper.appendChild(icon);
+
+      img.replaceWith(wrapper);
+    });
+
+    // 通知 LazyLoad 更新
+    if (window.lazyLoadInstance?.update) {
+      window.lazyLoadInstance.update();
+    }
+  }
+  
+</script>
+
+<!-- required -->
+<script src="/js/main.js?v=1.33.1" defer></script>
+
+<script type="text/javascript">
+  const applyTheme = (theme) => {
+    if (theme === 'auto') {
+      document.documentElement.removeAttribute('data-theme')
+    } else {
+      document.documentElement.setAttribute('data-theme', theme)
+    }
+
+    // applyThemeToGiscus(theme)
+  }
+
+  // FIXME: 这会导致无法使用 preferred_color_scheme 以外的主题
+  const applyThemeToGiscus = (theme) => {
+    // theme = theme === 'auto' ? 'preferred_color_scheme' : theme
+    const cmt = document.getElementById('giscus')
+    if (cmt) {
+      // This works before giscus load.
+      cmt.setAttribute('data-theme', theme)
+    }
+
+    const iframe = document.querySelector('#comments > section.giscus > iframe')
+    if (iframe) {
+      // This works after giscus loaded.
+      const src = iframe.src
+      const newSrc = src.replace(/theme=[\w]+/, `theme=${theme}`)
+      iframe.src = newSrc
+    }
+  }
+
+  const switchTheme = () => {
+    // light -> dark -> auto -> light -> ...
+    const currentTheme = document.documentElement.getAttribute('data-theme')
+    let newTheme;
+    switch (currentTheme) {
+      case 'light':
+        newTheme = 'dark'
+        break
+      case 'dark':
+        newTheme = 'auto'
+        break
+      default:
+        newTheme = 'light'
+    }
+    applyTheme(newTheme)
+    window.localStorage.setItem('Stellar.theme', newTheme)
+    utils.dark.mode = newTheme === 'auto' ? (window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light") : newTheme;
+    utils.dark.method.toggle.start();
+
+    const messages = {
+      light: `切换到浅色模式`,
+      dark: `切换到深色模式`,
+      auto: `切换到跟随系统配色`,
+    }
+    hud?.toast?.(messages[newTheme])
+  }
+
+  (() => {
+    // Apply user's preferred theme, if any.
+    const theme = window.localStorage.getItem('Stellar.theme')
+    if (theme !== null) {
+      applyTheme(theme)
+    } else {
+      utils.dark.mode = window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+    }
+    utils.dark.method.toggle.start();
+  })()
+</script>
+
+
+<!-- optional -->
+
+
+
+<script defer>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.services = Object.assign({}, JSON.parse(`{"mdrender":{"js":"/js/services/mdrender.js"},"siteinfo":{"js":"/js/services/siteinfo.js","api":null},"ghinfo":{"js":"/js/services/ghinfo.js"},"rating":{"js":"/js/services/rating.js","api":"https://star-vote.xaox.cc/api/rating"},"vote":{"js":"/js/services/vote.js","api":"https://star-vote.xaox.cc/api/vote"},"sites":{"js":"/js/services/sites.js"},"friends":{"js":"/js/services/friends.js"},"friends_and_posts":{"js":"/js/services/friends_and_posts.js"},"timeline":{"js":"/js/services/timeline.js"},"fcircle":{"js":"/js/services/fcircle.js"},"weibo":{"js":"/js/services/weibo.js"},"memos":{"js":"/js/services/memos.js"},"voice":{"js":"/js/plugins/voice.js"},"video":{"js":"/js/plugins/video.js"},"download-file":{"js":"/js/plugins/download-file.js"},"twikoo":{"js":"/js/services/twikoo_latest_comment.js"},"waline":{"js":"/js/services/waline_latest_comment.js"},"artalk":{"js":"/js/services/artalk_latest_comment.js"},"giscus":{"js":"/js/services/giscus_latest_comment.js"},"contributors":{"edit_this_page":{"_posts/":null,"wiki/stellar/":"https://github.com/xaoxuu/hexo-theme-stellar-docs/blob/main/"},"js":"/js/services/contributors.js"}}`));
+    for (let id of Object.keys(ctx.services)) {
+      const js = ctx.services[id].js;
+      if (id == 'siteinfo') {
+        ctx.cardlinks = document.querySelectorAll('a.link-card[cardlink]');
+        if (ctx.cardlinks?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            setCardLink(ctx.cardlinks);
+          });
+        }
+      } else if (id == 'voice') {
+        ctx.voiceAudios = document.querySelectorAll('.voice>audio');
+        if (ctx.voiceAudios?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            createVoiceDom(ctx.voiceAudios);
+          });
+        }
+      } else if (id == 'video') {
+        ctx.videos = document.querySelectorAll('.video>video');
+        if (ctx.videos?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            videoEvents(ctx.videos);
+          });
+        }
+      } else if (id == 'download-file') {
+        ctx.files = document.querySelectorAll('.file');
+        if (ctx.files?.length > 0) {
+          utils.js(js, { defer: true }).then(function () {
+            downloadFileEvent(ctx.files);
+          });
+        }
+      } else {
+        const els = document.getElementsByClassName(`ds-${id}`);
+        if (els?.length > 0) {
+          utils.jq(() => {
+            if (id == 'timeline' || 'memos' || 'marked') {
+              utils.js(deps.marked).then(function () {
+                utils.js(js, { defer: true });
+              });
+            } else {
+              utils.js(js, { defer: true });
+            }
+          });
+        }
+      }
+    }
+
+    // chat iphone time
+    let phoneTimes = document.querySelectorAll('.chat .status-bar .time');
+
+    if (phoneTimes.length > 0) {
+      NowTime();
+      var date = new Date();
+      var sec = date.getSeconds();
+      var firstAdjustInterval = setInterval(firstAdjustTime, 1000 * (60 - sec));
+    }
+
+    function firstAdjustTime() {
+      NowTime();
+      clearInterval(firstAdjustInterval);
+      setInterval(NowTime, 1000 * 60);
+    }
+
+    function NowTime() {
+      for (let i = 0; i < phoneTimes.length; ++i) {
+        var timeSpan = phoneTimes[i];
+        var date = new Date();
+        var hour = date.getHours();
+        var min = date.getMinutes();
+        timeSpan.innerHTML = check(hour) + ":" + check(min);
+      }
+    };
+
+    function check(val) {
+      if (val < 10) {
+        return ("0" + val);
+      }
+      return (val);
+    }
+
+    // chat quote
+    const chat_quote_obverser = new IntersectionObserver((entries, observer) => {
+      entries.filter((entry) => { return entry.isIntersecting }).sort((a, b) => a.intersectionRect.y !== b.intersectionRect.y ? a.intersectionRect.y - b.intersectionRect.y : a.intersectionRect.x - b.intersectionRect.x).forEach((entry, index) => {
+          observer.unobserve(entry.target);
+          setTimeout(() => {
+            entry.target.classList.add('quote-blink');
+            setTimeout(() => {
+              entry.target.classList.remove('quote-blink');
+            }, 1000);
+          }, Math.max(100, 16) * (index + 1));
+        });
+    });
+
+    var chatQuotes = document.querySelectorAll(".chat .talk .quote");
+    chatQuotes.forEach((quote) => {
+      quote.addEventListener('click', function () {
+        var chatCellDom = document.getElementById("quote-" + quote.getAttribute("quotedCellTag"));
+        if (chatCellDom) {
+          var chatDiv = chatCellDom.parentElement;
+          var mid = chatDiv.clientHeight / 2;
+          var offsetTop = chatCellDom.offsetTop;
+          if (offsetTop > mid - chatCellDom.clientHeight / 2) {
+            chatDiv.scrollTo({
+              top: chatCellDom.offsetTop - mid + chatCellDom.clientHeight / 2,
+              behavior: "smooth"
+            });
+          } else {
+            chatDiv.scrollTo({
+              top: 0,
+              behavior: "smooth"
+            });
+          }
+          chat_quote_obverser.observe(chatCellDom);
+        }
+      });
+    });
+  });
+</script>
+
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    ctx.search = {
+      path: `/search.json`,
+    }
+    utils.js('/js/search/local-search.js', { defer: true });
+  });
+</script><script>
+  window.FPConfig = {
+    delay: 0,
+    ignoreKeywords: [],
+    maxRPS: 5,
+    hoverDelay: 25
+  };
+</script>
+<script defer src="https://gcore.jsdelivr.net/npm/flying-pages@2/flying-pages.min.js"></script><script>
+  ctx.fancybox = {
+    selector: `.timenode p>img`,
+    css: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.css`,
+    js: `https://gcore.jsdelivr.net/npm/@fancyapps/ui@5.0/dist/fancybox/fancybox.umd.js`
+  };
+  var selector = '[data-fancybox]:not(.error), .with-fancybox .atk-content img:not([atk-emoticon])';
+  if (ctx.fancybox.selector) {
+    selector += `, ${ctx.fancybox.selector}`
+  }
+  var needFancybox = document.querySelectorAll(selector).length !== 0;
+  if (!needFancybox) {
+    const memos = document.getElementsByClassName('ds-memos');
+    if (memos != undefined && memos.length > 0) {
+      needFancybox = true;
+    }
+    const fancybox = document.getElementsByClassName('with-fancybox');
+    if (fancybox != undefined && fancybox.length > 0) {
+      needFancybox = true;
+    }
+  }
+  if (needFancybox) {
+    utils.css(ctx.fancybox.css);
+    utils.js(ctx.fancybox.js, { defer: true }).then(function () {
+      Fancybox.bind(selector, {
+        hideScrollbar: false,
+        Thumbs: {
+          autoStart: false,
+        },
+        caption: (fancybox, slide) => {
+          return slide.triggerEl.alt || slide.triggerEl.dataset.caption || null
+        }
+      });
+    })
+  }
+</script>
+<script>
+  window.addEventListener('DOMContentLoaded', (event) => {
+    const swiper_api = document.getElementById('swiper-api');
+    if (swiper_api != undefined) {
+      utils.css(`https://unpkg.com/swiper@10.3/swiper-bundle.min.css`);
+      utils.js(`https://unpkg.com/swiper@10.3/swiper-bundle.min.js`, { defer: true }).then(function () {
+        const effect = swiper_api.getAttribute('effect') || '';
+        var swiper = new Swiper('.swiper#swiper-api', {
+          slidesPerView: 'auto',
+          spaceBetween: 8,
+          centeredSlides: true,
+          effect: effect,
+          rewind: true,
+          pagination: {
+            el: '.swiper-pagination',
+            clickable: true,
+          },
+          navigation: {
+            nextEl: '.swiper-button-next',
+            prevEl: '.swiper-button-prev',
+          },
+        });
+      })
+    }
+  });
+</script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+    window.codeElements = document.querySelectorAll('.code');
+    if (window.codeElements.length > 0) {
+      ctx.copycode = {
+        default_text: `Copy`,
+        success_text: `Copied`,
+        toast: `复制成功`,
+      };
+      utils.js('/js/plugins/copycode.js');
+    }
+  });
+</script>
+
+
+<!-- inject -->
+
+</div></body></html>
