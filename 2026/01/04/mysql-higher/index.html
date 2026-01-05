@@ -20,16 +20,16 @@
   <title>Mysql攻略-进阶功能到更多 - cloudyou</title>
 
   
-    <meta name="description" content="看完本文你将速通：窗口函数，悲观&#x2F;乐观锁，处理 JSON 数据，复杂逻辑处理(if else)，性能分析，存储过程与触发器等等高级功能。看完你就是Mysql高手 施工中。">
+    <meta name="description" content="看完本文你将速通：窗口函数，处理 JSON 数据，CTE (通用表表达式)，触发器，存储过程与性能分析等等高级功能。看完你就是Mysql高手 还是用上一篇文章里的py生成的数据 窗口函数窗口函数是Mysql8.0+的功能，它允许用户在不改变查询结果集行数的情况下，对每一行执行聚合计算或其他复杂的计算。 窗口函数不会改变查询结果集的行数，而是为每一行添加一个额外的列，这个列包含了窗口函数的计算结果。">
 <meta property="og:type" content="article">
 <meta property="og:title" content="Mysql攻略-进阶功能到更多">
 <meta property="og:url" content="https://www.cloudyou.top/2026/01/04/mysql-higher/">
 <meta property="og:site_name" content="cloudyou">
-<meta property="og:description" content="看完本文你将速通：窗口函数，悲观&#x2F;乐观锁，处理 JSON 数据，复杂逻辑处理(if else)，性能分析，存储过程与触发器等等高级功能。看完你就是Mysql高手 施工中。">
+<meta property="og:description" content="看完本文你将速通：窗口函数，处理 JSON 数据，CTE (通用表表达式)，触发器，存储过程与性能分析等等高级功能。看完你就是Mysql高手 还是用上一篇文章里的py生成的数据 窗口函数窗口函数是Mysql8.0+的功能，它允许用户在不改变查询结果集行数的情况下，对每一行执行聚合计算或其他复杂的计算。 窗口函数不会改变查询结果集的行数，而是为每一行添加一个额外的列，这个列包含了窗口函数的计算结果。">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://www.cloudyou.top/images/%E5%A4%B4%E5%83%8F.jpg">
 <meta property="article:published_time" content="2026-01-04T11:11:19.000Z">
-<meta property="article:modified_time" content="2026-01-04T11:16:29.911Z">
+<meta property="article:modified_time" content="2026-01-05T15:30:35.973Z">
 <meta property="article:author" content="关小雨">
 <meta property="article:tag" content="Database">
 <meta property="article:tag" content="Mysql">
@@ -51,7 +51,7 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"关小雨","sameAs":[],"image":"/images/头像.jpg"},"dateCreated":"2026-01-04T19:11:19+08:00","dateModified":"2026-01-04T19:16:29+08:00","datePublished":"2026-01-04T19:11:19+08:00","description":"","headline":"Mysql攻略-进阶功能到更多","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.cloudyou.top/2026/01/04/mysql-higher/"},"publisher":{"@type":"Organization","name":"关小雨","sameAs":[],"image":"/images/头像.jpg","logo":{"@type":"ImageObject","url":"/images/头像.jpg"}},"url":"https://www.cloudyou.top/2026/01/04/mysql-higher/","keywords":"Mysql, Database, notebook","thumbnailUrl":"/images/mysql3.png","image":1}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"关小雨","sameAs":[],"image":"/images/头像.jpg"},"dateCreated":"2026-01-04T19:11:19+08:00","dateModified":"2026-01-05T23:30:35+08:00","datePublished":"2026-01-04T19:11:19+08:00","description":"","headline":"Mysql攻略-进阶功能到更多","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.cloudyou.top/2026/01/04/mysql-higher/"},"publisher":{"@type":"Organization","name":"关小雨","sameAs":[],"image":"/images/头像.jpg","logo":{"@type":"ImageObject","url":"/images/头像.jpg"}},"url":"https://www.cloudyou.top/2026/01/04/mysql-higher/","keywords":"Mysql, Database, notebook","thumbnailUrl":"/images/mysql3.png","image":1}</script>
   
 </head>
 <body>
@@ -83,7 +83,7 @@
   <div class="content">
     <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
 <span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div>
-<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-01-04T11:11:19.000Z">2026-01-04</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-01-04T11:16:29.911Z">2026-01-04</time></span></div></div></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-01-04T11:11:19.000Z">2026-01-04</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-01-05T15:30:35.973Z">2026-01-05</time></span></div></div></div>
     
     <div class="bottom only-title">
       
@@ -94,8 +94,694 @@
     </div>
     
   </div>
-  </div><article class="md-text content"><p>看完本文你将速通：窗口函数，悲观&#x2F;乐观锁，处理 JSON 数据，复杂逻辑处理(if else)，性能分析，存储过程与触发器等等高级功能。看完你就是Mysql高手</p>
-<p>施工中。</p>
+  </div><article class="md-text content"><p>看完本文你将速通：窗口函数，处理 JSON 数据，CTE (通用表表达式)，触发器，存储过程与性能分析等等高级功能。看完你就是Mysql高手</p>
+<p>还是用上一篇文章里的py生成的数据</p>
+<h1 id="窗口函数"><a href="#窗口函数" class="headerlink" title="窗口函数"></a>窗口函数</h1><p>窗口函数是Mysql8.0+的功能，它允许用户在不改变查询结果集行数的情况下，对每一行执行聚合计算或其他复杂的计算。</p>
+<p>窗口函数<strong>不会改变查询结果集的行数，而是为每一行添加一个额外的列</strong>，这个列包含了窗口函数的计算结果。这使得窗口函数非常适合于需要在保持原始数据的同时进行聚合或其他复杂计算的场景。</p>
+<p>使用窗口函数的SQL语法是</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&lt;</span>窗口函数<span class="operator">&gt;</span> <span class="keyword">OVER</span> (</span><br><span class="line">    [<span class="keyword">PARTITION</span> <span class="keyword">BY</span> 字段<span class="number">1</span>, 字段<span class="number">2.</span>..] <span class="comment">-- 【分组】：按什么归类（比如按用户、按班级）</span></span><br><span class="line">    [<span class="keyword">ORDER</span> <span class="keyword">BY</span> 字段<span class="number">3</span> <span class="keyword">ASC</span><span class="operator">/</span><span class="keyword">DESC</span>]      <span class="comment">-- 【排序】：组内按什么顺序算（比如按金额、按成绩）</span></span><br><span class="line">    [<span class="keyword">ROWS</span><span class="operator">/</span><span class="keyword">RANGE</span> ...]               <span class="comment">-- 【范围】：(进阶) 滑动窗口范围，通常用默认值</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><code>&lt;窗口函数&gt;(&lt;参数&gt;)</code>：指定要使用的函数及其参数。函数可以是聚合函数，也可以是专门为窗口函数设计的函数。</p>
+<p><code>PARTITION BY &lt;分区表达式&gt;（可选）</code>：将结果集分成多个分区，窗口函数会在每个分区内独立执行。分区表达式可以是一个或多个列名，用于确定如何将结果集分成不同的分区。</p>
+<p><code>ORDER BY &lt;排序表达式&gt; ASC | DESC（可选）</code>：指定窗口内行的排序顺序。排序表达式可以是一个或多个列名，用于确定窗口内行的排序方式。</p>
+<p><code>ROWS/Range &lt;行范围&gt;（可选）</code>：定义窗口的行范围。行范围可以是固定的行数（如ROWS BETWEEN 2 PRECEDING AND CURRENT ROW），也可以是相对于当前行的动态范围（如ROWS BETWEEN UNBOUNDED PRECEDING AND CURRENT ROW，表示从窗口开始到当前行的所有行）。</p>
+<h2 id="常用的窗口函数"><a href="#常用的窗口函数" class="headerlink" title="常用的窗口函数:"></a>常用的窗口函数:</h2><table>
+<thead>
+<tr>
+<th align="left">分类</th>
+<th align="left">函数名</th>
+<th align="left">作用</th>
+<th align="left">例子</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>序号&#x2F;排名</strong></td>
+<td align="left"><strong><code>ROW_NUMBER()</code></strong></td>
+<td align="left"><strong>唯一序号</strong> (1, 2, 3, 4)</td>
+<td align="left">给每个订单编个号，即使金额一样也不能重复</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong><code>RANK()</code></strong></td>
+<td align="left"><strong>跳跃排名</strong> (1, 2, 2, <strong>4</strong>)</td>
+<td align="left">并列第一，下一个就是第三名，相同的值会留下空位</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong><code>DENSE_RANK()</code></strong></td>
+<td align="left"><strong>紧凑排名</strong> (1, 2, 2, <strong>3</strong>)</td>
+<td align="left">并列第一，下一个是第二名。不会为相同的值留下空位 (适合发奖状)</td>
+</tr>
+<tr>
+<td align="left"><strong>错位&#x2F;偏移</strong></td>
+<td align="left"><strong><code>LAG(col, n)</code></strong></td>
+<td align="left"><strong>往前看 n 行</strong></td>
+<td align="left">这一单比<strong>上一单</strong>多花多少钱？</td>
+</tr>
+<tr>
+<td align="left"></td>
+<td align="left"><strong><code>LEAD(col, n)</code></strong></td>
+<td align="left"><strong>往后看 n 行</strong></td>
+<td align="left">这一单比<strong>下一单</strong>少花多少钱？</td>
+</tr>
+<tr>
+<td align="left"><strong>分布&#x2F;切片</strong></td>
+<td align="left"><strong><code>NTILE(n)</code></strong></td>
+<td align="left"><strong>切成 n 份</strong></td>
+<td align="left">把用户分成“高&#x2F;中&#x2F;低”消费三档</td>
+</tr>
+<tr>
+<td align="left"><strong>聚合窗口</strong></td>
+<td align="left"><strong><code>SUM()</code>, <code>AVG()</code></strong></td>
+<td align="left"><strong>累计&#x2F;组内统计</strong></td>
+<td align="left">算出用户的<strong>累计</strong>消费流水</td>
+</tr>
+</tbody></table>
+<h2 id="上手使用窗口函数"><a href="#上手使用窗口函数" class="headerlink" title="上手使用窗口函数"></a>上手使用窗口函数</h2><p>还记得那个富豪榜吗</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    u.username, </span><br><span class="line">    <span class="built_in">SUM</span>(o.total_amount) <span class="keyword">as</span> money</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o <span class="keyword">ON</span> u.id <span class="operator">=</span> o.user_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> u.username</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> money <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<p>在这里只是使用了ORDER BY来让他使用购买额来排序，但是并没有一个单独的列告诉我这是排名第几？</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----------+----------+</span><br><span class="line">| username | money    |</span><br><span class="line">+----------+----------+</span><br><span class="line">| 刘林     | 69024.00 |</span><br><span class="line">| 王萍     | 57733.00 |</span><br><span class="line">| 余建华   | 57539.00 |</span><br><span class="line">省略若干行..</span><br><span class="line">| 齐琳     | 10975.00 |</span><br><span class="line">+----------+----------+</span><br><span class="line">19 rows in set (0.0014 sec)</span><br></pre></td></tr></table></figure>
+
+<p>如果想给他单独添加一行告诉我排名，就是用窗口函数的<code>RANK</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> </span><br><span class="line">    u.username, </span><br><span class="line">    <span class="built_in">SUM</span>(o.total_amount) <span class="keyword">as</span> money,</span><br><span class="line">    <span class="built_in">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="built_in">SUM</span>(o.total_amount) <span class="keyword">DESC</span>) <span class="keyword">as</span> ranklist</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o <span class="keyword">ON</span> u.id <span class="operator">=</span> o.user_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> u.username</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> money <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<p>RANK()指我要对后面的东西来排名</p>
+<p>OVER()表示指定的窗口-&gt;窗口是<code>SUM(o.total_amout)的DESC排名</code></p>
+<p>所以，连起来的意思就是，对<code>SUM(o.total_amout)的DESC</code>的这一列进行RANK()排名</p>
+<p>然后将这一个排名列命名为<code>ranklist</code>。执行后的效果是这样的:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">+----------+----------+----------+</span><br><span class="line">| username | money    | ranklist |</span><br><span class="line">+----------+----------+----------+</span><br><span class="line">| 刘林     | 69024.00 |        1 |</span><br><span class="line">| 王萍     | 57733.00 |        2 |</span><br><span class="line">| 余建华   | 57539.00 |        3 |</span><br><span class="line">.....省略若干行.....</span><br><span class="line">| 潘岩     | 14220.00 |       17 |</span><br><span class="line">| 李阳     | 11863.00 |       18 |</span><br><span class="line">| 齐琳     | 10975.00 |       19 |</span><br><span class="line">+----------+----------+----------+</span><br><span class="line">19 rows in set (0.0021 sec)</span><br></pre></td></tr></table></figure>
+
+<h3 id="如果我非要把这个列命名为rank"><a href="#如果我非要把这个列命名为rank" class="headerlink" title="如果我非要把这个列命名为rank"></a>如果我非要把这个列命名为<code>rank</code></h3><p>如果把这一列命名成<code>rank</code>的话就会报错</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> </span><br><span class="line">    u.username, </span><br><span class="line">    <span class="built_in">SUM</span>(o.total_amount) <span class="keyword">as</span> money,</span><br><span class="line">    <span class="built_in">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="built_in">SUM</span>(o.total_amount) <span class="keyword">DESC</span>) <span class="keyword">as</span> rank</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o <span class="keyword">ON</span> u.id <span class="operator">=</span> o.user_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> u.username</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> mone</span><br></pre></td></tr></table></figure>
+
+<p>报错内容为:</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ERROR: 1064 (42000): You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near &#x27;rank</span><br></pre></td></tr></table></figure>
+
+<p>这不是Mysql版本的问题，而是这个<code>rank</code>和窗口函数<code>RANK()</code>冲突了</p>
+<p>这就像在 Python 里写 <code>print = 1</code> 或者在 Java 里写 <code>int class = 5</code> 一样，<strong>不能用系统自带的命令名来给变量起名。</strong></p>
+<p>如果不想换名字非要用<code>rank</code>?必须用 <strong>反引号</strong>把它包起来</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    u.username, </span><br><span class="line">    <span class="built_in">SUM</span>(o.total_amount) <span class="keyword">as</span> money,</span><br><span class="line">    <span class="comment">-- 加了反引号 `rank`，告诉 MySQL 这是别名，不是关键字</span></span><br><span class="line">    <span class="built_in">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="built_in">SUM</span>(o.total_amount) <span class="keyword">DESC</span>) <span class="keyword">as</span> `rank`</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o <span class="keyword">ON</span> u.id <span class="operator">=</span> o.user_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> u.username</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> money <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这样执行的效果就是</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">+----------+----------+----------+</span><br><span class="line">| username | money    | rank     |</span><br><span class="line">+----------+----------+----------+</span><br><span class="line">| 刘林     | 69024.00 |        1 |</span><br><span class="line">| 王萍     | 57733.00 |        2 |</span><br><span class="line">| 余建华   | 57539.00 |        3 |</span><br><span class="line">.....省略若干行.....</span><br><span class="line">| 潘岩     | 14220.00 |       17 |</span><br><span class="line">| 李阳     | 11863.00 |       18 |</span><br><span class="line">| 齐琳     | 10975.00 |       19 |</span><br><span class="line">+----------+----------+----------+</span><br><span class="line">19 rows in set (0.0021 sec)</span><br></pre></td></tr></table></figure>
+
+<h2 id="窗口函数和聚合函数的区别"><a href="#窗口函数和聚合函数的区别" class="headerlink" title="窗口函数和聚合函数的区别"></a>窗口函数和聚合函数的区别</h2><p>窗口函数是单独新增一个列，并且给每一行放上窗口函数输出的值，在不压行的情况下算统计。</p>
+<p>而聚合函数顾名思义是把多行压成一行</p>
+<table>
+<thead>
+<tr>
+<th>对比点</th>
+<th>聚合函数</th>
+<th>窗口函数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>行数</td>
+<td>会变少</td>
+<td>不变</td>
+</tr>
+<tr>
+<td>是否保留明细</td>
+<td>不保留</td>
+<td>保留</td>
+</tr>
+<tr>
+<td>是否用 GROUP BY</td>
+<td>必须&#x2F;常用</td>
+<td>不需要</td>
+</tr>
+<tr>
+<td>适合干嘛</td>
+<td>汇总报表</td>
+<td>排名、占比、累计</td>
+</tr>
+<tr>
+<td>心智模型</td>
+<td>压成一坨</td>
+<td>每行旁边算一遍</td>
+</tr>
+</tbody></table>
+<h2 id="PARTITION-BY（分区）的使用"><a href="#PARTITION-BY（分区）的使用" class="headerlink" title="PARTITION BY（分区）的使用"></a>PARTITION BY（分区）的使用</h2><p>假如我要获取到东莞市的前三排名用户消费金额</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    u.city, </span><br><span class="line">    u.username,  </span><br><span class="line">    IFNULL(<span class="built_in">SUM</span>(o.total_amount),<span class="number">0</span>) <span class="keyword">as</span> money,</span><br><span class="line">    <span class="built_in">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="built_in">SUM</span>(o.total_amount) <span class="keyword">DESC</span>) <span class="keyword">as</span> ranklist</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o <span class="keyword">ON</span> u.id <span class="operator">=</span> o.user_id</span><br><span class="line"><span class="keyword">WHERE</span> u.city <span class="operator">=</span> &quot;东莞市&quot;</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> u.city, u.username</span><br><span class="line">LIMIT <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<p>OK成功获取到结果</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+--------+----------+----------+----------+</span><br><span class="line">| city   | username | money    | ranklist |</span><br><span class="line">+--------+----------+----------+----------+</span><br><span class="line">| 东莞市 | 王淑华   | 15365.00 |        1 |</span><br><span class="line">| 东莞市 | 戴秀云   |  9909.00 |        2 |</span><br><span class="line">| 东莞市 | 刘鹏     |  9589.00 |        3 |</span><br><span class="line">+--------+----------+----------+----------+</span><br><span class="line">3 rows in set (0.0192 sec)</span><br></pre></td></tr></table></figure>
+
+<p>假如我要获取全国前三消费城市</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    u.city, </span><br><span class="line">    IFNULL(<span class="built_in">SUM</span>(o.total_amount),<span class="number">0</span>) <span class="keyword">as</span> money,</span><br><span class="line">    <span class="built_in">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="built_in">SUM</span>(o.total_amount) <span class="keyword">DESC</span>) <span class="keyword">as</span> ranklist</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o <span class="keyword">ON</span> u.id <span class="operator">=</span> o.user_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> u.city, u.username</span><br><span class="line">LIMIT <span class="number">3</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这样也能获取到富豪城市前三</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">+--------+----------+----------+</span><br><span class="line">| city   | money    | ranklist |</span><br><span class="line">+--------+----------+----------+</span><br><span class="line">| 淮安市 | 33505.00 |        1 |</span><br><span class="line">| 丽华市 | 31875.00 |        2 |</span><br><span class="line">| 秀芳县 | 30721.00 |        3 |</span><br><span class="line">+--------+----------+----------+</span><br><span class="line">3 rows in set (0.1092 sec)</span><br></pre></td></tr></table></figure>
+
+<p>那假如我要获取到每个城市的消费前三呢，这时候可以使用<code>PARTITION BY</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span>(</span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    u.city, </span><br><span class="line">    u.username,  </span><br><span class="line">    IFNULL(<span class="built_in">SUM</span>(o.total_amount),<span class="number">0</span>) <span class="keyword">as</span> money,</span><br><span class="line">    <span class="built_in">RANK</span>() <span class="keyword">OVER</span>(</span><br><span class="line">    <span class="keyword">PARTITION</span> <span class="keyword">BY</span> u.city</span><br><span class="line">    <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="built_in">SUM</span>(o.total_amount) <span class="keyword">DESC</span></span><br><span class="line">    ) <span class="keyword">as</span> ranklist</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o <span class="keyword">ON</span> u.id <span class="operator">=</span> o.user_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> u.city, u.username</span><br><span class="line">)<span class="keyword">AS</span> t</span><br><span class="line"><span class="keyword">WHERE</span> t.ranklist <span class="operator">&lt;=</span> <span class="number">3</span> <span class="keyword">AND</span> t.money <span class="operator">&gt;</span> <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+<p>这样执行结果就是想要的了</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">+------------+----------+----------+----------+</span><br><span class="line">| city       | username | money    | ranklist |</span><br><span class="line">+------------+----------+----------+----------+</span><br><span class="line">| 上海县     | 张斌     | 19107.00 |        1 |</span><br><span class="line">| 上海县     | 林帆     | 14341.00 |        2 |</span><br><span class="line">| 上海县     | 张雪     |  6129.00 |        3 |</span><br><span class="line">| 东莞市     | 王淑华   | 15365.00 |        1 |</span><br><span class="line">| 东莞市     | 戴秀云   |  9909.00 |        2 |</span><br><span class="line">| 东莞市     | 刘鹏     |  9589.00 |        3 |</span><br><span class="line">...省略若干行...</span><br><span class="line">+------------+----------+----------+----------+</span><br><span class="line">690 rows in set (0.1214 sec)</span><br></pre></td></tr></table></figure>
+
+<p>这个SQL有点复杂先看里面那个</p>
+<p>首先去了用户表的名字，和城市，并且是使用左连接把这两列和订单表里的金额列通过<code>userid</code>连了起来，并且使用姓名和城市进行分组。</p>
+<p>这时候在内存是这样的:</p>
+<table>
+<thead>
+<tr>
+<th>姓名</th>
+<th>城市</th>
+<th>购买金额</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>布莱恩</td>
+<td>圆蛤镇</td>
+<td>5000</td>
+</tr>
+<tr>
+<td>布莱恩</td>
+<td>圆蛤镇</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>斯图威</td>
+<td>圆蛤镇</td>
+<td>500</td>
+</tr>
+<tr>
+<td>梅格</td>
+<td>圆蛤镇</td>
+<td>NULL(梅格只注册没有下过单)</td>
+</tr>
+<tr>
+<td>耄耋</td>
+<td>白手套</td>
+<td>120</td>
+</tr>
+<tr>
+<td>耄爸</td>
+<td>白手套</td>
+<td>10</td>
+</tr>
+<tr>
+<td>耄妈</td>
+<td>白手套</td>
+<td>10000</td>
+</tr>
+</tbody></table>
+<p>然后再通过<code>SUM</code>聚合函数把购买金额给聚合了起来</p>
+<table>
+<thead>
+<tr>
+<th>姓名</th>
+<th>城市</th>
+<th>购买金额</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>布莱恩</td>
+<td>圆蛤镇</td>
+<td>6000</td>
+</tr>
+<tr>
+<td>斯图威</td>
+<td>圆蛤镇</td>
+<td>500</td>
+</tr>
+<tr>
+<td>梅格</td>
+<td>圆蛤镇</td>
+<td>NULL</td>
+</tr>
+<tr>
+<td>耄耋</td>
+<td>白手套</td>
+<td>120</td>
+</tr>
+<tr>
+<td>耄爸</td>
+<td>白手套</td>
+<td>10</td>
+</tr>
+<tr>
+<td>耄妈</td>
+<td>白手套</td>
+<td>10000</td>
+</tr>
+</tbody></table>
+<p>然后进入窗口函数，首先对城市进行分区。圆蛤镇和白手套单独使用SUM(o.total_amount)内部进行RANK。</p>
+<p>如果不加分区，就会让耄妈排名第一，耄爸排名第六。而设计的目标是要取每个城市的前三。<br>所以这样，通过按照城市分区后，再分区内部单独RANK就获取到了每个城市的排名。<br>但是显然不可能每个城市只有3个人。所以把里面这个SQL输出作为表再次运行一次子查询，要求<code>t.ranklist &lt;= 3 AND t.money &gt; 0</code>这样就成功取到所有城市的消费前三了。</p>
+<h2 id="ROWS-Range"><a href="#ROWS-Range" class="headerlink" title="ROWS&#x2F;Range"></a>ROWS&#x2F;Range</h2><p>如果说 <code>PARTITION BY</code> 是把蛋糕切成大块，<code>ORDER BY</code> 是给切好的蛋糕排队，那么 <strong><code>ROWS</code> &#x2F; <code>RANGE</code></strong> 就是“定义手里的放大镜到底要看几行”（Window Frame）。</p>
+<p>它们定义了：<strong>在当前这一行进行计算时，要回头看几行？往后看几行？</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="operator">&lt;</span>窗口函数<span class="operator">&gt;</span> <span class="keyword">OVER</span> (</span><br><span class="line"> <span class="keyword">PARTITION</span> <span class="keyword">BY</span> ...</span><br><span class="line"> <span class="keyword">ORDER</span> <span class="keyword">BY</span> ...</span><br><span class="line"> [<span class="keyword">ROWS</span><span class="operator">|</span><span class="keyword">RANGE</span>] <span class="keyword">BETWEEN</span> <span class="operator">&lt;</span>开始位置<span class="operator">&gt;</span> <span class="keyword">AND</span> <span class="operator">&lt;</span>结束位置<span class="operator">&gt;</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p><strong>常用的位置关键字：</strong></p>
+<ul>
+<li><code>CURRENT ROW</code>：当前这一行。</li>
+<li><code>n PRECEDING</code>：往前 n 行。</li>
+<li><code>n FOLLOWING</code>：往后 n 行。</li>
+<li><code>UNBOUNDED PRECEDING</code>：最前面（起点）。</li>
+<li><code>UNBOUNDED FOLLOWING</code>：最后面（终点）。</li>
+</ul>
+<h3 id="rows的使用"><a href="#rows的使用" class="headerlink" title="rows的使用"></a>rows的使用</h3><p>rows使用行，往前一行或者往后一行</p>
+<p>比如要计算值为3的移动平均线，就是获取前天，昨天，今天的数值加起来除以3</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    total_amount,</span><br><span class="line">    <span class="built_in">AVG</span>(total_amount) <span class="keyword">OVER</span> (</span><br><span class="line">        <span class="keyword">ROWS</span> <span class="keyword">BETWEEN</span> <span class="number">2</span> PRECEDING <span class="keyword">AND</span> <span class="keyword">CURRENT</span> <span class="type">ROW</span></span><br><span class="line">    ) <span class="keyword">as</span> moving_avg</span><br><span class="line"><span class="keyword">FROM</span> orders;</span><br></pre></td></tr></table></figure>
+
+<p>或者要查看当前订单和它的<strong>上一单</strong>和<strong>下一单</strong>的金额总和。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    order_no,</span><br><span class="line">    total_amount,</span><br><span class="line">    <span class="built_in">SUM</span>(total_amount) <span class="keyword">OVER</span> (</span><br><span class="line">        <span class="keyword">ORDER</span> <span class="keyword">BY</span> created_at</span><br><span class="line">        <span class="keyword">ROWS</span> <span class="keyword">BETWEEN</span> <span class="number">1</span> PRECEDING <span class="keyword">AND</span> <span class="number">1</span> FOLLOWING</span><br><span class="line">    ) <span class="keyword">as</span> context_sum</span><br><span class="line"><span class="keyword">FROM</span> orders;</span><br></pre></td></tr></table></figure>
+
+<h3 id="range的使用"><a href="#range的使用" class="headerlink" title="range的使用"></a>range的使用</h3><p>range按照按值的逻辑范围，一般用于时间范围，比如这样</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">SUM</span>(amount) <span class="keyword">OVER</span> (</span><br><span class="line">  <span class="keyword">PARTITION</span> <span class="keyword">BY</span> user_id</span><br><span class="line">  <span class="keyword">ORDER</span> <span class="keyword">BY</span> create_time</span><br><span class="line">  <span class="keyword">RANGE</span> <span class="keyword">BETWEEN</span> <span class="type">INTERVAL</span> <span class="number">7</span> <span class="keyword">DAY</span> PRECEDING <span class="keyword">AND</span> <span class="keyword">CURRENT</span> <span class="type">ROW</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>来统计最近 7 天订单总额</p>
+<h3 id="range和rows的区别"><a href="#range和rows的区别" class="headerlink" title="range和rows的区别"></a>range和rows的区别</h3><p>假如有这样一个表</p>
+<table>
+<thead>
+<tr>
+<th>id</th>
+<th>score</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>1</td>
+<td>10</td>
+</tr>
+<tr>
+<td>2</td>
+<td>10</td>
+</tr>
+<tr>
+<td>3</td>
+<td>20</td>
+</tr>
+<tr>
+<td>4</td>
+<td>30</td>
+</tr>
+<tr>
+<td>5</td>
+<td>30</td>
+</tr>
+</tbody></table>
+<p>用rows来新增一个求和列的话</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">  id,</span><br><span class="line">  score,</span><br><span class="line">  <span class="built_in">SUM</span>(score) <span class="keyword">OVER</span> (</span><br><span class="line">    <span class="keyword">ORDER</span> <span class="keyword">BY</span> score</span><br><span class="line">    <span class="keyword">ROWS</span> <span class="keyword">BETWEEN</span> <span class="number">1</span> PRECEDING <span class="keyword">AND</span> <span class="keyword">CURRENT</span> <span class="type">ROW</span></span><br><span class="line">  ) <span class="keyword">AS</span> sum_rows</span><br><span class="line"><span class="keyword">FROM</span> score;</span><br></pre></td></tr></table></figure>
+
+<p>就会是这样的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+-------+----------+</span><br><span class="line">| id | score | sum_rows |</span><br><span class="line">+----+-------+----------+</span><br><span class="line">|  1 |    10 |       10 |</span><br><span class="line">|  2 |    10 |       20 |</span><br><span class="line">|  3 |    20 |       30 |</span><br><span class="line">|  4 |    30 |       50 |</span><br><span class="line">|  5 |    30 |       60 |</span><br><span class="line">+----+-------+----------+</span><br><span class="line">5 rows in set (0.0005 sec)</span><br></pre></td></tr></table></figure>
+
+<p>即使分数一样，也是一行一行数。符合直觉吧</p>
+<p>而如果换成range</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">  id,</span><br><span class="line">  score,</span><br><span class="line">  <span class="built_in">SUM</span>(score) <span class="keyword">OVER</span> (</span><br><span class="line">    <span class="keyword">ORDER</span> <span class="keyword">BY</span> score</span><br><span class="line">    <span class="keyword">RANGE</span> <span class="keyword">BETWEEN</span> <span class="number">1</span> PRECEDING <span class="keyword">AND</span> <span class="keyword">CURRENT</span> <span class="type">ROW</span></span><br><span class="line">  ) <span class="keyword">AS</span> sum_rows</span><br><span class="line"><span class="keyword">FROM</span> score;</span><br></pre></td></tr></table></figure>
+
+<p>就会是这样的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----+-------+----------+</span><br><span class="line">| id | score | sum_rows |</span><br><span class="line">+----+-------+----------+</span><br><span class="line">|  1 |    10 |       20 |</span><br><span class="line">|  2 |    10 |       20 |</span><br><span class="line">|  3 |    20 |       20 |</span><br><span class="line">|  4 |    30 |       60 |</span><br><span class="line">|  5 |    30 |       60 |</span><br><span class="line">+----+-------+----------+</span><br><span class="line">5 rows in set (0.0004 sec)</span><br></pre></td></tr></table></figure>
+
+<p>因为上面那个RANGE，说人话的意思就是，把 score 在 [当前值 - 1, 当前值] 这个区间里的所有行加起来</p>
+<p>所以</p>
+<table>
+<thead>
+<tr>
+<th>score</th>
+<th>RANGE 区间</th>
+<th>被算的 score</th>
+<th>结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>10</td>
+<td>[9,10]</td>
+<td>10,10</td>
+<td>20</td>
+</tr>
+<tr>
+<td>10</td>
+<td>[9,10]</td>
+<td>10,10</td>
+<td>20</td>
+</tr>
+<tr>
+<td>20</td>
+<td>[19,20]</td>
+<td>20</td>
+<td>20</td>
+</tr>
+<tr>
+<td>30</td>
+<td>[29,30]</td>
+<td>30,30</td>
+<td>60</td>
+</tr>
+<tr>
+<td>30</td>
+<td>[29,30]</td>
+<td>30,30</td>
+<td>60</td>
+</tr>
+</tbody></table>
+<p>关于窗口函数更多内容，可以前往<a target="_blank" rel="noopener" href="https://cloud.tencent.com/developer/article/2398505">深入MySQL窗口函数：原理和应用-腾讯云开发者社区-腾讯云</a></p>
+<h1 id="处理json数据"><a href="#处理json数据" class="headerlink" title="处理json数据"></a>处理json数据</h1><p>MySQL 从 5.7 版本开始原生支持 JSON 数据类型</p>
+<h2 id="什么时候用json"><a href="#什么时候用json" class="headerlink" title="什么时候用json"></a>什么时候用json</h2><ol>
+<li><strong>不确定的属性（动态 Schema）：</strong><ul>
+<li>电商的<strong>商品表</strong>。衣服有“颜色、尺码”，手机有“内存、屏幕分辨率”，书有“作者、ISBN”。如果为每个属性都建一列，表会变得极其宽且难以维护。用 JSON 字段存 <code>attributes</code> 是完美方案。</li>
+</ul>
+</li>
+<li><strong>用户个性化配置：</strong><ul>
+<li>用户的偏好设置、UI 布局配置、通知开关等，这些字段经常变动，没必要每次加配置都去改表结构。</li>
+</ul>
+</li>
+<li><strong>接口数据存储&#x2F;日志：</strong><ul>
+<li>直接存储调用第三方 API 返回的 JSON 结果，或者存储前端提交的复杂表单数据，用于留存或后续审计。</li>
+</ul>
+</li>
+<li><strong>稀疏数据：</strong><ul>
+<li>一个表有 100 个列，但大部分行只有其中 5 个列有值，其他都是 NULL。用 JSON 可以节省空间并简化结构。</li>
+</ul>
+</li>
+</ol>
+<h2 id="上手使用json"><a href="#上手使用json" class="headerlink" title="上手使用json"></a>上手使用json</h2><p>在创建表的时候直接将列的数据类型指定为<code>json</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE TABLE</span> products (</span><br><span class="line">    id <span class="type">INT</span> AUTO_INCREMENT <span class="keyword">PRIMARY KEY</span>,</span><br><span class="line">    name <span class="type">VARCHAR</span>(<span class="number">255</span>),</span><br><span class="line">    details JSON  <span class="comment">-- 定义 JSON 类型</span></span><br><span class="line">);</span><br></pre></td></tr></table></figure>
+
+<h3 id="插入数据"><a href="#插入数据" class="headerlink" title="插入数据"></a>插入数据</h3><p>直接插入json字符串即可</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT INTO</span> products (name, details) <span class="keyword">VALUES</span> </span><br><span class="line">(<span class="string">&#x27;T-Shirt&#x27;</span>, <span class="string">&#x27;&#123;&quot;color&quot;: &quot;white&quot;, &quot;size&quot;: &quot;L&quot;, &quot;tags&quot;: [&quot;summer&quot;, &quot;casual&quot;]&#125;&#x27;</span>),</span><br><span class="line">(<span class="string">&#x27;iPhone 15&#x27;</span>, <span class="string">&#x27;&#123;&quot;color&quot;: &quot;black&quot;, &quot;storage&quot;: &quot;256GB&quot;, &quot;screen&quot;: &quot;6.1&quot;&#125;&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>执行后表的内容就是这样的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">MySQL  localhost:3306 ssl  mall_db_simple  SQL &gt; select * from products;</span><br><span class="line">+----+-----------+---------------------------------------------------------------+</span><br><span class="line">| id | name      | details                                                       |</span><br><span class="line">+----+-----------+---------------------------------------------------------------+</span><br><span class="line">|  1 | T-Shirt   | &#123;&quot;size&quot;: &quot;L&quot;, &quot;tags&quot;: [&quot;summer&quot;, &quot;casual&quot;], &quot;color&quot;: &quot;white&quot;&#125; |</span><br><span class="line">|  2 | iPhone 15 | &#123;&quot;color&quot;: &quot;black&quot;, &quot;screen&quot;: &quot;6.1&quot;, &quot;storage&quot;: &quot;256GB&quot;&#125;       |</span><br><span class="line">+----+-----------+---------------------------------------------------------------+</span><br><span class="line">2 rows in set (0.0004 sec)</span><br></pre></td></tr></table></figure>
+
+<h3 id="json相关函数"><a href="#json相关函数" class="headerlink" title="json相关函数"></a>json相关函数</h3><h4 id="读取类"><a href="#读取类" class="headerlink" title="读取类"></a>读取类</h4><table>
+<thead>
+<tr>
+<th align="left">函数 &#x2F; 操作符</th>
+<th align="left">作用</th>
+<th align="left">语法示例</th>
+<th align="left">结果 &amp; 说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>-&gt;</code></strong></td>
+<td align="left"><strong>提取值 (保留引号)</strong> 提取指定路径的节点，返回的是 JSON 类型。</td>
+<td align="left"><code>SELECT @j-&gt;&#39;$.name&#39;;</code></td>
+<td align="left"><code>&quot;Mario&quot;</code><br/>注意带有双引号，通常用于进一步处理 JSON。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>-&gt;&gt;</code></strong></td>
+<td align="left"><strong>提取值 (去引号)</strong> 提取并转为字符串&#x2F;数字，<strong>最推荐</strong>用于显示或比较。</td>
+<td align="left"><code>SELECT @j-&gt;&gt;&#39;$.name&#39;;</code></td>
+<td align="left"><code>Mario</code><br/>双引号没了，直接变成了字符串。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>JSON_KEYS</code></strong></td>
+<td align="left"><strong>获取所有 Key</strong> 返回对象顶层所有的键名数组。</td>
+<td align="left"><code>SELECT JSON_KEYS(@j);</code></td>
+<td align="left"><code>[&quot;name&quot;, &quot;score&quot;, &quot;tags&quot;]</code><br>常用于查看 JSON 结构。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>JSON_LENGTH</code></strong></td>
+<td align="left"><strong>获取长度</strong> 对象的键数量或数组的元素个数。</td>
+<td align="left"><code>SELECT JSON_LENGTH(@j, &#39;$.tags&#39;);</code></td>
+<td align="left"><code>2</code><br/>查看 tags 数组里有几个元素。</td>
+</tr>
+</tbody></table>
+<h4 id="修改类"><a href="#修改类" class="headerlink" title="修改类"></a>修改类</h4><table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">作用</th>
+<th align="left">语法示例</th>
+<th align="left">结果 &amp; 说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>JSON_SET</code></strong></td>
+<td align="left"><strong>(万能) 插入或更新</strong><br>Key 存在则更新，不存在则插入。</td>
+<td align="left"><code>SELECT JSON_SET(@j, &#39;$.score&#39;, 200, &#39;$.age&#39;, 18);</code></td>
+<td align="left"><code>{&quot;name&quot;:..., &quot;score&quot;: 200, &quot;age&quot;: 18}</code><br><strong>最推荐使用</strong>，类似 Upsert。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>JSON_INSERT</code></strong></td>
+<td align="left"><strong>只插入</strong><br>Key 不存在才插入，存在则忽略。</td>
+<td align="left"><code>SELECT JSON_INSERT(@j, &#39;$.score&#39;, 200);</code></td>
+<td align="left"><code>{&quot;score&quot;: 100...}</code><br>因为 score 已存在，所以不改。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>JSON_REPLACE</code></strong></td>
+<td align="left"><strong>只更新</strong><br>Key 存在才更新，不存在则忽略。</td>
+<td align="left"><code>SELECT JSON_REPLACE(@j, &#39;$.age&#39;, 18);</code></td>
+<td align="left"><code>{&quot;name&quot;:...}</code><br>因为 age 不存在，所以不加。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>JSON_REMOVE</code></strong></td>
+<td align="left"><strong>删除</strong><br>删除指定路径的节点。</td>
+<td align="left"><code>SELECT JSON_REMOVE(@j, &#39;$.tags&#39;);</code></td>
+<td align="left"><code>{&quot;name&quot;: &quot;Mario&quot;, &quot;score&quot;: 100}</code><br>tags 字段被删掉了。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>JSON_ARRAY_APPEND</code></strong></td>
+<td align="left"><strong>数组追加</strong><br>向数组类型的字段追加元素。</td>
+<td align="left"><code>SELECT JSON_ARRAY_APPEND(@j, &#39;$.tags&#39;, &#39;new&#39;);</code></td>
+<td align="left"><code>...&quot;tags&quot;: [&quot;red&quot;, &quot;game&quot;, &quot;new&quot;]</code></td>
+</tr>
+</tbody></table>
+<h4 id="查询与搜索类"><a href="#查询与搜索类" class="headerlink" title="查询与搜索类"></a>查询与搜索类</h4><table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">作用</th>
+<th align="left">语法示例</th>
+<th align="left">结果 &amp; 说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>JSON_CONTAINS</code></strong></td>
+<td align="left"><strong>包含检查</strong><br>检查 JSON 文档是否包含指定的值（精确匹配）。</td>
+<td align="left"><code>SELECT JSON_CONTAINS(@j, &#39;&quot;red&quot;&#39;, &#39;$.tags&#39;);</code></td>
+<td align="left"><code>1</code> (True)<br>判断 tags 数组里有没有 “red”。注意字符串要多包一层引号。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>JSON_SEARCH</code></strong></td>
+<td align="left"><strong>搜索路径</strong><br>查找某个值在 JSON 中的路径。</td>
+<td align="left"><code>SELECT JSON_SEARCH(@j, &#39;one&#39;, &#39;game&#39;);</code></td>
+<td align="left"><code>&quot;$.tags[1]&quot;</code><br>告诉你 “game” 在哪里。</td>
+</tr>
+<tr>
+<td align="left"><strong><code>JSON_VALID</code></strong></td>
+<td align="left"><strong>格式校验</strong><br>判断字符串是否为合法的 JSON。</td>
+<td align="left"><code>SELECT JSON_VALID(&#39;{&quot;a&quot;:1}&#39;);</code></td>
+<td align="left"><code>1</code> (True)<br>常用于清洗脏数据。</td>
+</tr>
+</tbody></table>
+<h4 id="构造类"><a href="#构造类" class="headerlink" title="构造类"></a>构造类</h4><table>
+<thead>
+<tr>
+<th align="left">函数</th>
+<th align="left">作用</th>
+<th align="left">语法示例</th>
+<th align="left">结果 &amp; 说明</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong><code>JSON_OBJECT</code></strong></td>
+<td align="left"><strong>创建对象</strong><br>将键值对列表转为 JSON 对象。</td>
+<td align="left"><code>SELECT JSON_OBJECT(&#39;id&#39;, 1, &#39;name&#39;, &#39;A&#39;);</code></td>
+<td align="left"><code>{&quot;id&quot;: 1, &quot;name&quot;: &quot;A&quot;}</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>JSON_ARRAY</code></strong></td>
+<td align="left"><strong>创建数组</strong><br>将值列表转为 JSON 数组。</td>
+<td align="left"><code>SELECT JSON_ARRAY(&#39;a&#39;, 1, NOW());</code></td>
+<td align="left"><code>[&quot;a&quot;, 1, &quot;2023-10-01...&quot;]</code></td>
+</tr>
+<tr>
+<td align="left"><strong><code>JSON_ARRAYAGG</code></strong></td>
+<td align="left"><strong>聚合为数组</strong><br>配合 GROUP BY，将多行数据聚合为一个 JSON 数组。</td>
+<td align="left"><code>SELECT JSON_ARRAYAGG(name) FROM users;</code></td>
+<td align="left"><code>[&quot;Alice&quot;, &quot;Bob&quot;, &quot;Charlie&quot;]</code><br>非常有用的聚合函数。</td>
+</tr>
+</tbody></table>
+<h3 id="查询json列中的数据"><a href="#查询json列中的数据" class="headerlink" title="查询json列中的数据"></a>查询json列中的数据</h3><p>使用 <code>-&gt;</code> 和 <code>-&gt;&gt;</code> 操作符：</p>
+<ul>
+<li><code>-&gt;</code>：返回带引号的 JSON 结果（例如 <code>&quot;white&quot;</code>）。</li>
+<li><code>-&gt;&gt;</code>：返回去引号的字符串结果（例如 <code>white</code>）。</li>
+</ul>
+<p>比如我要查询每个产品的名称和颜色</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> name,details<span class="operator">-</span><span class="operator">&gt;&gt;</span><span class="string">&#x27;$.color&#x27;</span> <span class="keyword">as</span> color <span class="keyword">from</span> products;</span><br></pre></td></tr></table></figure>
+
+<p>执行后的输出是这样的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+-----------+-------+</span><br><span class="line">| name      | color |</span><br><span class="line">+-----------+-------+</span><br><span class="line">| T-Shirt   | white |</span><br><span class="line">| iPhone 15 | black |</span><br><span class="line">+-----------+-------+</span><br><span class="line">2 rows in set (0.0020 sec)</span><br></pre></td></tr></table></figure>
+
+<p>或者我要查询详情中包含 “storage” 属性的商品</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> products <span class="keyword">where</span> details<span class="operator">-</span><span class="operator">&gt;&gt;</span><span class="string">&#x27;$.storage&#x27;</span> <span class="keyword">is</span> <span class="keyword">not null</span>;</span><br></pre></td></tr></table></figure>
+
+<p>执行后的输出是这样的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+----+-----------+---------------------------------------------------------+</span><br><span class="line">| id | name      | details                                                 |</span><br><span class="line">+----+-----------+---------------------------------------------------------+</span><br><span class="line">|  2 | iPhone 15 | &#123;&quot;color&quot;: &quot;black&quot;, &quot;screen&quot;: &quot;6.1&quot;, &quot;storage&quot;: &quot;256GB&quot;&#125; |</span><br><span class="line">+----+-----------+---------------------------------------------------------+</span><br><span class="line">1 row in set (0.0005 sec)</span><br></pre></td></tr></table></figure>
+
+<p>或者如果要查找json的某个数组中包含某个值的行，使用<code>JSON_CONTAINS()</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> <span class="operator">*</span> <span class="keyword">from</span> products <span class="keyword">where</span> json_contains(details,<span class="string">&#x27;&quot;summer&quot;&#x27;</span>,&quot;$.tags&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>执行后的输出结果是这样的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">+----+---------+---------------------------------------------------------------+</span><br><span class="line">| id | name    | details                                                       |</span><br><span class="line">+----+---------+---------------------------------------------------------------+</span><br><span class="line">|  1 | T-Shirt | &#123;&quot;size&quot;: &quot;L&quot;, &quot;tags&quot;: [&quot;summer&quot;, &quot;casual&quot;], &quot;color&quot;: &quot;white&quot;&#125; |</span><br><span class="line">+----+---------+---------------------------------------------------------------+</span><br><span class="line">1 row in set (0.0010 sec)</span><br></pre></td></tr></table></figure>
+
+<h3 id="修改json数据"><a href="#修改json数据" class="headerlink" title="修改json数据"></a>修改json数据</h3><p>不要把整个 JSON 拿出来改完再覆盖回去，使用原生函数效率更高。</p>
+<p>比如我要给所有商品增加一个<code>NB</code>属性，并把<code>color</code>设置成<code>blue</code></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> products <span class="keyword">set</span> details <span class="operator">=</span> json_set(details,&quot;$.color&quot;,&quot;blue&quot;,&quot;$.NB&quot;,&quot;true&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>执行的效果是</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----+-----------+----------------------------------------------------------------------------+</span><br><span class="line">| id | name      | details                                                                    |</span><br><span class="line">+----+-----------+----------------------------------------------------------------------------+</span><br><span class="line">|  1 | T-Shirt   | &#123;&quot;NB&quot;: &quot;true&quot;, &quot;size&quot;: &quot;L&quot;, &quot;tags&quot;: [&quot;summer&quot;, &quot;casual&quot;], &quot;color&quot;: &quot;blue&quot;&#125; |</span><br><span class="line">|  2 | iPhone 15 | &#123;&quot;NB&quot;: &quot;true&quot;, &quot;color&quot;: &quot;blue&quot;, &quot;screen&quot;: &quot;6.1&quot;, &quot;storage&quot;: &quot;256GB&quot;&#125;       |</span><br><span class="line">+----+-----------+----------------------------------------------------------------------------+</span><br><span class="line">2 rows in set (0.0004 sec)</span><br></pre></td></tr></table></figure>
+
+<p>如果要删除<code>NB</code>属性</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">update</span> products <span class="keyword">set</span> details <span class="operator">=</span> json_remove(details,&quot;$.NB&quot;);</span><br></pre></td></tr></table></figure>
+
+<p>执行的效果是</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">+----+-----------+--------------------------------------------------------------+</span><br><span class="line">| id | name      | details                                                      |</span><br><span class="line">+----+-----------+--------------------------------------------------------------+</span><br><span class="line">|  1 | T-Shirt   | &#123;&quot;size&quot;: &quot;L&quot;, &quot;tags&quot;: [&quot;summer&quot;, &quot;casual&quot;], &quot;color&quot;: &quot;blue&quot;&#125; |</span><br><span class="line">|  2 | iPhone 15 | &#123;&quot;color&quot;: &quot;blue&quot;, &quot;screen&quot;: &quot;6.1&quot;, &quot;storage&quot;: &quot;256GB&quot;&#125;       |</span><br><span class="line">+----+-----------+--------------------------------------------------------------+</span><br><span class="line">2 rows in set (0.0004 sec)</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用json需要注意的"><a href="#使用json需要注意的" class="headerlink" title="使用json需要注意的"></a>使用json需要注意的</h2><p>json列本身<strong>不能</strong>直接建立索引。如果需要经常需要在 WHERE 子句中根据 json里的某个字段，需要使用虚拟列。并给虚拟列添加索引age’ &gt; 20;</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER TABLE</span> users <span class="keyword">ADD</span> <span class="keyword">COLUMN</span> v_age <span class="type">INT</span> </span><br><span class="line">GENERATED ALWAYS <span class="keyword">AS</span> (profile<span class="operator">-</span><span class="operator">&gt;&gt;</span><span class="string">&#x27;$.age&#x27;</span>) VIRTUAL;</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> INDEX idx_age <span class="keyword">ON</span> users(v_age);</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> v_age <span class="operator">&gt;</span> <span class="number">20</span>; </span><br><span class="line"><span class="comment">-- 或者</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> users <span class="keyword">WHERE</span> profile<span class="operator">-</span><span class="operator">&gt;&gt;</span><span class="string">&#x27;$.age&#x27;</span> <span class="operator">&gt;</span> <span class="number">20</span>;</span><br></pre></td></tr></table></figure>
+
+<p>json存储会比普通字段占用更多空间。不要把 json当作大文本存，尽量保持 json结构精简。</p>
+<h1 id="CTE-通用表表达式"><a href="#CTE-通用表表达式" class="headerlink" title="CTE (通用表表达式)"></a>CTE (通用表表达式)</h1><p>可以把 CTE 理解为 <strong>“临时命名的结果集”</strong>。它就像是一个在当前 SQL 语句中临时定义的“虚拟表”或“变量”，可以像查询普通表一样查询它。</p>
+<p>CTE 主要用于解决以下三个痛点：</p>
+<ol>
+<li><strong>提高代码可读性（最常用）</strong>：<ul>
+<li>以前写复杂的 SQL，会使用大量的<strong>嵌套子查询</strong>（Subquery），一层套一层，像“洋葱”一样，非常难以阅读和维护。</li>
+<li>CTE 可以把逻辑扁平化，先定义数据 A，再定义数据 B，最后查询 A 和 B，逻辑像写代码一样自上而下。</li>
+</ul>
+</li>
+<li><strong>逻辑复用</strong>：<ul>
+<li>如果同一个子查询结果在主查询中需要被用到多次（例如 join 两次），用 CTE 只需要定义一次，后面引用即可，不用重复写子查询代码。</li>
+</ul>
+</li>
+<li><strong>递归查询（杀手级功能）</strong>：<ul>
+<li>处理树形结构（如：公司组织架构、商品多级分类、评论回复楼层）时，必须使用递归 CTE (<code>WITH RECURSIVE</code>)。</li>
+</ul>
+</li>
+</ol>
+<h2 id="CTE的语法"><a href="#CTE的语法" class="headerlink" title="CTE的语法"></a>CTE的语法</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> cte_name (列名<span class="number">1</span>, 列名<span class="number">2</span>, ...) <span class="keyword">AS</span> (</span><br><span class="line">    <span class="comment">-- 这里写你的子查询</span></span><br><span class="line">    <span class="keyword">SELECT</span> ...</span><br><span class="line">)</span><br><span class="line"><span class="comment">-- 紧接着写主查询，可以使用上面的 cte_name</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> cte_name;</span><br></pre></td></tr></table></figure>
+
+<h2 id="使用CTE"><a href="#使用CTE" class="headerlink" title="使用CTE"></a>使用CTE</h2><p>还记得上面那个每个城市消费前三的例子吗</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span>(</span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    u.city, </span><br><span class="line">    u.username,  </span><br><span class="line">    IFNULL(<span class="built_in">SUM</span>(o.total_amount),<span class="number">0</span>) <span class="keyword">as</span> money,</span><br><span class="line">    <span class="built_in">RANK</span>() <span class="keyword">OVER</span>(</span><br><span class="line">    <span class="keyword">PARTITION</span> <span class="keyword">BY</span> u.city</span><br><span class="line">    <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="built_in">SUM</span>(o.total_amount) <span class="keyword">DESC</span></span><br><span class="line">    ) <span class="keyword">as</span> ranklist</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line"><span class="keyword">LEFT</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o <span class="keyword">ON</span> u.id <span class="operator">=</span> o.user_id</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> u.city, u.username</span><br><span class="line">)<span class="keyword">AS</span> t</span><br><span class="line"><span class="keyword">WHERE</span> t.ranklist <span class="operator">&lt;=</span> <span class="number">3</span> <span class="keyword">AND</span> t.money <span class="operator">&gt;</span> <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+<p>如果把它换成CTE写法就是</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- 1. 先定义“带排名的用户列表”</span></span><br><span class="line"><span class="keyword">WITH</span> UserRanks <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> </span><br><span class="line">        u.city, </span><br><span class="line">        u.username,  </span><br><span class="line">        IFNULL(<span class="built_in">SUM</span>(o.total_amount),<span class="number">0</span>) <span class="keyword">as</span> money,</span><br><span class="line">        <span class="built_in">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">PARTITION</span> <span class="keyword">BY</span> u.city <span class="keyword">ORDER</span> <span class="keyword">BY</span> <span class="built_in">SUM</span>(o.total_amount) <span class="keyword">DESC</span>) <span class="keyword">as</span> ranklist</span><br><span class="line">    <span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line">    <span class="keyword">LEFT</span> <span class="keyword">JOIN</span> orders <span class="keyword">AS</span> o <span class="keyword">ON</span> u.id <span class="operator">=</span> o.user_id</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> u.city, u.username</span><br><span class="line">)</span><br><span class="line"><span class="comment">-- 2. 再对这个列表进行筛选</span></span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> </span><br><span class="line"><span class="keyword">FROM</span> UserRanks </span><br><span class="line"><span class="keyword">WHERE</span> ranklist <span class="operator">&lt;=</span> <span class="number">3</span> <span class="keyword">AND</span> money <span class="operator">&gt;</span> <span class="number">0</span>;</span><br></pre></td></tr></table></figure>
+
+<p>看着好像没什么差别？确实，在这个简单例子里，确实只是“排版”的区别。</p>
+<h3 id="分步聚合"><a href="#分步聚合" class="headerlink" title="分步聚合"></a>分步聚合</h3><p>我要找出总消费金额 &gt; 5000的用户，并列出他们的姓名、电话、城市以及具体的消费总额。</p>
+<p>先写一个查询列出所有用户消费金额</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">select</span> </span><br><span class="line">    user_id,</span><br><span class="line">    <span class="built_in">SUM</span>(total_amount) <span class="keyword">AS</span> total_spent</span><br><span class="line"><span class="keyword">FROM</span> orders <span class="keyword">GROUP</span> <span class="keyword">BY</span> user_id;</span><br></pre></td></tr></table></figure>
+
+<p>然后把这表作为一个UserSpent临时表，和用户表内连接起来就是这样</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> UserSpent <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">select</span> </span><br><span class="line">        user_id,</span><br><span class="line">        <span class="built_in">SUM</span>(total_amount) <span class="keyword">AS</span> total_spent</span><br><span class="line">    <span class="keyword">FROM</span> orders <span class="keyword">GROUP</span> <span class="keyword">BY</span> user_id</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    u.username,</span><br><span class="line">    u.city,</span><br><span class="line">    u.phone,</span><br><span class="line">    us.total_spent</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> UserSpent <span class="keyword">AS</span> us <span class="keyword">ON</span> u.id <span class="operator">=</span> us.user_id</span><br><span class="line"><span class="keyword">WHERE</span> us.total_spent <span class="operator">&gt;</span> <span class="number">5000</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> us.total_spent <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<p>再用到窗口函数，给他加个排名</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> UserSpent <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">select</span> </span><br><span class="line">        user_id,</span><br><span class="line">        <span class="built_in">SUM</span>(total_amount) <span class="keyword">AS</span> total_spent</span><br><span class="line">    <span class="keyword">FROM</span> orders <span class="keyword">GROUP</span> <span class="keyword">BY</span> user_id</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    u.username,</span><br><span class="line">    u.city,</span><br><span class="line">    u.phone,</span><br><span class="line">    us.total_spent,</span><br><span class="line">    <span class="built_in">RANK</span>() <span class="keyword">OVER</span>(<span class="keyword">ORDER</span> <span class="keyword">BY</span> us.total_spent <span class="keyword">DESC</span>) <span class="keyword">as</span> `rank`</span><br><span class="line"><span class="keyword">FROM</span> users <span class="keyword">AS</span> u</span><br><span class="line"><span class="keyword">INNER</span> <span class="keyword">JOIN</span> UserSpent <span class="keyword">AS</span> us <span class="keyword">ON</span> u.id <span class="operator">=</span> us.user_id</span><br><span class="line"><span class="keyword">WHERE</span> us.total_spent <span class="operator">&gt;</span> <span class="number">5000</span></span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> us.total_spent <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<p>执行出来的结果就是这样的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">+----------+------------+-------------+-------------+------+</span><br><span class="line">| username | city       | phone       | total_spent | rank |</span><br><span class="line">+----------+------------+-------------+-------------+------+</span><br><span class="line">| 车燕     | 淮安市     | 15138603669 |    33505.00 |    1 |</span><br><span class="line">| 谢梅     | 丽华市     | 15198232698 |    31875.00 |    2 |</span><br><span class="line">....省略若干行...</span><br><span class="line">| 梁秀华   | 慧市       | 13235808817 |     5049.00 |  502 |</span><br><span class="line">| 陈莉     | 重庆县     | 18953949093 |     5022.00 |  503 |</span><br><span class="line">+----------+------------+-------------+-------------+------+</span><br><span class="line">503 rows in set (0.0126 sec)</span><br></pre></td></tr></table></figure>
+
+<h3 id="复用逻辑-链式CTE"><a href="#复用逻辑-链式CTE" class="headerlink" title="复用逻辑&#x2F;链式CTE"></a>复用逻辑&#x2F;链式CTE</h3><p>查看 “数码” 类目下，各个商品的销售额，以及该商品占整个“数码”类目总销售额的<strong>百分比</strong>。</p>
+<p>需要下面两个数据</p>
+<ol>
+<li>每个数码商品的销售额（Group By product_id）。</li>
+<li>数码类的总销售额（计算要用到它来做分母）。</li>
+</ol>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> DigitalProductSales <span class="keyword">AS</span> (</span><br><span class="line">    <span class="comment">-- 1. 先把数码类的所有销售明细算出来</span></span><br><span class="line">    <span class="keyword">SELECT</span> </span><br><span class="line">        p.name <span class="keyword">AS</span> product_name,</span><br><span class="line">        <span class="built_in">SUM</span>(oi.quantity <span class="operator">*</span> oi.price) <span class="keyword">AS</span> prod_total</span><br><span class="line">    <span class="keyword">FROM</span> order_items oi</span><br><span class="line">    <span class="keyword">JOIN</span> products p <span class="keyword">ON</span> oi.product_id <span class="operator">=</span> p.id</span><br><span class="line">    <span class="keyword">WHERE</span> p.category <span class="operator">=</span> <span class="string">&#x27;数码&#x27;</span></span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> p.name</span><br><span class="line">),</span><br><span class="line">TotalDigitalSales <span class="keyword">AS</span> (</span><br><span class="line">    <span class="comment">-- 2. 复用上面的 CTE！计算数码类的总销售额</span></span><br><span class="line">    <span class="comment">-- 这里直接查询了定义好的 DigitalProductSales，不用再去 join 原始表了</span></span><br><span class="line">    <span class="keyword">SELECT</span> <span class="built_in">SUM</span>(prod_total) <span class="keyword">AS</span> cat_total </span><br><span class="line">    <span class="keyword">FROM</span> DigitalProductSales</span><br><span class="line">)</span><br><span class="line"><span class="comment">-- 3. 主查询：计算占比</span></span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    dps.product_name,</span><br><span class="line">    dps.prod_total,</span><br><span class="line">    tds.cat_total,</span><br><span class="line">    CONCAT(ROUND((dps.prod_total <span class="operator">/</span> tds.cat_total) <span class="operator">*</span> <span class="number">100</span>, <span class="number">2</span>), <span class="string">&#x27;%&#x27;</span>) <span class="keyword">AS</span> <span class="keyword">percent</span></span><br><span class="line"><span class="keyword">FROM</span> DigitalProductSales dps</span><br><span class="line"><span class="keyword">CROSS</span> <span class="keyword">JOIN</span> TotalDigitalSales tds</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> dps.prod_total <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<p>可以看到，下面的TotalDigitalSales是可以直接使用DigitalProductSales的数据的。定义多个CTE使用逗号隔开</p>
+<p>但是这么写其实不太好，我也只是为了演示CTE之间可以调用数据。</p>
+<p>这种需求应该使用窗口函数</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    p.name <span class="keyword">AS</span> product_name,</span><br><span class="line">    <span class="built_in">SUM</span>(oi.quantity <span class="operator">*</span> oi.price) <span class="keyword">AS</span> prod_total,</span><br><span class="line">    <span class="built_in">SUM</span>(<span class="built_in">SUM</span>(oi.quantity <span class="operator">*</span> oi.price)) <span class="keyword">OVER</span>() <span class="keyword">AS</span> cat_total,</span><br><span class="line">    CONCAT(ROUND(<span class="built_in">SUM</span>(oi.quantity <span class="operator">*</span> oi.price) <span class="operator">/</span> <span class="built_in">SUM</span>(<span class="built_in">SUM</span>(oi.quantity <span class="operator">*</span> oi.price)) <span class="keyword">OVER</span>() <span class="operator">*</span> <span class="number">100</span>, <span class="number">2</span>), <span class="string">&#x27;%&#x27;</span>) <span class="keyword">AS</span> <span class="keyword">percent</span></span><br><span class="line"><span class="keyword">FROM</span> order_items oi</span><br><span class="line"><span class="keyword">JOIN</span> products p <span class="keyword">ON</span> oi.product_id <span class="operator">=</span> p.id</span><br><span class="line"><span class="keyword">WHERE</span> p.category <span class="operator">=</span> <span class="string">&#x27;数码&#x27;</span></span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> p.name</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> prod_total <span class="keyword">DESC</span>;</span><br></pre></td></tr></table></figure>
+
+<p>执行效果是一样的。窗口函数更简单</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">+--------------+------------+------------+---------+</span><br><span class="line">| product_name | prod_total | cat_total  | percent |</span><br><span class="line">+--------------+------------+------------+---------+</span><br><span class="line">| 数码-我的    |  299052.00 | 1448330.00 | 20.65%  |</span><br><span class="line">| 数码-项目    |  238022.00 | 1448330.00 | 16.43%  |</span><br><span class="line">| 数码-喜欢    |  231068.00 | 1448330.00 | 15.95%  |</span><br><span class="line">| 数码-不能    |  123622.00 | 1448330.00 | 8.54%   |</span><br><span class="line">| 数码-比较    |  119634.00 | 1448330.00 | 8.26%   |</span><br><span class="line">| 数码-起来    |  107300.00 | 1448330.00 | 7.41%   |</span><br><span class="line">| 数码-以上    |  101840.00 | 1448330.00 | 7.03%   |</span><br><span class="line">| 数码-行业    |   67035.00 | 1448330.00 | 4.63%   |</span><br><span class="line">| 数码-开发    |   57277.00 | 1448330.00 | 3.95%   |</span><br><span class="line">| 数码-全国    |   54400.00 | 1448330.00 | 3.76%   |</span><br><span class="line">| 数码-一般    |   49080.00 | 1448330.00 | 3.39%   |</span><br><span class="line">+--------------+------------+------------+---------+</span><br><span class="line">11 rows in set (0.0343 sec)</span><br></pre></td></tr></table></figure>
+
+<p>再来个例子，生成一个“月度销售报表”，包含：月份、当月订单数、当月总金额、以及环比上个月的增长率。</p>
+<p>同样，先把数据按照月份分组统计</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    DATE_FORMAT(created_at, <span class="string">&#x27;%Y-%m&#x27;</span>) <span class="keyword">AS</span> sale_month,</span><br><span class="line">    <span class="built_in">SUM</span>(total_amount) <span class="keyword">AS</span> total_money</span><br><span class="line"><span class="keyword">FROM</span> orders</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> DATE_FORMAT(created_at, <span class="string">&#x27;%Y-%m&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>然后把这个查询作为一个CTE，在另一个CTE里使用窗口函数创建一个上一个月的列</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> MonthlyStats <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> </span><br><span class="line">        DATE_FORMAT(created_at, <span class="string">&#x27;%Y-%m&#x27;</span>) <span class="keyword">AS</span> sale_month,</span><br><span class="line">        <span class="built_in">SUM</span>(total_amount) <span class="keyword">AS</span> total_money</span><br><span class="line">    <span class="keyword">FROM</span> orders</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> DATE_FORMAT(created_at, <span class="string">&#x27;%Y-%m&#x27;</span>)</span><br><span class="line">),</span><br><span class="line">GrowthStats <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> </span><br><span class="line">        sale_month,</span><br><span class="line">        total_money,</span><br><span class="line">        <span class="built_in">LAG</span>(total_money, <span class="number">1</span>) <span class="keyword">OVER</span> (<span class="keyword">ORDER</span> <span class="keyword">BY</span> sale_month) <span class="keyword">AS</span> last_month_money</span><br><span class="line">    <span class="keyword">FROM</span> MonthlyStats</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>最后再把数据显示出来</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> MonthlyStats <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> </span><br><span class="line">        DATE_FORMAT(created_at, <span class="string">&#x27;%Y-%m&#x27;</span>) <span class="keyword">AS</span> sale_month,</span><br><span class="line">        <span class="built_in">SUM</span>(total_amount) <span class="keyword">AS</span> total_money</span><br><span class="line">    <span class="keyword">FROM</span> orders</span><br><span class="line">    <span class="keyword">GROUP</span> <span class="keyword">BY</span> DATE_FORMAT(created_at, <span class="string">&#x27;%Y-%m&#x27;</span>)</span><br><span class="line">),</span><br><span class="line">GrowthStats <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> </span><br><span class="line">        sale_month,</span><br><span class="line">        total_money,</span><br><span class="line">        <span class="built_in">LAG</span>(total_money, <span class="number">1</span>) <span class="keyword">OVER</span> (<span class="keyword">ORDER</span> <span class="keyword">BY</span> sale_month) <span class="keyword">AS</span> last_month_money</span><br><span class="line">    <span class="keyword">FROM</span> MonthlyStats</span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span> </span><br><span class="line">    sale_month,</span><br><span class="line">    total_money,</span><br><span class="line">    last_month_money,</span><br><span class="line">    CONCAT(ROUND((total_money <span class="operator">-</span> last_month_money) <span class="operator">/</span> last_month_money <span class="operator">*</span> <span class="number">100</span>, <span class="number">2</span>), <span class="string">&#x27;%&#x27;</span>) <span class="keyword">AS</span> growth_rate</span><br><span class="line"><span class="keyword">FROM</span> GrowthStats</span><br><span class="line"><span class="keyword">ORDER</span> <span class="keyword">BY</span> sale_month;</span><br></pre></td></tr></table></figure>
+
+<p>执行后得到的结果就是这样的</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">+------------+-------------+------------------+-------------+</span><br><span class="line">| sale_month | total_money | last_month_money | growth_rate |</span><br><span class="line">+------------+-------------+------------------+-------------+</span><br><span class="line">| 2025-01    |   540403.00 |             NULL | NULL        |</span><br><span class="line">| 2025-02    |   489717.00 |        540403.00 | -9.38%      |</span><br><span class="line">| 2025-03    |   538732.00 |        489717.00 | 10.01%      |</span><br><span class="line">| 2025-04    |   509465.00 |        538732.00 | -5.43%      |</span><br><span class="line">| 2025-05    |   573503.00 |        509465.00 | 12.57%      |</span><br><span class="line">| 2025-06    |   391503.00 |        573503.00 | -31.73%     |</span><br><span class="line">| 2025-07    |   429322.00 |        391503.00 | 9.66%       |</span><br><span class="line">| 2025-08    |   505246.00 |        429322.00 | 17.68%      |</span><br><span class="line">| 2025-09    |   501646.00 |        505246.00 | -0.71%      |</span><br><span class="line">| 2025-10    |   536669.00 |        501646.00 | 6.98%       |</span><br><span class="line">| 2025-11    |   632946.00 |        536669.00 | 17.94%      |</span><br><span class="line">| 2025-12    |   456490.00 |        632946.00 | -27.88%     |</span><br><span class="line">| 2026-01    |    98514.00 |        456490.00 | -78.42%     |</span><br><span class="line">+------------+-------------+------------------+-------------+</span><br><span class="line">13 rows in set (0.0085 sec)</span><br></pre></td></tr></table></figure>
+
+<p>其实这里就能看到CTE的作用了，因为这种情况下如果不用CTE，整个SQL会非常难读难改像一坨大的，就像这样:</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span></span><br><span class="line">    DATE_FORMAT(created_at, <span class="string">&#x27;%Y-%m&#x27;</span>) <span class="keyword">AS</span> sale_month,</span><br><span class="line">    <span class="built_in">SUM</span>(total_amount) <span class="keyword">AS</span> total_money,</span><br><span class="line">    <span class="built_in">LAG</span>(<span class="built_in">SUM</span>(total_amount), <span class="number">1</span>) <span class="keyword">OVER</span> (<span class="keyword">ORDER</span> <span class="keyword">BY</span> DATE_FORMAT(created_at, <span class="string">&#x27;%Y-%m&#x27;</span>)) <span class="keyword">AS</span> last_month_money,</span><br><span class="line">    CONCAT(ROUND((<span class="built_in">SUM</span>(total_amount)  <span class="operator">-</span> <span class="built_in">LAG</span>(<span class="built_in">SUM</span>(total_amount), <span class="number">1</span>) <span class="keyword">OVER</span> (<span class="keyword">ORDER</span> <span class="keyword">BY</span> DATE_FORMAT(created_at, <span class="string">&#x27;%Y-%m&#x27;</span>)) ) <span class="operator">/</span> <span class="built_in">LAG</span>(<span class="built_in">SUM</span>(total_amount), <span class="number">1</span>) <span class="keyword">OVER</span> (<span class="keyword">ORDER</span> <span class="keyword">BY</span> DATE_FORMAT(created_at, <span class="string">&#x27;%Y-%m&#x27;</span>))  <span class="operator">*</span> <span class="number">100</span>, <span class="number">2</span>), <span class="string">&#x27;%&#x27;</span>) <span class="keyword">AS</span> growth_rate</span><br><span class="line"><span class="keyword">FROM</span> orders</span><br><span class="line"><span class="keyword">GROUP</span> <span class="keyword">BY</span> DATE_FORMAT(created_at, <span class="string">&#x27;%Y-%m&#x27;</span>);</span><br></pre></td></tr></table></figure>
+
+<p>两者执行效果是一样的，但是后者会让人一眼就放弃</p>
+<p>主要还是因为SQL 的一个核心规则：在同一个 SELECT 层级中，定义的“别名”（Alias）不能在同一层级的其他计算中直接使用。</p>
+<h3 id="递归-WITH-RECURSIVE"><a href="#递归-WITH-RECURSIVE" class="headerlink" title="递归(WITH RECURSIVE)"></a>递归(WITH RECURSIVE)</h3><p>在CTE中是可以调用自己的</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> <span class="keyword">RECURSIVE</span> NumSeries <span class="keyword">AS</span> (</span><br><span class="line">    <span class="keyword">SELECT</span> <span class="number">1</span> <span class="keyword">AS</span> n</span><br><span class="line"></span><br><span class="line">    <span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">SELECT</span> n <span class="operator">+</span> <span class="number">1</span> <span class="keyword">FROM</span> NumSeries <span class="keyword">WHERE</span> n <span class="operator">&lt;</span> <span class="number">5</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> NumSeries;</span><br></pre></td></tr></table></figure>
+
+<p>注意，SQL 的递归不是“函数调用”，而是结果集自我扩张。<code>UNION ALL</code> 上面的语句只执行1次，下面的语句会执行多次，且每次引用的 <code>NumSeries</code> 指的不是整个表，而是上一轮刚刚产生的那一行数据。</p>
+<p>递归 CTE 根本不是函数递归，它是：先算出一行，再用这行算出下一行，再用“新算出来的那行”继续算，直到算不出新行</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">SELECT</span> n <span class="operator">+</span> <span class="number">1</span> <span class="keyword">FROM</span> NumSeries <span class="keyword">WHERE</span> n <span class="operator">&lt;</span> <span class="number">5</span></span><br></pre></td></tr></table></figure>
+
+<p>这里面的<code>NumSeries</code>,把它想象成执行<code>NumSeries</code>最新一行数据的指针</p>
+<p>执行逻辑就类似于下面的Python程序</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">nums = [<span class="number">1</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span> <span class="literal">True</span>:</span><br><span class="line">    new_nums = []</span><br><span class="line">    <span class="keyword">for</span> n <span class="keyword">in</span> nums:</span><br><span class="line">        <span class="keyword">if</span> n &lt; <span class="number">5</span>:</span><br><span class="line">            new_nums.append(n + <span class="number">1</span>)</span><br><span class="line">    <span class="keyword">if</span> <span class="keyword">not</span> new_nums:</span><br><span class="line">        <span class="keyword">break</span></span><br><span class="line">    nums.extend(new_nums)</span><br><span class="line"></span><br><span class="line"><span class="built_in">print</span>(nums)</span><br></pre></td></tr></table></figure>
+
+<p>递归 CTE 每一轮只用“上一轮新产生的行”去算下一轮，不会反复拿旧行再算一遍，否则它会 无限重复、无限膨胀。</p>
+<p>递归使用这个模板</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> <span class="keyword">RECURSIVE</span> cte_name <span class="keyword">AS</span> (</span><br><span class="line">    <span class="comment">-- 1. 初始查询（种子）：你想从谁开始找？</span></span><br><span class="line">    <span class="keyword">SELECT</span> ...</span><br><span class="line"></span><br><span class="line">    <span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">-- 2. 递归查询（套娃）：逻辑通常是 JOIN cte_name</span></span><br><span class="line">    <span class="keyword">SELECT</span> ...</span><br><span class="line">    <span class="keyword">FROM</span> <span class="keyword">table</span></span><br><span class="line">    <span class="keyword">JOIN</span> cte_name <span class="keyword">ON</span> table.parent_id <span class="operator">=</span> cte_name.id <span class="comment">-- 或者是 cte.id = table.parent_id</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> cte_name;</span><br></pre></td></tr></table></figure>
+
+<p>来个例子：</p>
+<p>假设表 <code>employees</code> 结构如下：</p>
+<table>
+<thead>
+<tr>
+<th align="left">id</th>
+<th align="left">name</th>
+<th align="left">manager_id (上司ID)</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left">1</td>
+<td align="left"><strong>大老板</strong></td>
+<td align="left">NULL</td>
+</tr>
+<tr>
+<td align="left">2</td>
+<td align="left"><strong>技术总监</strong></td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">3</td>
+<td align="left"><strong>产品总监</strong></td>
+<td align="left">1</td>
+</tr>
+<tr>
+<td align="left">4</td>
+<td align="left">程序员A</td>
+<td align="left">2</td>
+</tr>
+<tr>
+<td align="left">5</td>
+<td align="left">程序员B</td>
+<td align="left">2</td>
+</tr>
+<tr>
+<td align="left">6</td>
+<td align="left">实习生</td>
+<td align="left">4</td>
+</tr>
+</tbody></table>
+<p>要查出技术总监 (id&#x3D;2) 手下的所有人（包括下属的下属，一直到底）。</p>
+<p>sql语句是这么写的</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">WITH</span> <span class="keyword">RECURSIVE</span> Subordinates <span class="keyword">AS</span> (</span><br><span class="line">    <span class="comment">-- 启动：先找到那个“根”节点（技术总监）</span></span><br><span class="line">    <span class="keyword">SELECT</span> id, name, manager_id, <span class="number">1</span> <span class="keyword">AS</span> depth</span><br><span class="line">    <span class="keyword">FROM</span> employees</span><br><span class="line">    <span class="keyword">WHERE</span> id <span class="operator">=</span> <span class="number">2</span>  <span class="comment">-- 从 ID=2 开始往下找</span></span><br><span class="line">    </span><br><span class="line">    <span class="keyword">UNION</span> <span class="keyword">ALL</span></span><br><span class="line">    </span><br><span class="line">    <span class="comment">-- 循环：找上一轮找到的人的下属,s 是上一轮找到的结果集</span></span><br><span class="line">    <span class="keyword">SELECT</span> e.id, e.name, e.manager_id, s.depth <span class="operator">+</span> <span class="number">1</span></span><br><span class="line">    <span class="keyword">FROM</span> employees e</span><br><span class="line">    <span class="keyword">JOIN</span> Subordinates s <span class="keyword">ON</span> e.manager_id <span class="operator">=</span> s.id </span><br><span class="line">    <span class="comment">-- 员工的 manager_id 等于 上一轮找到的人的 id</span></span><br><span class="line">)</span><br><span class="line"><span class="keyword">SELECT</span> <span class="operator">*</span> <span class="keyword">FROM</span> Subordinates;</span><br></pre></td></tr></table></figure>
+
+<p>先通过<code>WHERE id = 2</code>获取到了技术总监那行的数据，然后再把那行再和原<code>employees</code>表通过技术总监的<code>manager_id</code>和<code>id</code>内连接。显然内连接的结果就是程序员A和程序员B两行。</p>
+<p>同理，再用程序员A的<code>id</code>和原表的<code>manager_id</code>内连接，得到实习生那行。</p>
+<p>用程序员B的的<code>id</code>和原表的<code>manager_id</code>内连接，得到的是空</p>
+<p>用实习生的的<code>id</code>和原表的<code>manager_id</code>内连接，得到的是空</p>
+<p>自此，循环结束</p>
+<h2 id="性能上的微小区别"><a href="#性能上的微小区别" class="headerlink" title="性能上的微小区别"></a>性能上的微小区别</h2><p>在 MySQL 8.0 中，CTE 还有一个特性叫 <strong>Materialization（物化&#x2F;临时表缓存）</strong>。</p>
+<p>普通子查询：有时候优化器会把子查询“打散”，合并到主查询里去执行（Derived Merge）。</p>
+<p>CTE：如果你的 CTE 逻辑非常复杂（比如计算量巨大），且在主查询里被引用了多次，MySQL 可能会选择把这个 CTE 的结果<strong>存成一个内部临时表</strong>（只算一次），然后多次读取。这在某些特定场景下比多次执行子查询要快。</p>
+<p>总之只要满足以下任意一点，就建议用 CTE：</p>
+<ol>
+<li>同一个子查询结果，要在后面用 2 次以上（复用）。</li>
+<li>需要递归查询（树形结构）。</li>
+<li>逻辑太长太深，需要把代码拆分成“第一步算这个、第二步算那个”来提高可读性。</li>
+</ol>
 </article>
 
 
@@ -110,7 +796,12 @@
 <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
-</aside><div class='float-panel'>
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0"><span class="toc-text">窗口函数</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E5%B8%B8%E7%94%A8%E7%9A%84%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0"><span class="toc-text">常用的窗口函数:</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E6%89%8B%E4%BD%BF%E7%94%A8%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0"><span class="toc-text">上手使用窗口函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A6%82%E6%9E%9C%E6%88%91%E9%9D%9E%E8%A6%81%E6%8A%8A%E8%BF%99%E4%B8%AA%E5%88%97%E5%91%BD%E5%90%8D%E4%B8%BArank"><span class="toc-text">如果我非要把这个列命名为rank</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E7%AA%97%E5%8F%A3%E5%87%BD%E6%95%B0%E5%92%8C%E8%81%9A%E5%90%88%E5%87%BD%E6%95%B0%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">窗口函数和聚合函数的区别</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#PARTITION-BY%EF%BC%88%E5%88%86%E5%8C%BA%EF%BC%89%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">PARTITION BY（分区）的使用</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#ROWS-Range"><span class="toc-text">ROWS&#x2F;Range</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#rows%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">rows的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#range%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="toc-text">range的使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#range%E5%92%8Crows%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="toc-text">range和rows的区别</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E5%A4%84%E7%90%86json%E6%95%B0%E6%8D%AE"><span class="toc-text">处理json数据</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E7%94%A8json"><span class="toc-text">什么时候用json</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%B8%8A%E6%89%8B%E4%BD%BF%E7%94%A8json"><span class="toc-text">上手使用json</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%8F%92%E5%85%A5%E6%95%B0%E6%8D%AE"><span class="toc-text">插入数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#json%E7%9B%B8%E5%85%B3%E5%87%BD%E6%95%B0"><span class="toc-text">json相关函数</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#%E8%AF%BB%E5%8F%96%E7%B1%BB"><span class="toc-text">读取类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9%E7%B1%BB"><span class="toc-text">修改类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2%E4%B8%8E%E6%90%9C%E7%B4%A2%E7%B1%BB"><span class="toc-text">查询与搜索类</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#%E6%9E%84%E9%80%A0%E7%B1%BB"><span class="toc-text">构造类</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E6%9F%A5%E8%AF%A2json%E5%88%97%E4%B8%AD%E7%9A%84%E6%95%B0%E6%8D%AE"><span class="toc-text">查询json列中的数据</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E4%BF%AE%E6%94%B9json%E6%95%B0%E6%8D%AE"><span class="toc-text">修改json数据</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8json%E9%9C%80%E8%A6%81%E6%B3%A8%E6%84%8F%E7%9A%84"><span class="toc-text">使用json需要注意的</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#CTE-%E9%80%9A%E7%94%A8%E8%A1%A8%E8%A1%A8%E8%BE%BE%E5%BC%8F"><span class="toc-text">CTE (通用表表达式)</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#CTE%E7%9A%84%E8%AF%AD%E6%B3%95"><span class="toc-text">CTE的语法</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E4%BD%BF%E7%94%A8CTE"><span class="toc-text">使用CTE</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%88%86%E6%AD%A5%E8%81%9A%E5%90%88"><span class="toc-text">分步聚合</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%A4%8D%E7%94%A8%E9%80%BB%E8%BE%91-%E9%93%BE%E5%BC%8FCTE"><span class="toc-text">复用逻辑&#x2F;链式CTE</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E9%80%92%E5%BD%92-WITH-RECURSIVE"><span class="toc-text">递归(WITH RECURSIVE)</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#%E6%80%A7%E8%83%BD%E4%B8%8A%E7%9A%84%E5%BE%AE%E5%B0%8F%E5%8C%BA%E5%88%AB"><span class="toc-text">性能上的微小区别</span></a></li></ol></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
   <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
   </button>
