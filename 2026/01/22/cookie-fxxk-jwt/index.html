@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="hexo-theme" content="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1" theme-name="Stellar" theme-version="1.33.1">
   
-  <meta name="robots" content="noindex,follow">
+  
   <meta name="generator" content="Hexo 8.1.1">
   <meta http-equiv='x-dns-prefetch-control' content='on' />
   
@@ -17,22 +17,28 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#000">
   <meta name="theme-color" content="#f9fafb">
-  <title>标签：quant - cloudyou</title>
+  <title>JWT-比cookie弔的鉴权 - cloudyou</title>
 
   
-    <meta property="og:type" content="website">
-<meta property="og:title" content="cloudyou">
-<meta property="og:url" content="https://www.cloudyou.top/tags/quant/">
+    <meta name="description" content="我就先说清弔在哪里：JWT不用存 传统的鉴权：数据库里面放个表，分别记录用户id，cookie，和过期时间，如果要支持多设备同时登录还要加个登录设备列，还要定期清理过期的cookie。用户登录的时候先查表，查到了判断下和传来的cookie是不是一样的。 JWT不同，他就像是带着时间戳的证书，服务端只管签发验证，过期了就过期了反正没存再签发一个就行。登陆的时候就把header和payload再加上服">
+<meta property="og:type" content="article">
+<meta property="og:title" content="JWT-比cookie弔的鉴权">
+<meta property="og:url" content="https://www.cloudyou.top/2026/01/22/cookie-fxxk-jwt/">
 <meta property="og:site_name" content="cloudyou">
+<meta property="og:description" content="我就先说清弔在哪里：JWT不用存 传统的鉴权：数据库里面放个表，分别记录用户id，cookie，和过期时间，如果要支持多设备同时登录还要加个登录设备列，还要定期清理过期的cookie。用户登录的时候先查表，查到了判断下和传来的cookie是不是一样的。 JWT不同，他就像是带着时间戳的证书，服务端只管签发验证，过期了就过期了反正没存再签发一个就行。登陆的时候就把header和payload再加上服">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://www.cloudyou.top/images/%E5%A4%B4%E5%83%8F.jpg">
+<meta property="article:published_time" content="2026-01-21T21:52:51.000Z">
+<meta property="article:modified_time" content="2026-01-21T23:02:39.969Z">
 <meta property="article:author" content="关小雨">
-<meta name="twitter:card" content="summary">
+<meta property="article:tag" content="cookie">
+<meta property="article:tag" content="jwt">
+<meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:image" content="https://www.cloudyou.top/images/%E5%A4%B4%E5%83%8F.jpg">
   
   
   
-  
+  <meta name="keywords" content="jwt,cookie">
 
   <!-- feed -->
   
@@ -44,12 +50,12 @@
 
   
 
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Website","@id":"https://www.cloudyou.top","author":{"@type":"Person","name":"关小雨","sameAs":[],"image":"/images/头像.jpg"},"name":"cloudyou","description":"","url":"https://www.cloudyou.top"}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"关小雨","sameAs":[],"image":"/images/头像.jpg"},"dateCreated":"2026-01-22T05:52:51+08:00","dateModified":"2026-01-22T07:02:39+08:00","datePublished":"2026-01-22T05:52:51+08:00","description":"","headline":"JWT-比cookie弔的鉴权","mainEntityOfPage":{"@type":"WebPage","@id":"https://www.cloudyou.top/2026/01/22/cookie-fxxk-jwt/"},"publisher":{"@type":"Organization","name":"关小雨","sameAs":[],"image":"/images/头像.jpg","logo":{"@type":"ImageObject","url":"/images/头像.jpg"}},"url":"https://www.cloudyou.top/2026/01/22/cookie-fxxk-jwt/","keywords":"jwt, cookie","thumbnailUrl":"/images/jwt-banner.png","image":1}</script>
   
 </head>
 <body>
 
-<div class="l_body index" id="start" layout="undefined" type="undefined" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
+<div class="l_body content" id="start" layout="post" type="tech" ><aside class="l_left"><div class="sidebg"></div><div class="leftbar-container">
 
 
 <header class="header"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/头像.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">cloudyou</div><div class="sub normal cap">捕获数据，也捕获云与星光</div><div class="sub hover cap" style="opacity:0"> 量化万物，除了自由与爱</div></a></div></header>
@@ -61,30 +67,84 @@
 <div class="widgets">
 <div class="search-wrapper" id="search-wrapper"><form class="search-form"><a class="search-button" onclick="document.getElementById(&quot;search-input&quot;).focus();"><svg t="1705074644177" viewBox="0 0 1025 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="1560" width="200" height="200"><path d="M1008.839137 935.96571L792.364903 719.491476a56.783488 56.783488 0 0 0-80.152866 0 358.53545 358.53545 0 1 1 100.857314-335.166073 362.840335 362.840335 0 0 1-3.689902 170.145468 51.248635 51.248635 0 1 0 99.217358 26.444296 462.057693 462.057693 0 1 0-158.255785 242.303546l185.930047 185.725053a51.248635 51.248635 0 0 0 72.568068 0 51.248635 51.248635 0 0 0 0-72.978056z" p-id="1561"></path><path d="M616.479587 615.969233a50.428657 50.428657 0 0 0-61.498362-5.534852 174.655348 174.655348 0 0 1-177.525271 3.484907 49.403684 49.403684 0 0 0-58.833433 6.76482l-3.074918 2.869923a49.403684 49.403684 0 0 0 8.609771 78.10292 277.767601 277.767601 0 0 0 286.992355-5.739847 49.403684 49.403684 0 0 0 8.404776-76.667958z" p-id="1562"></path></svg></a><input type="text" class="search-input" id="search-input" placeholder="站内搜索"></form><div id="search-result"></div><div class="search-no-result">没有找到内容！</div></div>
 
+
+
 <widget class="widget-wrapper recent post-list"><div class="widget-header dis-select"><span class="name">最近更新</span></div><div class="widget-body fs14"><a class="item title" href="/2026/01/22/cookie-fxxk-jwt/"><span class="title">JWT-比cookie弔的鉴权</span></a><a class="item title" href="/2026/01/12/go-Concurrency/"><span class="title">Golang并发攻略-基本概念和快速上手</span></a><a class="item title" href="/2026/01/12/kalman-randomforest-quant/"><span class="title">当航天算法遇上机器学习：一种基于卡尔曼滤波与随机森林的交易策略</span></a><a class="item title" href="/2026/01/06/golang-start/"><span class="title">Golang攻略-其他语言迁移到Go</span></a><a class="item title" href="/2026/01/04/mysql-higher/"><span class="title">Mysql攻略-进阶功能到更多</span></a><a class="item title" href="/2026/01/02/mysql-super/"><span class="title">Mysql攻略-高级查询到进阶功能</span></a><a class="item title" href="/2026/01/02/mysql-quick/"><span class="title">Mysql攻略-安装使用到基础的增删改查</span></a></div></widget>
 </div>
 
 </div></aside><div class="l_main" id="main">
 
-<header class="header mobile-only"><div class="logo-wrap"><a class="avatar" href="/about/"><div class="bg" style="opacity:0;background-image:url(https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/avatar/round/rainbow64@3x.webp);"></div><img no-lazy class="avatar" src="/images/头像.jpg" onerror="javascript:this.classList.add('error');this.src='https://gcore.jsdelivr.net/gh/cdn-x/placeholder@1.0.12/image/2659360.svg';"></a><a class="title" href="/"><div class="main">cloudyou</div><div class="sub normal cap">捕获数据，也捕获云与星光</div><div class="sub hover cap" style="opacity:0"> 量化万物，除了自由与爱</div></a></div></header>
-
- 
 
 
 
 
-<div class="navbar top"><div class="navbar-blur"><div class="navbar-container"><nav class="post"><a href="/">近期发布</a><a class="active" href="/tags/">标签：quant</a><a href="/archives/">归档</a></nav></div></div></div>
-<div class="post-list post"><a class="post-card post" href="/2026/01/12/kalman-randomforest-quant/">
-<article class="md-text"><div class="post-cover"><img src="/images/btc_backtest.png"/></div><h2 class="post-title">当航天算法遇上机器学习：一种基于卡尔曼滤波与随机森林的交易策略</h2><div class="excerpt"><p>这篇文章介绍一个量化策略:它没有华丽的百倍收益，但它跑出了一条类似成熟基金的资金曲线，在暴跌中空仓躺平，在趋势中稳步推进。这个策略的核心，是将航天领域的卡尔曼滤波与机器学习中的随机森林进行了融合。
-如果你还在寻找Alpha，这篇文章或许能给你一个新的...</p></div><div class="meta cap"><span class="cap" id="post-meta"><svg style="margin-bottom:2px" xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="currentColor" d="M6.94 2c.416 0 .753.324.753.724v1.46c.668-.012 1.417-.012 2.26-.012h4.015c.842 0 1.591 0 2.259.013v-1.46c0-.4.337-.725.753-.725s.753.324.753.724V4.25c1.445.111 2.394.384 3.09 1.055c.698.67.982 1.582 1.097 2.972L22 9H2v-.724c.116-1.39.4-2.302 1.097-2.972c.697-.67 1.645-.944 3.09-1.055V2.724c0-.4.337-.724.753-.724"/><path fill="currentColor" d="M22 14v-2c0-.839-.004-2.335-.017-3H2.01c-.013.665-.01 2.161-.01 3v2c0 3.771 0 5.657 1.172 6.828C4.343 22 6.228 22 10 22h4c3.77 0 5.656 0 6.828-1.172C22 19.658 22 17.772 22 14" opacity=".5"/><path fill="currentColor" d="M18 17a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m-5 4a1 1 0 1 1-2 0a1 1 0 0 1 2 0m0-4a1 1 0 1 1-2 0a1 1 0 0 1 2 0"/></svg><time datetime="2026-01-12T13:38:28.000Z">2026-01-12</time></span></div></article>
-</a></div>
+<div class="article banner top"><img class="lazy bg" data-src="/images/jwt-banner.png">
+  <div class="content">
+    <div class="top bread-nav footnote"><div class="left"><div class="flex-row" id="breadcrumb"><a class="cap breadcrumb" href="/">主页</a>
+<span class="sep"></span><a class="cap breadcrumb" href="/">文章</a></div>
+<div class="flex-row" id="post-meta"><span class="text created">发布于：<time datetime="2026-01-21T21:52:51.000Z">2026-01-22</time></span><span class="sep updated"></span><span class="text updated">更新于：<time datetime="2026-01-21T23:02:39.969Z">2026-01-22</time></span></div></div></div>
+    
+    <div class="bottom only-title">
+      
+      <div class="text-area">
+        <h1 class="text title"><span>JWT-比cookie弔的鉴权</span></h1>
+        
+      </div>
+    </div>
+    
+  </div>
+  </div><article class="md-text content"><p>我就先说清弔在哪里：JWT不用存</p>
+<p>传统的鉴权：数据库里面放个表，分别记录用户id，cookie，和过期时间，如果要支持多设备同时登录还要加个登录设备列，还要定期清理过期的cookie。用户登录的时候先查表，查到了判断下和传来的cookie是不是一样的。</p>
+<p>JWT不同，他就像是带着时间戳的证书，服务端只管签发验证，过期了就过期了反正没存再签发一个就行。登陆的时候就把header和payload再加上服务端上的私钥现场跑一下看看和客户端传上来的能不能对的上。</p>
+<p>哈希算法知道吧，什么东西丢进去都有个唯一的值，JWT就是用的这个特性。</p>
+<h1 id="JWT长什么样"><a href="#JWT长什么样" class="headerlink" title="JWT长什么样"></a>JWT长什么样</h1><p>JWT 是一串字符，用点 . 分成了三部分：A.B.C 可以去这里看看：<a target="_blank" rel="noopener" href="https://www.jwt.io/">https://www.jwt.io/</a></p>
+<p><img src="/images/jwt.png" alt="jwt" title="jwt"></p>
+<p>比如这样一个JWT</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0.KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30</span><br></pre></td></tr></table></figure>
+
+<p>可以看到是三个部分 <code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</code> 和 <code>eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0</code> 和 <code>KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30</code> 中间用英文逗号隔开。</p>
+<p>其中部分A：<code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9</code>就是声明使用的是什么算法，这部分是明文，是可以直接base解码出来的，如图对应的就是下面的内容，指定使用HS256算法</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;alg&quot;</span><span class="punctuation">:</span><span class="string">&quot;HS256&quot;</span><span class="punctuation">,</span><span class="attr">&quot;typ&quot;</span><span class="punctuation">:</span><span class="string">&quot;JWT&quot;</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="/images/jwt2.png" alt="jwt2" title="jwt2"></p>
+<p>部分B：<code>eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsImlhdCI6MTUxNjIzOTAyMn0</code> 也是同理，这个也是明文，可以直接base64解码得到附带了过期时间的下面数据</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="punctuation">&#123;</span><span class="attr">&quot;sub&quot;</span><span class="punctuation">:</span><span class="string">&quot;1234567890&quot;</span><span class="punctuation">,</span><span class="attr">&quot;name&quot;</span><span class="punctuation">:</span><span class="string">&quot;John Doe&quot;</span><span class="punctuation">,</span><span class="attr">&quot;admin&quot;</span><span class="punctuation">:</span><span class="literal"><span class="keyword">true</span></span><span class="punctuation">,</span><span class="attr">&quot;iat&quot;</span><span class="punctuation">:</span><span class="number">1516239022</span><span class="punctuation">&#125;</span></span><br></pre></td></tr></table></figure>
+
+<p>然后就是部分C：<code>KMUFsIDTnFmyG3nMiGM6H9FNFUROf3wh7SmqJp-QV30</code>，这里就是鉴权的关键点。JWT需要服务器上有一个绝对安全的私钥用于签发JWT。可以把它简单想象成类似哈希值的算法，把部分A和部分B加上服务器的私钥（在这个JWT是<code>a-string-secret-at-least-256-bits-long</code>）一起哈希计算得到这么一个特定值。然后就和前面的部分A 部分B拼起来返回客户端。</p>
+<h1 id="怎么用？"><a href="#怎么用？" class="headerlink" title="怎么用？"></a>怎么用？</h1><p>JWT的签发：登录还是正常传账号密码，但是就不用再弄个cookie表了，直接根据用户id设置一个过期时间加上服务器上的私钥算出一个哈希值传给客户端。</p>
+<p>JWT的验证：从请求里拿到用户的JWT，提取其中的部分A和部分B，然后再加上自己私钥，当场算一遍看看能不能和用户传来的JWT的部分C对上。对上那就问题。不用去查数据库。</p>
+<p>安全性？客户端不知道服务端的JWT私钥，而又众所周知哈希算法具有不可逆性，服务端可以根据自己的私钥和设置的过期时间签发一个JWT，而客户端不能根据JWT反推服务端私钥，从而无法伪造JWT。无论是延长过期时间，或者修改了登陆的目标用户。部分B就变了，而用户手里却只有部分A和原版部分B加上服务器私钥生成的原版部分C。这样的话修改部分B就会让原版部分C直接失效。</p>
+<p>所以，这么验权就不用去查表了，甚至不用把签发的JWT存进数据库里。<strong>JWT 的安全性 &#x3D; Secret Key 的安全性</strong>。只要服务器密钥不被黑客偷走，这个机制就是固若金汤的。</p>
+<p>吊销JWT：从JWT的设计上来说这个就确实没办法做到吊销或者踢人下线，签发的JWT无法撤销或者收回，所以JWT最好配合redis，鉴权前看看这个JWT有没有在黑名单里面</p>
+<h1 id="所以cookie还有用吗"><a href="#所以cookie还有用吗" class="headerlink" title="所以cookie还有用吗"></a>所以cookie还有用吗</h1><p>Cookie 即使在 JWT 时代，不仅没有死，反而是最安全的“JWT 容器”。</p>
+<p>如果就是简单把JWT代替cookie，后端：直接返回 JSON {“token”: “A.B.C”} -&gt; 前端：收到后，执行 localStorage.setItem(‘token’, ‘A.B.C’) -&gt; 请求：前端代码拦截器取出 Token，手动加在 Header 里：Authorization: Bearer A.B.C。</p>
+<p>把JWT存在localStorage里的话，如果站点有XSS漏洞被脚本小子嵌入了一段恶意js并且被浏览器执行的话，<code>&lt;script&gt;把localStorage里的数据发给我&lt;/script&gt;</code></p>
+<p>那脚本小子就能拿着JWT登陆了。但是只用一招就能让脚本小子回家种地，就是使用<code>HttpOnly Cookie</code></p>
+<p>生成 JWT 后，<strong>不</strong>放在 JSON Body 里返回，而是通过 Set-Cookie 头命令浏览器存储。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">c.SetCookie(<span class="string">&quot;token&quot;</span>, jwtString, <span class="number">3600</span>, <span class="string">&quot;/&quot;</span>, <span class="string">&quot;localhost&quot;</span>, <span class="literal">false</span>, <span class="literal">true</span>)</span><br></pre></td></tr></table></figure>
+
+<p>这样前端 JS 完全不需要也无法操作 Token。浏览器发现请求是发给后端的，自动会把 Cookie 带上。Cookie里面又有JWT。</p>
+<p>这个带有JWT的Cookie只能由浏览器在发请求时自动携带，任何JS代码也包括黑客注入的都无法读取它</p>
+</article>
+
+
+<div class="related-wrap" id="read-next"><section class="body"><div class="item" id="prev"></div><div class="item" id="next"><div class="note">较早文章</div><a href="/2026/01/12/kalman-randomforest-quant/">当航天算法遇上机器学习：一种基于卡尔曼滤波与随机森林的交易策略</a></div></section></div>
+
+
+
+
 
 
 <footer class="page-footer footnote"><hr><div class="text"><p>本站由 <a href="/">关小雨</a> 使用 <a target="_blank" rel="noopener" href="https://github.com/xaoxuu/hexo-theme-stellar/tree/1.33.1">Stellar 1.33.1</a> 主题创建。<br><span class="jinrishici-sentence"></span></p>
 <script src="https://sdk.jinrishici.com/v2/browser/jinrishici.js" charset="utf-8"></script>
 </div></footer>
 <div class="main-mask" onclick="sidebar.dismiss()"></div></div><aside class="l_right">
-</aside><div class='float-panel'>
+<div class="widgets">
+
+
+
+<widget class="widget-wrapper toc" id="data-toc" collapse="false"><div class="widget-header dis-select"><span class="name">本文目录</span><a class="cap-action" onclick="sidebar.toggleTOC()" ><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg></a></div><div class="widget-body"><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#JWT%E9%95%BF%E4%BB%80%E4%B9%88%E6%A0%B7"><span class="toc-text">JWT长什么样</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%80%8E%E4%B9%88%E7%94%A8%EF%BC%9F"><span class="toc-text">怎么用？</span></a></li><li class="toc-item toc-level-1"><a class="toc-link" href="#%E6%89%80%E4%BB%A5cookie%E8%BF%98%E6%9C%89%E7%94%A8%E5%90%97"><span class="toc-text">所以cookie还有用吗</span></a></li></ol></div><div class="widget-footer"><a class="top" onclick="util.scrollTop()"><svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><!-- Icon from Solar by 480 Design - https://creativecommons.org/licenses/by/4.0/ --><g fill="none" stroke="currentColor" stroke-linecap="round" stroke-width="1.5"><path stroke-linejoin="round" d="m9 15.5l3-3l3 3m-6-4l3-3l3 3"/><path d="M7 3.338A9.95 9.95 0 0 1 12 2c5.523 0 10 4.477 10 10s-4.477 10-10 10S2 17.523 2 12c0-1.821.487-3.53 1.338-5"/></g></svg><span>回到顶部</span></a></div></widget>
+</div></aside><div class='float-panel'>
   <button type='button' style='display:none' class='laptop-only rightbar-toggle mobile' onclick='sidebar.rightbar()'>
     <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24"><path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6h11m-11 6h11m-11 6h11M4 6h1v4m-1 0h2m0 8H4c0-1 2-2 2-3s-1-1.5-2-1"/></svg>
   </button>
