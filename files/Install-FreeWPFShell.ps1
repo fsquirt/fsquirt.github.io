@@ -1,3 +1,11 @@
+Write-Host "    ______             _       ______  ___________ __         ____"
+Write-Host "   / ____/_______  ___| |     / / __ \/ ____/ ___// /_  ___  / / /"
+Write-Host "  / /_  / ___/ _ \/ _ \ | /| / / /_/ / /_   \__ \/ __ \/ _ \/ / / "
+Write-Host " / __/ / /  /  __/  __/ |/ |/ / ____/ __/  ___/ / / / /  __/ / /  "
+Write-Host "/_/   /_/   \___/\___/|__/|__/_/   /_/    /____/_/ /_/\___/_/_/   "
+Write-Host "                                                                  "
+Write-Host "                                 Under MIT license, github:fsquirt"
+
 # 1. 设置变量
 $url = "https://www.cloudyou.top/files/freewpfshell.zip"
 $zipFile = "D:\freewpfshell.zip"
@@ -27,7 +35,7 @@ $wshell = New-Object -ComObject WScript.Shell
 $shortcut = $wshell.CreateShortcut($shortcutPath)
 $shortcut.TargetPath = $exePath
 $shortcut.WorkingDirectory = $destFolder
-$shortcut.Description = "FreeWPFShell 快捷方式"
+$shortcut.Description = "FreeWPFShell"
 $shortcut.Save()
 
 # 6. 删除下载的 ZIP 文件
