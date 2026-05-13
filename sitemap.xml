@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://www.cloudyou.top/mbr/</loc>
+    
+    <lastmod>2026-04-10</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://www.cloudyou.top/fws/</loc>
     
     <lastmod>2026-04-07</lastmod>
@@ -14,24 +23,6 @@
     <loc>https://www.cloudyou.top/fwsprivacy/</loc>
     
     <lastmod>2026-04-05</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudyou.top/2026/03/23/WindowsTerminnalEMU/</loc>
-    
-    <lastmod>2026-03-23</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudyou.top/2026/03/23/FxxkConPTY/</loc>
-    
-    <lastmod>2026-03-23</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -56,15 +47,6 @@
   </url>
   
   <url>
-    <loc>https://www.cloudyou.top/2026/01/12/go-Concurrency/</loc>
-    
-    <lastmod>2026-02-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
     <loc>https://www.cloudyou.top/test</loc>
     
     <lastmod>2026-01-29</lastmod>
@@ -73,115 +55,14 @@
     <priority>0.6</priority>
   </url>
   
-  <url>
-    <loc>https://www.cloudyou.top/2026/01/22/cookie-fxxk-jwt/</loc>
-    
-    <lastmod>2026-01-21</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudyou.top/2026/01/06/golang-start/</loc>
-    
-    <lastmod>2026-01-09</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudyou.top/2026/01/04/mysql-higher/</loc>
-    
-    <lastmod>2026-01-06</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudyou.top/2026/01/02/mysql-super/</loc>
-    
-    <lastmod>2026-01-04</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudyou.top/2026/01/02/mysql-quick/</loc>
-    
-    <lastmod>2026-01-02</lastmod>
-    
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  
 
   <url>
     <loc>https://www.cloudyou.top/</loc>
-    <lastmod>2026-04-07</lastmod>
+    <lastmod>2026-05-13</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
-  
-  <url>
-    <loc>https://www.cloudyou.top/tags/CSharp/</loc>
-    <lastmod>2026-04-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudyou.top/tags/Windows/</loc>
-    <lastmod>2026-04-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudyou.top/tags/golang/</loc>
-    <lastmod>2026-04-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudyou.top/tags/notebook/</loc>
-    <lastmod>2026-04-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudyou.top/tags/Mysql/</loc>
-    <lastmod>2026-04-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudyou.top/tags/Database/</loc>
-    <lastmod>2026-04-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudyou.top/tags/jwt/</loc>
-    <lastmod>2026-04-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
-  
-  <url>
-    <loc>https://www.cloudyou.top/tags/cookie/</loc>
-    <lastmod>2026-04-07</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.2</priority>
-  </url>
   
 
   
